@@ -1061,10 +1061,10 @@ bool GraphicsEngine::clear(void){
 	glDeleteVertexArrays(1,&(this->box_vao));
 	glDeleteVertexArrays(1,&(this->plate_vao));
 
-
+	/*
 	for(auto& sp : this->spriteList){
 		delete sp;
-	}
+	}*/
 
 	return true;
 }

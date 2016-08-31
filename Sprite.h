@@ -1,12 +1,16 @@
 #ifndef __INCLUDE_SPRITE_H__
 #define __INCLUDE_SPRITE_H__
 
+#include <set>
+
 #include "Camera.h"
 #include "RigidBody.h"
 #include "ModuleBase.h"
 
-typedef class Sprite{
+class SpriteManager;
 
+typedef class Sprite{
+	friend class SpriteManager;
 protected:
 
 	pShaderProgram program;
@@ -25,7 +29,7 @@ protected:
 protected:
 	std::map<std::string,AIModuleBase*> modules;
 public:
-	Sprite(void);
+	Sprite();
 	virtual ~Sprite();
 	virtual void update(double dt) = 0;
 	virtual void draw(double dt) = 0;
@@ -47,10 +51,27 @@ public:
 
 }*pSprite;
 
+class SpriteManager{
+protected:
+	static SpriteManager manager;
+
+	std::set<pSprite> spriteList;
+
+	SpriteManager();
+	virtual ~SpriteManager();
+public:
+	static SpriteManager* getInstance();
+	
+	void addToManager(pSprite p);
+	void removeFromManager(pSprite p);
+};
+
 typedef class TrailPoints : public Sprite{
+	friend class SpriteManager;
+protected:
+	~TrailPoints(void);
 public:
     TrailPoints(size_t max_count);
-    ~TrailPoints(void);
     
     void update(double dt) override;
     void draw(double dt) override;
@@ -63,6 +84,7 @@ protected:
 }*pTrailPoints;
 
 class Robot : public Sprite,public RigidBody{
+	friend class SpriteManager;
 protected:
 	float width;
 	float length;
@@ -70,10 +92,12 @@ protected:
 	AIData data;
     
     pTrailPoints pts;
+	
+protected:
+	virtual ~Robot();
 public:
 	Robot();
-	virtual ~Robot();
-
+	
 	virtual void update(double dt) override;
 	virtual void draw(double dt) override;
 
@@ -96,12 +120,14 @@ public:
 };
 
 class Ball : public Sprite,public RigidBody{
+	friend class SpriteManager;
 protected:
 	float friction;
 	AIData data;
+protected:
+	virtual ~Ball();
 public:
 	Ball();
-	virtual ~Ball();
 
 	virtual void update(double dt)override;
 	virtual void draw(double dt)override;
@@ -120,10 +146,12 @@ public:
 };
 
 class Obstacle : public Robot{
+	friend class SpriteManager;
+protected:
+	virtual ~Obstacle();
 public:
 	Obstacle();
-	virtual ~Obstacle();
-
+	
 	virtual void move(double)override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual float calculateDistance(RigidBody* dest);
@@ -132,13 +160,12 @@ public:
 };
 
 class Wall : public Sprite,public RigidBody{
+	friend class SpriteManager;
 protected:
-
+	virtual ~Wall();
 public:
 	Wall();
-	virtual ~Wall();
-
-
+	
 	virtual void update(double dt) override;
 	virtual void draw(double dt) override;
 

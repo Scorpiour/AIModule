@@ -2,6 +2,30 @@
 
 using namespace std;
 
+SpriteManager SpriteManager::manager;
+
+SpriteManager::SpriteManager(){
+
+}
+
+SpriteManager::~SpriteManager(){
+	for(auto ptr : this->spriteList){
+		SAFE_DEL(ptr);
+	}
+}
+
+SpriteManager* SpriteManager::getInstance(){
+	return &(SpriteManager::manager);
+}
+
+void SpriteManager::addToManager(pSprite p){
+	this->spriteList.insert(p);
+}
+
+void SpriteManager::removeFromManager(pSprite p){
+	this->spriteList.erase(p);
+}
+
 Sprite::Sprite(){
 	for(int i=0;i<16;i++){
 		modelMatrix[i] = 0;
@@ -20,10 +44,14 @@ Sprite::Sprite(){
 
 	angles = glm::vec3(0,0,0);
 	radius = 1.f;
+
+	auto manager = SpriteManager::getInstance();
+	manager->addToManager(this);
 }
 
 Sprite::~Sprite(){
-
+	int i;
+	i = 3;
 }
 
 void Sprite::setProgram(pShaderProgram _program){

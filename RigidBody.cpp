@@ -124,5 +124,6 @@ RigidBody::RigidBody(){
 }
 
 RigidBody::~RigidBody(){
-
+	int i;
+	i = 2;
 }
