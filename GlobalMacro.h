@@ -80,6 +80,8 @@
 
 enum Position {LEFT_SIDE, RIGHT_SIDE};
 
+#include <cmath>
+
 typedef struct Point2F{
 	float x;
 	float y;
@@ -93,12 +95,12 @@ typedef struct Point2F{
 
 }*pPoint2F;
 
-
+#ifdef _WIN32
 #include <crtdbg.h>
 #ifdef _DEBUG
 
 #define new new(_NORMAL_BLOCK,__FILE__,__LINE__)
 
 #endif
-
+#endif
 #endif

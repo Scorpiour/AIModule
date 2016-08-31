@@ -89,12 +89,13 @@ void AIFuzzyLogic::init(const std::string& fuzzyFileName){
 	for(size_t i=0;i<noOutputs;i++){
 		fin>>output_values[i];
 	}
-
+	SAFE_DELS(this->rules);
 	this->rules = new FuzzyRule[noRules];
 
 	auto initRules = [=](ifstream& fin)->void{
 		for(size_t i=0;i<noRules;i++){
 			auto r = &(this->rules[i]);
+			SAFE_DELS(r->inp_index);
 			r->inp_index = new int[noInputs];
 			
 			for(size_t j=0;j<noInputs;j++){
@@ -104,6 +105,7 @@ void AIFuzzyLogic::init(const std::string& fuzzyFileName){
 
 		for(size_t i=0;i<noRules;i++){
 			auto r = &(this->rules[i]);
+			SAFE_DELS(r->inp_fuzzy_set);
 			r->inp_fuzzy_set = new int[noInputs];
 			
 			for(size_t j=0;j<noInputs;j++){
@@ -145,7 +147,7 @@ void AIFuzzyLogic::init(const std::string& fuzzyFileName){
 			}
 			return trz;
 		};
-		
+		SAFE_DELS(this->impMemFns);
 		this->impMemFns = new Trapezoid[noRegions * noInputs];
 
 		for(size_t i=0;i<noInputs;i++){

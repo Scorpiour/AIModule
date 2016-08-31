@@ -201,7 +201,7 @@ bool GraphicsEngine::init(void){
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,5);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
 	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,GL_TRUE);
@@ -499,7 +499,17 @@ bool GraphicsEngine::prepareSprites(void){
 	pball->setSX(4.0);
 	pball->setSY(4.0);
 	this->spriteList.push_back(pball);
-
+    
+    auto pTrailer = new TrailPoints(30);
+    pTrailer->setProgram(this->sphere_program);
+    pTrailer->setVAO(this->sphere_vao);
+    pTrailer->setCamera(this->main_camera);
+    pTrailer->setColour(glm::vec3(0,1,0));
+    pTrailer->setColourIntensity(glm::vec3(0.3,0.6,0.9));
+    pTrailer->setRadius(0.1);
+    pTrailer->setPosition(glm::vec3(0,-0.4,0));
+    this->spriteList.push_back(pTrailer);
+    
 
 	auto pRobot = new Robot();
 	pRobot->setID(1);
@@ -513,6 +523,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pRobot->setAngle(glm::vec3(0,M_PI/4,0));
 	pRobot->setSX(1.0);
 	pRobot->setSY(1.0);
+    pRobot->addTrailer(pTrailer);
 	this->spriteList.push_back(pRobot);
 
 	//Walls

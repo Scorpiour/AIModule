@@ -4,7 +4,7 @@ using namespace std;
 
 Robot::Robot():Sprite(),RigidBody(){
 	mass = 50.f;
-
+    this->pts = nullptr;
 	std::string robot_module_name = "Robot Fuzzy";
 	auto fuzzy_logic = new AIFuzzyLogic(robot_module_name);
 
@@ -16,7 +16,7 @@ Robot::Robot():Sprite(),RigidBody(){
 	}
 
 	this->addModule(robot_module_name,fuzzy_logic);
-
+    
 }
 
 Robot::~Robot(){
@@ -142,7 +142,13 @@ void Robot::move(double dt){
 	
 		this->setAngle(glm::vec3(0,-angle,0));
 	}*/
-
+    if(this->pts != nullptr){
+        Point2F pos;
+        pos.x = this->position.x;
+        pos.y = this->position.z;
+    
+        this->pts->addPoint(pos);
+    }
 }
 
 bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
@@ -270,6 +276,10 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 
 	return true;
+}
+
+void Robot::addTrailer(pTrailPoints _pts){
+    this->pts = _pts;
 }
 
 void Robot::setDistanceHeuristic(float h){
