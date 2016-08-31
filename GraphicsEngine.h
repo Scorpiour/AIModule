@@ -42,8 +42,6 @@ protected:	//Camara
 	pCamera main_camera;
 protected:	//Lamp
 	glm::vec3 lightPosition;
-protected:  //Sprites
-	std::vector<Sprite*> spriteList;
 protected:  //External Function
 	std::function<void*(double,void*)> externalFunc;
 protected:	//Constructor / Destructor

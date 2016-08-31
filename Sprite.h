@@ -62,8 +62,14 @@ protected:
 public:
 	static SpriteManager* getInstance();
 	
+	//Add a sprite to the manager. The sprites will be added to the manager automatically when constructed
 	void addToManager(pSprite p);
-	void removeFromManager(pSprite p);
+
+	//Remove a sprite from the manager, the removed sprite will be deleted permanently as well!
+	void removeFromManager(pSprite & p);
+
+	void updateAll(double dt);
+	void drawAll(double dt);
 };
 
 typedef class TrailPoints : public Sprite{

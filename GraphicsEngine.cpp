@@ -498,7 +498,6 @@ bool GraphicsEngine::prepareSprites(void){
 	pball->setRadius(0.3);
 	pball->setSX(4.0);
 	pball->setSY(4.0);
-	this->spriteList.push_back(pball);
     
     auto pTrailer = new TrailPoints(30);
     pTrailer->setProgram(this->sphere_program);
@@ -508,8 +507,6 @@ bool GraphicsEngine::prepareSprites(void){
     pTrailer->setColourIntensity(glm::vec3(0.3,0.6,0.9));
     pTrailer->setRadius(0.1);
     pTrailer->setPosition(glm::vec3(0,-0.4,0));
-    this->spriteList.push_back(pTrailer);
-    
 
 	auto pRobot = new Robot();
 	pRobot->setID(1);
@@ -524,7 +521,6 @@ bool GraphicsEngine::prepareSprites(void){
 	pRobot->setSX(1.0);
 	pRobot->setSY(1.0);
     pRobot->addTrailer(pTrailer);
-	this->spriteList.push_back(pRobot);
 
 	//Walls
 	//Top & Bottom Walls
@@ -552,7 +548,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -578,8 +573,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
-
 
 	//Left & Right Walls
 	pWall = new Wall();
@@ -606,7 +599,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -632,7 +624,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -658,7 +649,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -684,7 +674,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	//Gates
 	//Right Gate
@@ -712,7 +701,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -738,7 +726,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -764,7 +751,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 
 	//Left Gate
@@ -792,7 +778,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -818,7 +803,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -844,7 +828,6 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	//Corners
 	GLfloat length = 0.7*sqrt(2.0);
@@ -877,7 +860,6 @@ bool GraphicsEngine::prepareSprites(void){
 
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -907,7 +889,6 @@ bool GraphicsEngine::prepareSprites(void){
 
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -937,7 +918,6 @@ bool GraphicsEngine::prepareSprites(void){
 
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -967,7 +947,6 @@ bool GraphicsEngine::prepareSprites(void){
 
 		return true;
 	});
-	this->spriteList.push_back(pWall);
 
 	//Flooor
 	pWall = new Wall();
@@ -979,7 +958,6 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setPosition(glm::vec3(0,-0.5,0));
 	pWall->setScale(glm::vec3(22,18,1));
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -990,7 +968,6 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setPosition(glm::vec3(11.75,-0.5,0));
 	pWall->setScale(glm::vec3(1.5,4.0,1));
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
-	this->spriteList.push_back(pWall);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -1001,7 +978,6 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setPosition(glm::vec3(-11.75,-0.5,0));
 	pWall->setScale(glm::vec3(1.5,4.0,1));
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
-	this->spriteList.push_back(pWall);
 
 	//Obstacles;
 
@@ -1015,7 +991,6 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setScale(glm::vec3(15.0,0.7,1.0));
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
-	this->spriteList.push_back(pObs);
 
 	return true;
 }
@@ -1106,10 +1081,13 @@ bool GraphicsEngine::setExternalFunction(std::function<void*(double,void*)> _ext
 }
 
 bool GraphicsEngine::mainLoop(){
+
 	double dt;
 	static double prevtime;
 	static double time;
 	
+	auto sl = SpriteManager::getInstance();
+
 	prevtime = time;
 	time = glfwGetTime();
 
@@ -1134,14 +1112,8 @@ bool GraphicsEngine::mainLoop(){
 		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 	}
 	
-	for(auto p : this->spriteList){
-		p->update(dt);
-	}
-
-	for(auto p : this->spriteList){
-
-		p->draw(dt);
-	}
+	sl->updateAll(dt);
+	sl->drawAll(dt);
 	
 	glBindVertexArray(0);
 

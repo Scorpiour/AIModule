@@ -22,9 +22,29 @@ void SpriteManager::addToManager(pSprite p){
 	this->spriteList.insert(p);
 }
 
-void SpriteManager::removeFromManager(pSprite p){
-	this->spriteList.erase(p);
+void SpriteManager::removeFromManager(pSprite & p){
+	size_t count = this->spriteList.erase(p);
+	if(count){
+		SAFE_DEL(p);
+	}
 }
+
+void SpriteManager::updateAll(double dt){
+	for(auto ptr : this->spriteList){
+		if(ptr){
+			ptr->update(dt);
+		}
+	}
+}
+
+void SpriteManager::drawAll(double dt){
+	for(auto ptr : this->spriteList){
+		if(ptr){
+			ptr->draw(dt);
+		}
+	}
+}
+
 
 Sprite::Sprite(){
 	for(int i=0;i<16;i++){
@@ -50,8 +70,7 @@ Sprite::Sprite(){
 }
 
 Sprite::~Sprite(){
-	int i;
-	i = 3;
+
 }
 
 void Sprite::setProgram(pShaderProgram _program){
