@@ -172,6 +172,26 @@ typedef struct AStarSearchNode{
 	float heuristic;
 	Point2F position;
 	Point2I coord;
+
+	AStarSearchNode(){
+		gValue = 0.f;
+		heuristic = 0.f;
+	}
+	AStarSearchNode(const AStarSearchNode& node){
+		gValue = node.gValue;
+		heuristic = node.heuristic;
+		position = node.position;
+		coord = node.coord;
+	}
+
+	bool operator < (const AStarSearchNode& node)const{
+		return this->coord < node.coord;
+	}
+
+	bool operator == (const AStarSearchNode& node){
+		return !( (this->coord < node.coord) && ( node.coord < this->coord) ) ;
+	}
+
 }*pAStarSearchNode;
 
 

@@ -26,6 +26,9 @@ void AIModuleController::addToController(const std::string& name, AIModuleBase* 
 		modules.insert(make_pair(name,module));
 	}else{
 		//do somethinig with duplicate modules
+		auto ptr = iter->second;
+		delete ptr;
+		iter->second = module;
 	}
 }
 

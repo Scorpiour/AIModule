@@ -68,6 +68,9 @@ public:
         size_t head = 0;
         std::swap(elements[tail],elements[head]);
         elements.pop_back();
+		if(elements.empty()){
+			return;
+		}
         tail--;
         
         size_t left;

@@ -5,24 +5,6 @@ using namespace std;
 Robot::Robot():Sprite(),RigidBody(){
 	mass = 50.f;
     this->pts = nullptr;
-	std::string robot_module_name = "Robot AStar Search";
-	
-	/*
-	auto fuzzy_logic = new AIFuzzyLogic(robot_module_name);
-
-	fuzzy_logic->init("Fuzzy_Angle.fuzzy");
-
-	if(fuzzy_logic->isInit()){
-		data.dataSize = fuzzy_logic->getInputSize() + 1;
-		data.dataList = new double[data.dataSize];
-	}
-
-	this->addModule(robot_module_name,fuzzy_logic);*/
-
-	auto pAStar = new AIAStarSearch(robot_module_name);
-	
-	this->addModule(robot_module_name,pAStar);
-    
 }
 
 Robot::~Robot(){

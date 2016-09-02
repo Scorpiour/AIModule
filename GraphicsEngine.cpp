@@ -522,6 +522,10 @@ bool GraphicsEngine::prepareSprites(void){
 	pRobot->setSY(1.0);
     pRobot->addTrailer(pTrailer);
 
+	std::string robot_module_name = "Robot AStar Search";
+	auto pAStar = new AIAStarSearch(robot_module_name);
+	pRobot->addModule(robot_module_name,pAStar);
+
 	//Walls
 	//Top & Bottom Walls
 	auto pWall = new Wall();
