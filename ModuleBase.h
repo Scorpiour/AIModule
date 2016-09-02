@@ -37,6 +37,7 @@ public:
 	AIData(const AIData& A);
 	virtual ~AIData();
 
+	void clear();
 	const AIData& operator = (const AIData& A);
 }*pAIData;
 
@@ -70,6 +71,10 @@ protected:
 	void addToController(const std::string& name, AIModuleBase* module);
 };
 
+
+
+//Potential Field
+
 typedef class AIPotentialField : public AIModuleBase{
 protected:
 	pAIData pInternalData;
@@ -89,6 +94,11 @@ public:
 	void setQuickMode(bool b);
 
 }*pAIPotentialField;
+
+
+
+
+//Fuzzy Logic
 
 typedef enum {regular_trapezoid, left_trapezoid, right_trapezoid} TrapzType;
 
@@ -153,26 +163,27 @@ public:
 }*pAIFuzzyLogic;
 
 
+
+
+//AStar Search
+
 typedef struct AStarSearchNode{
 	float gValue;
 	float heuristic;
-
+	Point2F position;
+	Point2I coord;
 }*pAStarSearchNode;
 
-typedef std::deque<pAStarSearchNode> pathNode;
 
 typedef class AIAStarSearch : public AIModuleBase{
 protected:
 	pAIData pInternalData;
 	bool hasInit;
+	uint32_t level;
 
 	pAStarSearchNode startNode;
 	pAStarSearchNode goalNode;
-    
-    std::set<pAStarSearchNode> expandList;
-    
-    
-    
+
 protected:
 	~AIAStarSearch();
 public:
@@ -184,6 +195,6 @@ public:
 	virtual GlobalFlag releaseAIData(void)override;
 	virtual void setProcessFunction(ProcessFunction func)override;
 
-	virtual void init(pAStarSearchNode startNode, pAStarSearchNode goalNode);
+	virtual void init(pAStarSearchNode _startNode, pAStarSearchNode _goalNode,uint32_t _level);
 }*pAIAStarSearch;
 #endif

@@ -118,7 +118,7 @@ public:
 
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
-	virtual void setDistanceHeuristic(float h);
+	virtual float calculateDistance(const Point2F& point, float rad) override;
 
 	virtual void setScale(glm::vec3 _scale) override;
     
@@ -149,6 +149,7 @@ public:
 
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
+	virtual float calculateDistance(const Point2F& point, float rad) override;
 };
 
 class Obstacle : public Robot{
@@ -161,7 +162,7 @@ public:
 	virtual void move(double)override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual float calculateDistance(RigidBody* dest);
-	virtual float calculateDistance(Point2F& point,float rad);
+	virtual float calculateDistance(const Point2F& point,float rad) override;
 
 };
 
@@ -185,6 +186,7 @@ public:
 
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
+	virtual float calculateDistance(const Point2F& point, float rad) override;
 };
 
 #endif

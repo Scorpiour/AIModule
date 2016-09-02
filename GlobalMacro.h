@@ -95,6 +95,33 @@ typedef struct Point2F{
 
 }*pPoint2F;
 
+typedef struct Point2I{
+	int32_t x;
+	int32_t y;
+
+	Point2I(const Point2I& pt){
+		this->x = pt.x;
+		this->y = pt.y;
+	}
+
+	const Point2I& operator = (const Point2I& pt){
+		if(this != &pt){
+			this->x = pt.x;
+			this->y = pt.y;
+		}
+		return *this;
+	}
+
+	bool operator < (const Point2I& pt){
+		if(this->y < pt.y){
+			return true;
+		}else if(this->y == pt.y){
+			return this->x < pt.x;
+		}
+		return false;
+	}
+}*pPoint2I;
+
 #ifdef _WIN32
 #include <crtdbg.h>
 #ifdef _DEBUG

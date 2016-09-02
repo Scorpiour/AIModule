@@ -42,6 +42,7 @@ public:
 
 	virtual void move(double)=0;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) = 0;
+	virtual float calculateDistance(const Point2F& point, float rad) = 0;
 	
 	virtual void setForceFunc(std::function<bool(RigidBody*,Point2F&)> _forceFunc);
 	virtual bool processForceFunc(RigidBody*,Point2F&);
@@ -61,9 +62,11 @@ public:
 	virtual bool isEnabled()const;
 }*pRigidBody;
 
+
 typedef class RigidController{
 	friend class RigidBody;
 protected:
+
 	RigidController();
 	~RigidController();
 
@@ -75,6 +78,8 @@ public:
 	static RigidController& getInstance();
 public:
 	void calculateCollisionForce(double dt);
+	float calculateDistanceLevel(const Point2F& pt);
+
 }*pRigidController;
 
 

@@ -210,3 +210,21 @@ bool Ball::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	return true;
 }
+
+float Ball::calculateDistance(const Point2F& point, float rad){
+	float ix = this->getX();
+	float iy = this->getY();
+	float ir = this->getRadius();
+
+	float tx = point.x;
+	float ty = point.y;
+
+	float dx = tx-ix;
+	float dy = ty-iy;
+
+	float distance = sqrt(dx*dx + dy*dy);
+
+	distance = distance - rad - ir;
+
+	return distance;
+}

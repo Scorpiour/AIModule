@@ -53,8 +53,14 @@ AIData::AIData(const AIData& A){
 }
 
 AIData::~AIData(){
+	this->clear();
+}
+
+void AIData::clear(){
 	SAFE_DELS(idxList);
 	SAFE_DELS(dataList);
+	idxSize = 0;
+	dataSize = 0;
 }
 
 const AIData& AIData::operator = (const AIData& A){

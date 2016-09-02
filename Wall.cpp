@@ -3,7 +3,7 @@
 using namespace std;
 
 Wall::Wall():Sprite(),RigidBody(){
-
+	this->id = -2;
 }
 
 Wall::~Wall(){
@@ -78,4 +78,67 @@ bool Wall::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		return this->forceFunc(dest,result);
 	}
 	return false;
+}
+
+float Wall::calculateDistance(const Point2F& point, float rad){
+
+	if(this->forceFunc != nullptr){
+
+		float angle = this->angles.y;
+		float length = this->scaleMatrix[0] * 10;
+		float x = this->getX();
+		float y = this->getY();
+
+		float r = length / 2;
+
+		Point2F p1;
+		Point2F p2;
+
+		float cost = r*cos(angle);
+		float sint = r*sin(angle);
+
+		p1.x = x - cost;
+		p1.y = y - sint;
+		p2.x = x + cost;
+		p2.y = x + sint;
+
+		if(p1.x > p2.x){
+			std::swap(p1.x,p2.x);
+			std::swap(p1.y,p2.y);
+		}
+
+		float tx = point.x;
+		float ty = point.y;
+
+		float a = (p2.y - p1.y);
+		float b = (p1.x - p2.x);
+		float c = p1.y*(p2.x-p1.x) + p1.x*(p1.y-p2.y);
+
+		if(a==0&&b==0){
+			return 0.f;
+		}
+
+		float denom = 1/sqrt(a*a+b*b);
+		
+		Point2F foot;
+		foot.x = (b*b*tx - a*b*ty - a*c)*denom*denom;
+		foot.y = (a*a*ty - a*b*tx - b*c)*denom*denom;
+
+		float distance = -1.f;
+
+		if(foot.x < p1.x){
+			float dx = tx-p1.x;
+			float dy = ty-p1.y;
+			distance = sqrt(dx*dx + dy*dy);
+		}else if(foot.x > p2.x){
+			float dx = tx-p2.x;
+			float dy = ty-p2.y;
+			distance = sqrt(dx*dx + dy*dy);
+		}
+
+		distance = abs(a*tx + b*ty + c)*denom;
+
+		return distance;
+	}
+	return -1.f;
 }

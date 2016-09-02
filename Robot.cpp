@@ -5,7 +5,9 @@ using namespace std;
 Robot::Robot():Sprite(),RigidBody(){
 	mass = 50.f;
     this->pts = nullptr;
-	std::string robot_module_name = "Robot Fuzzy";
+	std::string robot_module_name = "Robot AStar Search";
+	
+	/*
 	auto fuzzy_logic = new AIFuzzyLogic(robot_module_name);
 
 	fuzzy_logic->init("Fuzzy_Angle.fuzzy");
@@ -15,7 +17,11 @@ Robot::Robot():Sprite(),RigidBody(){
 		data.dataList = new double[data.dataSize];
 	}
 
-	this->addModule(robot_module_name,fuzzy_logic);
+	this->addModule(robot_module_name,fuzzy_logic);*/
+
+	auto pAStar = new AIAStarSearch(robot_module_name);
+	
+	this->addModule(robot_module_name,pAStar);
     
 }
 
@@ -98,7 +104,10 @@ void Robot::setScale(glm::vec3 _scale){
 
 
 void Robot::move(double dt){
-	
+
+
+
+
 	float rsx = this->sx;
 	float rsy = this->sy;
 	
@@ -163,6 +172,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	int id = dest->getID();
 	if(id==0){
+		/*
 		std::string robot_module_name = "Robot Fuzzy";
 
 		auto iter  = this->modules.find(robot_module_name);
@@ -176,6 +186,31 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			fuzzy->loadAIData(&(this->data));
 			fuzzy->processAIData(dt);
 			fuzzy->outputAIData(&(this->data));
+		}*/
+
+		std::string robot_module_name = "Robot AStar Search";
+		auto iter  = this->modules.find(robot_module_name);
+
+		if(iter != modules.end()){
+			auto pAStar = dynamic_cast<AIAStarSearch*>(iter->second);
+
+			AStarSearchNode startNode;
+			AStarSearchNode goalNode;
+
+
+			startNode.position.x = this->getX();
+			startNode.position.y = this->getY();
+
+			goalNode.position.x = dest->getX();
+			goalNode.position.y = dest->getY();
+
+			//clear old datas
+			this->data.clear();
+
+			pAStar->init(&startNode, &goalNode, 5);
+			pAStar->loadAIData(&(this->data));
+			pAStar->processAIData(0);
+			pAStar->outputAIData(&(this->data));
 		}
 	}
 
@@ -270,10 +305,6 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		result.y = 0;
 	}
 
-	if(-2 == id){
-		Obstacle* obs = dynamic_cast<Obstacle*>(dest);
-	}
-
 
 	return true;
 }
@@ -282,6 +313,94 @@ void Robot::addTrailer(pTrailPoints _pts){
     this->pts = _pts;
 }
 
-void Robot::setDistanceHeuristic(float h){
 
+float Robot::calculateDistance(const Point2F& point,float rad){
+	float ix = this->getX();
+	float iy = this->getY();
+	float ir = this->getRadius();
+	
+	float tx = point.x;
+	float ty = point.y;
+
+	float dx = tx - ix;
+	float dy = ty - iy;
+
+	float distance = sqrt(dy*dy + dx*dx);
+
+	float phi = atan2(dy,dx);
+	float theta = this->angles.y;
+
+	while(phi < 0){
+		phi += 2*M_PI;
+	}
+	while(theta <0){
+		theta += 2*M_PI;
+	}
+	while(phi < theta){
+		phi += 2*M_PI;
+	}
+
+	float delta = phi - theta;
+	float denom = atan2(length,width);
+	
+	Point2F forceDirection;
+	forceDirection.x = 0;
+	forceDirection.y = 0;
+	float r = 0;
+
+	if(delta < denom){
+		forceDirection.x = cos(theta);
+		forceDirection.y = sin(theta);
+		distance *= cos(delta);
+		r = width/2;
+		distance -= r;
+	}else if(delta == denom){
+		forceDirection.x = cos(phi);
+		forceDirection.y = sin(phi);
+		r = ir;
+		distance -= r;
+	}else if(delta < M_PI-denom){
+		forceDirection.x = -sin(theta);
+		forceDirection.y = cos(theta);
+		distance *= sin(delta);
+		r = length/2;
+		distance -= r;
+	}else if(delta == M_PI-denom){
+		forceDirection.x = cos(phi);
+		forceDirection.y = sin(phi);
+		r = ir;
+		distance -= r;
+	}else if(delta < M_PI+denom){
+		forceDirection.x = -cos(theta);
+		forceDirection.y = -sin(theta);
+		distance *= cos(delta);
+		r = width/2;
+		distance -= r;
+	}else if(delta == M_PI+denom){
+		forceDirection.x = cos(phi);
+		forceDirection.y = sin(phi);
+		r = ir;
+		distance -= r;
+	}else if(delta < 2*M_PI-denom){
+		forceDirection.x = sin(theta);
+		forceDirection.y = -cos(theta);
+		distance *= sin(delta);
+		r = length/2;
+		distance -= r;
+	}else if(delta == 2*M_PI-denom){
+		forceDirection.x = cos(phi);
+		forceDirection.y = sin(phi);
+		r = ir;
+		distance -= r;
+	}else{
+		forceDirection.x = cos(theta);
+		forceDirection.y = sin(theta);
+		distance *= cos(delta);
+		r = width/2;
+		distance -= r;
+	}
+
+	distance = abs(distance);
+	
+	return distance;
 }

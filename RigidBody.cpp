@@ -55,6 +55,23 @@ void RigidController::calculateCollisionForce(double dt){
 	}
 }
 
+float RigidController::calculateDistanceLevel(const Point2F& pt){
+	float dv = FLT_MAX;
+	
+	for(auto& target : this->rigids){
+		if(target->getID() == -2){
+			float distance = target->calculateDistance(pt,0);
+			if(distance < 0 ){
+				continue;
+			}
+			if(distance < dv){
+				dv = distance;
+			}
+		}
+	}
+
+	return dv;
+}
 
 int RigidBody::getID()const{
 	return this->id;

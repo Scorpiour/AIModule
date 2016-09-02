@@ -154,14 +154,13 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	return true;
 }
 
-float Obstacle::calculateDistance(Point2F& point,float rad){
+float Obstacle::calculateDistance(const Point2F& point,float rad){
 	float ix = this->getX();
 	float iy = this->getY();
 	float ir = this->getRadius();
 	
 	float tx = point.x;
 	float ty = point.y;
-	float tr = rad;
 
 	float dx = tx - ix;
 	float dy = ty - iy;
@@ -335,5 +334,5 @@ float Obstacle::calculateDistance(RigidBody* dest){
 
 	distance = abs(distance);
 	
-	return distance;
+	return distance - tr;
 }
