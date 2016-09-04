@@ -76,8 +76,8 @@ void Robot::setScale(glm::vec3 _scale){
 	float scalex = this->scaleMatrix[0];
 	float scalez = this->scaleMatrix[10];
 
-	scalex *= 5.f;
-	scalez *= 5.f;
+	scalex *= 10.f;
+	scalez *= 10.f;
 
 	this->width = scalex;
 	this->length = scalez;
@@ -194,7 +194,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 				//clear old datas
 				this->data.clear();
 
-				pAStar->init(&startNode, &goalNode, 30);
+				pAStar->init(&startNode, &goalNode, 20);
 				pAStar->loadAIData(&(this->data));
 				pAStar->processAIData(0);
 				pAStar->outputAIData(&(this->data));

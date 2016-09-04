@@ -56,8 +56,12 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			if(distLevel < 0.f){
 				return -1.f;
 			}
-			distLevel = 100/(1+exp(3*distLevel-5));
-			
+			if(distLevel < 1.f){
+				distLevel = 1.f;
+			}
+			//distLevel = 5000/(1+exp(3*distLevel-5));
+			distLevel = 10000.f/distLevel;
+
 			float distance = distanceFunc(p1,p2);
 
 			float result = distLevel + distance;
@@ -141,6 +145,12 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 				break;
 			}
 
+			auto iter = expandList.find(firstNode->coord);
+			if(iter != expandList.end()){
+				continue;
+			}
+
+			expandList.insert(firstNode->coord);
 
 			for(int i=-1;i<=1;i++){
 				for(int j=-1;j<=1;j++){
@@ -152,7 +162,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 					nextCoord.x += j;
 					nextCoord.y += i;
 
-					auto iter = expandList.find(nextCoord);
+					iter = expandList.find(nextCoord);
 					if(iter != expandList.end()){
 						continue;
 					}
@@ -179,7 +189,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 						continue;
 					}
 
-					expandList.insert(nextCoord);
+					
 
 					nodeBuffer.insert(nextNode);
 					pSearchNode nextSearchNode = new SearchNode(*first);
@@ -199,6 +209,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		
 		//output result
 		if(result != nullptr){
+
 
 			pInternalData->idxSize = result->size();
 			pInternalData->dataSize = result->size() * 2;

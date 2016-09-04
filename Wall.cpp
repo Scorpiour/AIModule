@@ -100,7 +100,7 @@ float Wall::calculateDistance(const Point2F& point, float rad){
 		p1.x = x - cost;
 		p1.y = y - sint;
 		p2.x = x + cost;
-		p2.y = x + sint;
+		p2.y = y + sint;
 
 		if(p1.x > p2.x){
 			std::swap(p1.x,p2.x);
@@ -134,10 +134,10 @@ float Wall::calculateDistance(const Point2F& point, float rad){
 			float dx = tx-p2.x;
 			float dy = ty-p2.y;
 			distance = sqrt(dx*dx + dy*dy);
+		}else{
+			distance = abs(a*tx + b*ty + c)*denom;
 		}
-
-		distance = abs(a*tx + b*ty + c)*denom;
-
+		
 		return distance;
 	}
 	return FLT_MAX;
