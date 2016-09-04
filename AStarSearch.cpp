@@ -56,9 +56,11 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			if(distLevel < 0.f){
 				return -1.f;
 			}
-			float distance = distanceFunc(p1, p2);
+			distLevel = 100/(1+exp(3*distLevel-5));
 			
-			float result = 100/distLevel + distance;
+			float distance = distanceFunc(p1,p2);
+
+			float result = distLevel + distance;
 			return result;
 		};
 			
@@ -154,16 +156,18 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 					auto iter = expandList.find(nextCoord);
 					if(iter != expandList.end()){
 						continue;
-					}else{
-						expandList.insert(nextCoord);
 					}
 
 					auto nextNode = new AStarSearchNode;			
 
 					nextNode->coord = nextCoord;
-					nextNode->gValue += sqrt(nextCoord.x * nextCoord.x + nextCoord.y * nextCoord.y);
-					nextNode->position.x = firstNode->position.x + j*div_x;
-					nextNode->position.y = firstNode->position.y + i*div_y;
+					float gx = nextCoord.x * div_x;
+					float gy = nextCoord.y * div_y;
+					nextNode->gValue += sqrt(gx*gx + gy*gy);
+					nextNode->position.x = startNode->position.x + nextCoord.x*div_x;
+					nextNode->position.y = startNode->position.y + nextCoord.y*div_y;
+					
+					
 					if( abs(nextNode->position.x) > 250 || abs(nextNode->position.y) > 200){
 						delete nextNode;
 						continue;
@@ -175,6 +179,8 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 						delete nextNode;
 						continue;
 					}
+
+					expandList.insert(nextCoord);
 
 					nodeBuffer.insert(nextNode);
 					pSearchNode nextSearchNode = new SearchNode(*first);
