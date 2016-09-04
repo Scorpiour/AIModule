@@ -140,5 +140,5 @@ float Wall::calculateDistance(const Point2F& point, float rad){
 
 		return distance;
 	}
-	return -1.f;
+	return FLT_MAX;
 }

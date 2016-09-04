@@ -37,6 +37,42 @@ const glm::vec3 Camera::getUp()const{
 	return this->up;
 }
 
+bool Camera::rayClip(Point2F& worldCoord,GLFWwindow* window){
+	memcpy(invLookat,lookat,16*sizeof(GLfloat));
+	memcpy(invProject,project,16*sizeof(GLfloat));
+
+	if(GlobalVariables::Mat4Inverse(invProject) && GlobalVariables::Mat4Inverse(invLookat)){
+
+		double x;
+		double y;
+		glfwGetCursorPos(window,&x,&y);
+
+		int w,h;
+		glfwGetWindowSize(window,&w,&h);
+
+		float x_nds = (2.f * x)/(float)w - 1.f;
+		float y_nds = 1.f - (2.f * y)/(float)h;
+
+		glm::vec4 rayClip = glm::vec4(x_nds, y_nds, -1.f, 3.f);
+
+		glm::vec4 rayEye = GlobalVariables::Mat4MultiVec4(invProject,rayClip);
+		rayEye.z = -1.f;//((or>0)?or:1.f) ;//-camZ;	
+		rayEye.w = 0.f;
+
+		glm::vec4 rayWorld =  GlobalVariables::Mat4MultiVec4(invLookat,rayEye);
+		glm::vec3 ray = glm::vec3(rayWorld);
+		ray = glm::normalize(ray);
+
+		float t = -position.y / ray.y;
+
+		worldCoord.x = position.x + t*ray.x;
+		worldCoord.y = position.z + t*ray.z;
+		
+
+		return true;
+	}
+	return false;
+}
 
 void Camera::update(double dt, double radius, double persp_angle,double ratio){	
 

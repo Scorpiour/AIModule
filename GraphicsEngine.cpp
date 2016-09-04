@@ -41,6 +41,7 @@ GraphicsEngine::GraphicsEngine(){
 	this->manualFlag = true;
 	this->pausetime = 0;
 	this->pauseFlag = false;
+	this->resetBall = false;
 
 	this->lightPosition = glm::vec3(0,0,0);
 
@@ -184,7 +185,9 @@ void GraphicsEngine::resizeFramebufferCallback(GLFWwindow* window, int width, in
 }
 
 void GraphicsEngine::mouseButtonCallback(GLFWwindow* window, int btn, int action, int mode){
-
+	if(btn == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
+		GraphicsEngine::getInstance()->resetBall = true;
+	}
 }
 
 void GraphicsEngine::scrollCallback(GLFWwindow* window, double xoff, double yoff){
@@ -496,8 +499,10 @@ bool GraphicsEngine::prepareSprites(void){
 	pball->setColourIntensity(glm::vec3(0.3,0.6,0.9));
 	pball->setPosition(glm::vec3(5,-0.2,5));
 	pball->setRadius(0.3);
-	pball->setSX(4.0);
-	pball->setSY(4.0);
+	pball->setSX(0.0);
+	pball->setSY(0.0);
+
+	this->pb = pball;
     
     auto pTrailer = new TrailPoints(30);
     pTrailer->setProgram(this->sphere_program);
@@ -508,6 +513,15 @@ bool GraphicsEngine::prepareSprites(void){
     pTrailer->setRadius(0.1);
     pTrailer->setPosition(glm::vec3(0,-0.4,0));
 
+	auto pPath = new TrailPoints(50);
+	pPath->setProgram(this->sphere_program);
+    pPath->setVAO(this->sphere_vao);
+    pPath->setCamera(this->main_camera);
+    pPath->setColour(glm::vec3(1,1,0));
+    pPath->setColourIntensity(glm::vec3(0.3,0.6,0.9));
+    pPath->setRadius(0.1);
+    pPath->setPosition(glm::vec3(0,-0.4,0));
+
 	auto pRobot = new Robot();
 	pRobot->setID(1);
 	pRobot->setProgram(this->box_program);
@@ -515,16 +529,20 @@ bool GraphicsEngine::prepareSprites(void){
 	pRobot->setCamera(this->main_camera);
 	pRobot->setColour(glm::vec3(1,0,0));
 	pRobot->setColourIntensity(glm::vec3(0.3,0.6,0.9));
-	pRobot->setPosition(glm::vec3(0,-0.15,1));
+	pRobot->setPosition(glm::vec3(-9.f,-0.15,-7.f));
 	pRobot->setScale(glm::vec3(0.7, 0.7, 0.7));
 	pRobot->setAngle(glm::vec3(0,M_PI/4,0));
-	pRobot->setSX(1.0);
-	pRobot->setSY(1.0);
+	pRobot->setSX(0.0);
+	pRobot->setSY(0.0);
+	pRobot->setMovable(false);
     pRobot->addTrailer(pTrailer);
+	pRobot->addPathview(pPath);
 
 	std::string robot_module_name = "Robot AStar Search";
 	auto pAStar = new AIAStarSearch(robot_module_name);
 	pRobot->addModule(robot_module_name,pAStar);
+
+	this->pr = pRobot;
 
 	//Walls
 	//Top & Bottom Walls
@@ -992,7 +1010,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setColour(glm::vec3(0.3,0.3,0.3));
 	pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
 	pObs->setPosition(glm::vec3(-2,-0.15,0));
-	pObs->setScale(glm::vec3(15.0,0.7,1.0));
+	pObs->setScale(glm::vec3(6.0,0.7,6.0));
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
 
@@ -1106,6 +1124,15 @@ bool GraphicsEngine::mainLoop(){
 		this->externalFunc(dt,nullptr);
 	}
 
+	if(resetBall){
+		Point2F worldPos;
+		this->main_camera->rayClip(worldPos,window);
+		
+		this->pb->setPosition(glm::vec3(worldPos.x, -0.2, worldPos.y));
+		this->pr->clearAIData();
+
+		resetBall = false;
+	}
 	RigidController::getInstance().calculateCollisionForce(dt);
 
 	this->main_camera->update(dt,this->radius, this->persp_angle,this->ratio);

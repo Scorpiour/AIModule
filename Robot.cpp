@@ -5,6 +5,7 @@ using namespace std;
 Robot::Robot():Sprite(),RigidBody(){
 	mass = 50.f;
     this->pts = nullptr;
+	this->path = nullptr;
 }
 
 Robot::~Robot(){
@@ -87,7 +88,9 @@ void Robot::setScale(glm::vec3 _scale){
 
 void Robot::move(double dt){
 
-
+	if(!movable){
+		return;
+	}
 
 
 	float rsx = this->sx;
@@ -170,30 +173,45 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			fuzzy->outputAIData(&(this->data));
 		}*/
 
-		std::string robot_module_name = "Robot AStar Search";
-		auto iter  = this->modules.find(robot_module_name);
+		if(this->data.idxSize == 0){
 
-		if(iter != modules.end()){
-			auto pAStar = dynamic_cast<AIAStarSearch*>(iter->second);
+			std::string robot_module_name = "Robot AStar Search";
+			auto iter  = this->modules.find(robot_module_name);
 
-			AStarSearchNode startNode;
-			AStarSearchNode goalNode;
+			if(iter != modules.end()){
+				auto pAStar = dynamic_cast<AIAStarSearch*>(iter->second);
+
+				AStarSearchNode startNode;
+				AStarSearchNode goalNode;
 
 
-			startNode.position.x = this->getX();
-			startNode.position.y = this->getY();
+				startNode.position.x = this->getX();
+				startNode.position.y = this->getY();
 
-			goalNode.position.x = dest->getX();
-			goalNode.position.y = dest->getY();
+				goalNode.position.x = dest->getX();
+				goalNode.position.y = dest->getY();
 
-			//clear old datas
-			this->data.clear();
+				//clear old datas
+				this->data.clear();
 
-			pAStar->init(&startNode, &goalNode, 5);
-			pAStar->loadAIData(&(this->data));
-			pAStar->processAIData(0);
-			pAStar->outputAIData(&(this->data));
+				pAStar->init(&startNode, &goalNode, 30);
+				pAStar->loadAIData(&(this->data));
+				pAStar->processAIData(0);
+				pAStar->outputAIData(&(this->data));
+
+				if(this->data.idxSize != 0){
+					this->path->clear();
+
+					for(int i=0;i<data.idxSize;i++){
+						Point2F pt;
+						pt.x = data.dataList[i*2] / 10.f;
+						pt.y = data.dataList[i*2+1] / 10.f;
+						this->path->addPoint(pt);
+					}
+				}
+			}
 		}
+
 	}
 
 	float dx = tx - ix;
@@ -291,8 +309,16 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	return true;
 }
 
+void Robot::clearAIData(){
+	this->data.clear();
+}
+
 void Robot::addTrailer(pTrailPoints _pts){
     this->pts = _pts;
+}
+
+void Robot::addPathview(pTrailPoints _path){
+	this->path = _path;
 }
 
 
@@ -335,54 +361,45 @@ float Robot::calculateDistance(const Point2F& point,float rad){
 		forceDirection.y = sin(theta);
 		distance *= cos(delta);
 		r = width/2;
-		distance -= r;
 	}else if(delta == denom){
 		forceDirection.x = cos(phi);
 		forceDirection.y = sin(phi);
 		r = ir;
-		distance -= r;
 	}else if(delta < M_PI-denom){
 		forceDirection.x = -sin(theta);
 		forceDirection.y = cos(theta);
 		distance *= sin(delta);
 		r = length/2;
-		distance -= r;
 	}else if(delta == M_PI-denom){
 		forceDirection.x = cos(phi);
 		forceDirection.y = sin(phi);
 		r = ir;
-		distance -= r;
 	}else if(delta < M_PI+denom){
 		forceDirection.x = -cos(theta);
 		forceDirection.y = -sin(theta);
 		distance *= cos(delta);
 		r = width/2;
-		distance -= r;
 	}else if(delta == M_PI+denom){
 		forceDirection.x = cos(phi);
 		forceDirection.y = sin(phi);
 		r = ir;
-		distance -= r;
 	}else if(delta < 2*M_PI-denom){
 		forceDirection.x = sin(theta);
 		forceDirection.y = -cos(theta);
 		distance *= sin(delta);
 		r = length/2;
-		distance -= r;
 	}else if(delta == 2*M_PI-denom){
 		forceDirection.x = cos(phi);
 		forceDirection.y = sin(phi);
 		r = ir;
-		distance -= r;
 	}else{
 		forceDirection.x = cos(theta);
 		forceDirection.y = sin(theta);
 		distance *= cos(delta);
 		r = width/2;
-		distance -= r;
 	}
 
 	distance = abs(distance);
 	
-	return distance;
+	return distance - r;
 }

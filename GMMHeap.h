@@ -14,6 +14,8 @@
 #include <cstdlib>
 #include <vector>
 #include <set>
+#include <algorithm>
+#include <functional>
 #include <exception>
 
 template <typename K,typename V>
@@ -63,6 +65,8 @@ public:
         }
     }
     
+
+
     void leave(void){
         size_t tail = elements.size()-1;
         size_t head = 0;
@@ -108,6 +112,16 @@ public:
         }
         return elements[0].second;
     }
+
+	void traversal(std::function<void(K,V)> callback){
+		for(auto & p : elements){
+			callback(p.first, p.second);
+		}
+	}
+
+	void clear(){
+		elements.clear();
+	}
     
 protected:
     std::vector<std::pair<K,V>> elements;

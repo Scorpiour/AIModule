@@ -32,6 +32,11 @@ protected:	//General Members
 	float radius;
 	float persp_angle;
 	double pausetime;
+	bool resetBall;
+
+	Ball* pb;
+	Robot* pr;
+
 	std::string rootPath;
 protected:	//Buffers & Shaders
 	GLuint sphere_vao;

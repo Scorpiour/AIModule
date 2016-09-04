@@ -61,9 +61,7 @@ float RigidController::calculateDistanceLevel(const Point2F& pt){
 	for(auto& target : this->rigids){
 		if(target->getID() == -2){
 			float distance = target->calculateDistance(pt,0);
-			if(distance < 0 ){
-				continue;
-			}
+
 			if(distance < dv){
 				dv = distance;
 			}

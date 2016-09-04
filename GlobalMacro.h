@@ -152,6 +152,10 @@ typedef struct Point2I{
 		}
 		return false;
 	}
+
+	bool operator == (const Point2I& pt)const{
+		return (this->y == pt.y) && (this->x == pt.x) ;
+	}
 }*pPoint2I;
 
 #ifdef _WIN32

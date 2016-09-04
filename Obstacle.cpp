@@ -193,56 +193,47 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
 		forceDirection.y = sin(theta);
 		distance *= cos(delta);
 		r = width/2;
-		distance -= r;
 	}else if(delta == denom){
 		forceDirection.x = cos(phi);
 		forceDirection.y = sin(phi);
 		r = ir;
-		distance -= r;
 	}else if(delta < M_PI-denom){
 		forceDirection.x = -sin(theta);
 		forceDirection.y = cos(theta);
 		distance *= sin(delta);
 		r = length/2;
-		distance -= r;
 	}else if(delta == M_PI-denom){
 		forceDirection.x = cos(phi);
 		forceDirection.y = sin(phi);
 		r = ir;
-		distance -= r;
 	}else if(delta < M_PI+denom){
 		forceDirection.x = -cos(theta);
 		forceDirection.y = -sin(theta);
 		distance *= cos(delta);
 		r = width/2;
-		distance -= r;
 	}else if(delta == M_PI+denom){
 		forceDirection.x = cos(phi);
 		forceDirection.y = sin(phi);
 		r = ir;
-		distance -= r;
 	}else if(delta < 2*M_PI-denom){
 		forceDirection.x = sin(theta);
 		forceDirection.y = -cos(theta);
 		distance *= sin(delta);
 		r = length/2;
-		distance -= r;
 	}else if(delta == 2*M_PI-denom){
 		forceDirection.x = cos(phi);
 		forceDirection.y = sin(phi);
 		r = ir;
-		distance -= r;
 	}else{
 		forceDirection.x = cos(theta);
 		forceDirection.y = sin(theta);
 		distance *= cos(delta);
 		r = width/2;
-		distance -= r;
 	}
 
 	distance = abs(distance);
 	
-	return distance;
+	return distance - r;
 }
 
 float Obstacle::calculateDistance(RigidBody* dest){

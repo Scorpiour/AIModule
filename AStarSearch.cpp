@@ -40,17 +40,6 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		goalNode->coord.x = level;
 		goalNode->coord.y = level;
 
-		//To Determine if the search has reached certain position
-		auto reachFunc = [=](Point2F& p1, Point2F& p2)->bool{
-			float dx = abs(p1.x - p2.x);
-			float dy = abs(p1.y - p2.y);
-
-			if( (dx < div_x/2.f) && (dy < div_y/2.f) ){
-				return true;
-			}
-			return false;
-		};
-
 		//To Calculate the distance between two points
 		auto distanceFunc = [=](Point2F& p1, Point2F& p2)->float{
 			float dx = abs(p1.x - p2.x);
@@ -59,15 +48,21 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			return sqrt(dx*dx + dy*dy);
 		};
 
-		Point2F gp;
-		gp.x = startNode->position.x;
-		gp.y = startNode->position.y;
+		//Calculate the Heuristic Function : the distance between two points plus the potential value
+		auto heuristicFunc = [=](Point2F& p1, Point2F& p2)->float{
 
-		float distLevel = RigidController::getInstance().calculateDistanceLevel(gp);
-
-		float distance = distanceFunc(startNode->position, goalNode->position);
+			float distLevel = RigidController::getInstance().calculateDistanceLevel(p1);
 			
-		startNode->heuristic = 1000/distLevel;
+			if(distLevel < 0.f){
+				return -1.f;
+			}
+			float distance = distanceFunc(p1, p2);
+			
+			float result = 100/distLevel + distance;
+			return result;
+		};
+			
+		startNode->heuristic = heuristicFunc(startNode->position, goalNode->position);
 		startNode->gValue = 0.f;
 
 		auto initNode = new AStarSearchNode(*startNode);
@@ -75,8 +70,8 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 
 		std::set<Point2I> expandList;
 
-		GMMPriorityQueue<float, std::deque<pAStarSearchNode>*> searchList;
 		
+
 		//Expand a node to expansion list
 		auto expand = [&](pAStarSearchNode pNode)->bool{
 			Point2I pt = pNode->coord;
@@ -91,6 +86,9 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		};
 
 		typedef std::deque<pAStarSearchNode> SearchNode, *pSearchNode;
+
+		GMMPriorityQueue<float, pSearchNode> searchList;
+		std::set<pSearchNode> searchNodeBuffer;
 
 		//Calculate the key value of path
 		auto calculateKey = [&](pSearchNode ps)->float{
@@ -109,6 +107,8 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		};
 
 		pSearchNode currentNode = new SearchNode;
+		searchNodeBuffer.insert(currentNode);
+
 		currentNode->push_front(initNode);
 		
 		float key = calculateKey(currentNode);
@@ -128,32 +128,100 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			
 			auto firstNode = first->front();
 
-			if(expand(firstNode)){
-
-				
-				
-				delete first;
-			}else{
-				//Expand fail, this node has been visited already
-				//don't delete AStarSearchNode.
-				delete first;
-				continue;
+			//Reach Goal
+			/*
+			if(reachFunc(firstNode->position, goalNode->position)){
+				result = first;
+				break;
+			}*/
+			if(firstNode->coord == goalNode->coord){
+				result = first;
+				break;
 			}
+
+
+
+			for(int i=-1;i<=1;i++){
+				for(int j=-1;j<=1;j++){
+					if(!i && !j){
+						continue;
+					}
+
+					Point2I nextCoord = firstNode->coord;
+					nextCoord.x += j;
+					nextCoord.y += i;
+
+					auto iter = expandList.find(nextCoord);
+					if(iter != expandList.end()){
+						continue;
+					}else{
+						expandList.insert(nextCoord);
+					}
+
+					auto nextNode = new AStarSearchNode;			
+
+					nextNode->coord = nextCoord;
+					nextNode->gValue += sqrt(nextCoord.x * nextCoord.x + nextCoord.y * nextCoord.y);
+					nextNode->position.x = firstNode->position.x + j*div_x;
+					nextNode->position.y = firstNode->position.y + i*div_y;
+					if( abs(nextNode->position.x) > 250 || abs(nextNode->position.y) > 200){
+						delete nextNode;
+						continue;
+					}
+
+					nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
+
+					if(nextNode->heuristic < 0){
+						delete nextNode;
+						continue;
+					}
+
+					nodeBuffer.insert(nextNode);
+					pSearchNode nextSearchNode = new SearchNode(*first);
+					searchNodeBuffer.insert(nextSearchNode);
+						
+					nextSearchNode->push_front(nextNode);
+
+					float key = calculateKey(nextSearchNode);
+
+					searchList.join(key,nextSearchNode);
+				}
+			}
+				
+			
 
 		}
 		
-		for(auto& ptr : nodeBuffer){
-			delete ptr;
+		//output result
+		if(result != nullptr){
+
+			pInternalData->idxSize = result->size();
+			pInternalData->dataSize = result->size() * 2;
+			pInternalData->dataList = new double[pInternalData->dataSize];
+
+
+			size_t i = 0;
+			for(auto& ptr : *result){
+				pInternalData->dataList[i*2] = ptr->position.x;
+				pInternalData->dataList[i*2+1] = ptr->position.y;
+				i++;
+			}
 		}
-		nodeBuffer.clear();
 
 		expandList.clear();
 
-		while(!searchList.empty()){
-			auto ptr = searchList.front();
-			searchList.leave();
+		for(auto& ptr : nodeBuffer){
 			delete ptr;
 		}
+
+		for(auto& ptr : searchNodeBuffer){
+			delete ptr;
+		}
+
+		nodeBuffer.clear();
+
+		searchList.clear();
+
 
 		return GlobalFlag_Success;
 	}

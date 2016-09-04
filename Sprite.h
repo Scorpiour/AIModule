@@ -83,7 +83,7 @@ public:
     void draw(double dt) override;
     
     void addPoint(const Point2F& pt);
-    
+    void clear();
 protected:
     size_t maxCount;
     std::deque<Point2F> points;
@@ -98,6 +98,7 @@ protected:
 	AIData data;
     
     pTrailPoints pts;
+	pTrailPoints path;
 	
 protected:
 	virtual ~Robot();
@@ -123,6 +124,9 @@ public:
 	virtual void setScale(glm::vec3 _scale) override;
     
     void addTrailer(pTrailPoints _pts);
+	void addPathview(pTrailPoints _path);
+
+	void clearAIData();
 };
 
 class Ball : public Sprite,public RigidBody{

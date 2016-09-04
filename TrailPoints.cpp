@@ -23,6 +23,10 @@ void TrailPoints::addPoint(const Point2F& pt){
     }
 }
 
+void TrailPoints::clear(){
+	this->points.clear();
+}
+
 void TrailPoints::update(double dt){
     
 }
