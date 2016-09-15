@@ -173,15 +173,19 @@ typedef struct AStarSearchNode{
 	Point2F position;
 	Point2I coord;
 
+	AStarSearchNode* next;
+
 	AStarSearchNode(){
-		gValue = 0.f;
-		heuristic = 0.f;
+		gValue = -1.f;
+		heuristic = -1.f;
+		next = nullptr;
 	}
 	AStarSearchNode(const AStarSearchNode& node){
 		gValue = node.gValue;
 		heuristic = node.heuristic;
 		position = node.position;
 		coord = node.coord;
+		next = node.next;
 	}
 
 	bool operator < (const AStarSearchNode& node)const{
@@ -192,7 +196,7 @@ typedef struct AStarSearchNode{
 		return !( (this->coord < node.coord) && ( node.coord < this->coord) ) ;
 	}
 
-}*pAStarSearchNode;
+}AStarNode,*pAStarNode,*pAStarSearchNode;
 
 
 typedef class AIAStarSearch : public AIModuleBase{

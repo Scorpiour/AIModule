@@ -202,7 +202,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 				if(this->data.idxSize != 0){
 					this->path->clear();
 
-					for(int i=0;i<data.idxSize;i++){
+					for(int i=0;i<data.dataSize/2;i++){
 						Point2F pt;
 						pt.x = data.dataList[i*2] / 10.f;
 						pt.y = data.dataList[i*2+1] / 10.f;

@@ -513,7 +513,7 @@ bool GraphicsEngine::prepareSprites(void){
     pTrailer->setRadius(0.1);
     pTrailer->setPosition(glm::vec3(0,-0.4,0));
 
-	auto pPath = new TrailPoints(50);
+	auto pPath = new TrailPoints(100);
 	pPath->setProgram(this->sphere_program);
     pPath->setVAO(this->sphere_vao);
     pPath->setCamera(this->main_camera);

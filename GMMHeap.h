@@ -113,6 +113,13 @@ public:
         return elements[0].second;
     }
 
+	const K& frontKey(){
+		if(elements.empty()){
+			throw std::exception();
+		}
+		return elements[0].first;
+	}
+
 	void traversal(std::function<void(K,V)> callback){
 		for(auto & p : elements){
 			callback(p.first, p.second);
