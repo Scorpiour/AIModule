@@ -75,6 +75,7 @@ void Wall::move(double){
 
 bool Wall::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	if(this->forceFunc != nullptr){
+
 		return this->forceFunc(dest,result);
 	}
 	return false;

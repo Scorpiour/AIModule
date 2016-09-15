@@ -24,12 +24,16 @@ void Obstacle::move(double dt){
 	this->position.x += dx;
 	this->position.z += dy;
 
-	float arc = atan2(ay,ax);
-	this->setAngle(glm::vec3(0,arc,0));
+	//float arc = atan2(ay,ax);
+	//this->setAngle(glm::vec3(0,arc,0));
 }
 
 
 bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
+
+	if(dest->getID() == -2){
+		return false;
+	}
 
 	float ix = this->getX();
 	float iy = this->getY();
@@ -137,6 +141,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		result.x = 0;
 		result.y = 0;
 	}
+
 
 	/*
 	if(id == 1){

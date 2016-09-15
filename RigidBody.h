@@ -83,6 +83,29 @@ public:
 }*pRigidController;
 
 
+typedef class VirtualAttractivePoint:public RigidBody{
+public:
 
+	VirtualAttractivePoint();
+	virtual ~VirtualAttractivePoint();
+
+
+	virtual float getX()const override;
+	virtual float getY()const override;
+	virtual void setSX(float) override;
+	virtual void setSY(float) override;
+	virtual float getSX()const override;
+	virtual float getSY()const override;
+	virtual float getRadius()const override;
+
+	virtual void move(double) override;
+	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
+	virtual float calculateDistance(const Point2F& point, float rad) override;
+
+	virtual void setPosition(const Point2F& pos);
+
+protected:
+	Point2F position;
+}*pVirtualAttractivePoint;
 
 #endif

@@ -103,6 +103,7 @@ xcopy /Y /Q "$(ProjectDir)glew32.dll" "$(OutDir)"</Command>
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TrailPoints.cpp" />
+    <ClCompile Include="VirtualAttractivePoint.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>

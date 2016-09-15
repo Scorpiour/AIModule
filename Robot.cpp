@@ -6,6 +6,9 @@ Robot::Robot():Sprite(),RigidBody(){
 	mass = 50.f;
     this->pts = nullptr;
 	this->path = nullptr;
+	this->pTargetPoint = nullptr;
+	this->id = 1;
+	this->virtualForce = Point2F(0,0);
 }
 
 Robot::~Robot(){
@@ -82,7 +85,7 @@ void Robot::setScale(glm::vec3 _scale){
 	this->width = scalex;
 	this->length = scalez;
 
-	this->radius = sqrt(scalex*scalex + scalez*scalez);
+	this->radius = sqrt(scalex*scalex + scalez*scalez)/2;
 }
 
 
@@ -96,8 +99,17 @@ void Robot::move(double dt){
 	float rsx = this->sx;
 	float rsy = this->sy;
 	
-	float ax = collisionForce.x / mass;
-	float ay = collisionForce.y / mass;
+	float ax = virtualForce.x / mass;
+	float ay = virtualForce.y / mass;
+
+	if(this->collisionForce.y * sy < 0){
+		ay = 0.f;//collisionForce.y / mass;
+		sy = 0.f;
+	}
+	if(this->collisionForce.x * sx < 0){
+		ax = 0.f;//collisionForce.x / mass;
+		sx = 0.f;
+	}
 
 	sx += ax * dt;
 	sy += ay * dt;
@@ -157,6 +169,15 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	int id = dest->getID();
 	if(id==0){
+
+		float dx = tx - ix;
+		float dy = ty - iy;
+		float distance = sqrt(dx*dx + dy*dy);
+
+		if(distance > tr + ir + 10){
+
+		
+
 		/*
 		std::string robot_module_name = "Robot Fuzzy";
 
@@ -173,8 +194,8 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			fuzzy->outputAIData(&(this->data));
 		}*/
 
-		if(this->data.idxSize == 0){
-
+		//if(this->data.idxSize == 0){
+			
 			std::string robot_module_name = "Robot AStar Search";
 			auto iter  = this->modules.find(robot_module_name);
 
@@ -183,7 +204,6 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 				AStarSearchNode startNode;
 				AStarSearchNode goalNode;
-
 
 				startNode.position.x = this->getX();
 				startNode.position.y = this->getY();
@@ -199,17 +219,30 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 				pAStar->processAIData(0);
 				pAStar->outputAIData(&(this->data));
 
-				if(this->data.idxSize != 0){
+				if(this->data.idxSize != 0 && this->data.dataSize != 0){
 					this->path->clear();
 
+					Point2F pt;
+
 					for(int i=0;i<data.dataSize/2;i++){
-						Point2F pt;
 						pt.x = data.dataList[i*2] / 10.f;
 						pt.y = data.dataList[i*2+1] / 10.f;
 						this->path->addPoint(pt);
 					}
+					
+
+
+					pt.x = data.dataList[data.dataSize-4];
+					pt.y = data.dataList[data.dataSize-3];
+
+					this->pTargetPoint->setPosition(pt);			
 				}
+
+				this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
 			}
+
+
+
 		}
 
 	}
@@ -402,4 +435,8 @@ float Robot::calculateDistance(const Point2F& point,float rad){
 	distance = abs(distance);
 	
 	return distance - r;
+}
+
+void Robot::setTargetPoint(pVirtualAttractivePoint pTP){
+	this->pTargetPoint = pTP;
 }

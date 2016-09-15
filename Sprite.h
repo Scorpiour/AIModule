@@ -99,7 +99,11 @@ protected:
     
     pTrailPoints pts;
 	pTrailPoints path;
-	
+
+	pVirtualAttractivePoint pTargetPoint;
+
+	Point2F virtualForce;
+
 protected:
 	virtual ~Robot();
 public:
@@ -125,6 +129,7 @@ public:
     
     void addTrailer(pTrailPoints _pts);
 	void addPathview(pTrailPoints _path);
+	void setTargetPoint(pVirtualAttractivePoint pTP);
 
 	void clearAIData();
 };

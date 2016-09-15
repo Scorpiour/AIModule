@@ -73,7 +73,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 				distLevel = 1.f;
 			}
 			//distLevel = 5000/(1+exp(3*distLevel-10));
-			distLevel = 1000.f/(distLevel);
+			distLevel = 1000.f/(distLevel*distLevel);
 			
 			float distance = distanceFunc(p1,p2);
 			

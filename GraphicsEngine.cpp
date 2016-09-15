@@ -1,3 +1,5 @@
+#include <ctime>
+
 #include "GraphicsEngine.h"
 #include "GlobalMacro.h"
 
@@ -499,8 +501,8 @@ bool GraphicsEngine::prepareSprites(void){
 	pball->setColourIntensity(glm::vec3(0.3,0.6,0.9));
 	pball->setPosition(glm::vec3(5,-0.2,5));
 	pball->setRadius(0.3);
-	pball->setSX(0.0);
-	pball->setSY(0.0);
+	pball->setSX(1.0);
+	pball->setSY(1.0);
 
 	this->pb = pball;
     
@@ -522,6 +524,8 @@ bool GraphicsEngine::prepareSprites(void){
     pPath->setRadius(0.1);
     pPath->setPosition(glm::vec3(0,-0.4,0));
 
+	auto pTargetPoint = new VirtualAttractivePoint;
+
 	auto pRobot = new Robot();
 	pRobot->setID(1);
 	pRobot->setProgram(this->box_program);
@@ -534,9 +538,10 @@ bool GraphicsEngine::prepareSprites(void){
 	pRobot->setAngle(glm::vec3(0,M_PI/4,0));
 	pRobot->setSX(0.0);
 	pRobot->setSY(0.0);
-	pRobot->setMovable(false);
+	//pRobot->setMovable(false);
     pRobot->addTrailer(pTrailer);
 	pRobot->addPathview(pPath);
+	pRobot->setTargetPoint(pTargetPoint);
 
 	std::string robot_module_name = "Robot AStar Search";
 	auto pAStar = new AIAStarSearch(robot_module_name);
@@ -556,6 +561,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(20.6,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
@@ -581,6 +589,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(20.6,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
@@ -607,6 +618,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(6.3,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = 110;
@@ -632,6 +646,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(6.3,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = -110;
@@ -657,6 +674,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(6.3,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = 110;
@@ -682,6 +702,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(6.3,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = -110;
@@ -709,6 +732,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(1.5,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
@@ -734,6 +760,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(1.5,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
@@ -759,6 +788,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(4,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = 125;
@@ -786,6 +818,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(1.5,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 		pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
@@ -811,6 +846,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(1.5,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
@@ -836,6 +874,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(4,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = -125;
@@ -864,6 +905,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(length,1,1));
 	pWall->setAngle(glm::vec3(0,3*M_PI/4,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float r = dest->getRadius();
@@ -893,6 +937,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(length,1,1));
 	pWall->setAngle(glm::vec3(0,3*M_PI/4,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float r = dest->getRadius();
@@ -922,6 +969,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(length,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/4,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float r = dest->getRadius();
@@ -951,6 +1001,9 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(length,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/4,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
+		if(dest->getID() == -2){
+			return true;
+		}
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float r = dest->getRadius();
@@ -1003,13 +1056,38 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Obstacles;
 
+	srand(time(NULL));
+
+	for(int i=0;i<10;i++){
+
+		float x = rand()%17;
+		x += -8;
+
+		float y = rand()%13;
+		y += -6;
+
+		float p = rand()%12+1;
+
+		auto pObs = new Obstacle();
+		pObs->setProgram(this->box_program);
+		pObs->setVAO(this->box_vao);
+		pObs->setCamera(this->main_camera);
+		pObs->setColour(glm::vec3(0.3,0.3,0.3));
+		pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+		pObs->setPosition(glm::vec3(x,-0.15,y));
+		pObs->setScale(glm::vec3(0.7,0.7,0.7));
+		pObs->setAngle(glm::vec3(0,2*M_PI/p,0));
+		//pObs->setMovable(false);
+	}
+
+	/*
 	auto pObs = new Obstacle();
 	pObs->setProgram(this->box_program);
 	pObs->setVAO(this->box_vao);
 	pObs->setCamera(this->main_camera);
 	pObs->setColour(glm::vec3(0.3,0.3,0.3));
 	pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
-	pObs->setPosition(glm::vec3(0,-0.15,-4));
+	pObs->setPosition(glm::vec3(1,-0.15,-4));
 	pObs->setScale(glm::vec3(8.0,0.7,2.0));
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
@@ -1020,7 +1098,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setCamera(this->main_camera);
 	pObs->setColour(glm::vec3(0.3,0.3,0.3));
 	pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
-	pObs->setPosition(glm::vec3(0,-0.15,0));
+	pObs->setPosition(glm::vec3(1,-0.15,0));
 	pObs->setScale(glm::vec3(12.0,0.7,2.0));
 	pObs->setAngle(glm::vec3(0,M_PI*2/3,0));
 	pObs->setMovable(false);
@@ -1031,11 +1109,11 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setCamera(this->main_camera);
 	pObs->setColour(glm::vec3(0.3,0.3,0.3));
 	pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
-	pObs->setPosition(glm::vec3(-4,-0.15,4));
+	pObs->setPosition(glm::vec3(-3,-0.15,4));
 	pObs->setScale(glm::vec3(8.0,0.7,2.0));
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
-
+	*/
 	return true;
 }
 
@@ -1151,6 +1229,8 @@ bool GraphicsEngine::mainLoop(){
 		this->main_camera->rayClip(worldPos,window);
 		
 		this->pb->setPosition(glm::vec3(worldPos.x, -0.2, worldPos.y));
+		this->pb->setSX(0);
+		this->pb->setSY(0);
 		this->pr->clearAIData();
 
 		resetBall = false;

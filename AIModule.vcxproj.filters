@@ -121,6 +121,9 @@
     <ClCompile Include="TrailPoints.cpp">
       <Filter>Main\Graphics\Sprites</Filter>
     </ClCompile>
+    <ClCompile Include="VirtualAttractivePoint.cpp">
+      <Filter>Main\RigidBody</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sphere.fsd">
