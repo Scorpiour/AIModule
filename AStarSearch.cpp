@@ -1,3 +1,5 @@
+#include <ctime>
+
 #include "ModuleBase.h"
 #include "GMMHeap.h"
 #include "RigidBody.h"
@@ -27,10 +29,13 @@ GlobalFlag AIAStarSearch::loadAIData(const pAIData pdata){
 GlobalFlag AIAStarSearch::processAIData(double dt){
 	if(this->hasInit){
 
+		clock_t c = clock();
+
 		float checkdist = RigidController::getInstance().calculateDistanceLevel(goalNode->position);
 		if(checkdist < 0.f){
 
 			cout<<"Target in obstacle : "<<goalNode->position.x<<','<<goalNode->position.y<<endl;
+			pInternalData->idxSize = 1;
 			return GlobalFlag_GeneralError;
 		}
 
@@ -67,8 +72,8 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			if(distLevel < 1.f){
 				distLevel = 1.f;
 			}
-			distLevel = 5000/(1+exp(3*distLevel-10));
-			//distLevel = 1000.f/(distLevel*distLevel);
+			//distLevel = 5000/(1+exp(3*distLevel-10));
+			distLevel = 1000.f/(distLevel);
 			
 			float distance = distanceFunc(p1,p2);
 			
@@ -412,6 +417,9 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		searchList.clear();
 
 		*/
+
+		cout<<"Total Timespend of A* : "<<clock()-c<<"ms"<<endl;
+
 		return GlobalFlag_Success;
 	}
 	return GlobalFlag_Uninitialized;

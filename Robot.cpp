@@ -194,7 +194,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 				//clear old datas
 				this->data.clear();
 
-				pAStar->init(&startNode, &goalNode, 12);
+				pAStar->init(&startNode, &goalNode, 6);
 				pAStar->loadAIData(&(this->data));
 				pAStar->processAIData(0);
 				pAStar->outputAIData(&(this->data));

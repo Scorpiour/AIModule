@@ -4,7 +4,7 @@ using namespace std;
 
 int main(int argc, char** argv){
 #ifdef _WIN32
-	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)|_CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)|_CRTDBG_LEAK_CHECK_DF);
 #endif
 
 	GlobalVariables::mainPath = argv[0];
