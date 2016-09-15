@@ -103,11 +103,11 @@ void Robot::move(double dt){
 	float ay = virtualForce.y / mass;
 
 	if(this->collisionForce.y * sy < 0){
-		ay = 0.f;//collisionForce.y / mass;
+		//ay = 0.f;//collisionForce.y / mass;
 		sy = 0.f;
 	}
 	if(this->collisionForce.x * sx < 0){
-		ax = 0.f;//collisionForce.x / mass;
+		//ax = 0.f;//collisionForce.x / mass;
 		sx = 0.f;
 	}
 

@@ -72,8 +72,8 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			if(distLevel < 1.f){
 				distLevel = 1.f;
 			}
-			//distLevel = 5000/(1+exp(3*distLevel-10));
-			distLevel = 1000.f/(distLevel*distLevel);
+			distLevel = 500.f/(1+exp(distLevel-7));
+			//distLevel = 1000.f/(distLevel*distLevel);
 			
 			float distance = distanceFunc(p1,p2);
 			
@@ -81,10 +81,12 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			return result;
 		};
 
+		std::map<Point2I,float> hMap;
 
 		pAStarNode firstNode = new AStarNode(*startNode);
 		firstNode->gValue = 0.f;
 		firstNode->heuristic = heuristicFunc(firstNode->position,goalNode->position);
+		hMap.insert(make_pair(firstNode->coord,firstNode->heuristic));
 
 		nodeBuffer.insert(firstNode);
 		float key = firstNode->gValue + firstNode->heuristic;
@@ -146,8 +148,14 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 					nextNode->gValue = currentNode->gValue + nextG;
 					nextNode->coord = nextCoord;
 					nextNode->position = nextPosition;
-					nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
 
+					auto iter = hMap.find(nextNode->coord);
+					if(iter != hMap.end()){
+						nextNode->heuristic = iter->second;
+					}else{
+						nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
+						hMap.insert(make_pair(nextNode->coord,nextNode->heuristic));
+					}
 
 					nextNode->next = currentNode;
 					nodeBuffer.insert(nextNode);

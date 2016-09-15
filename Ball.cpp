@@ -172,6 +172,9 @@ void Ball::move(double dt){
 
 bool Ball::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
+	result.x = 0.f;
+	result.y = 0.f;
+	return true;
 
 	if(dest->getID() != 1){
 		result.x = 0.f;
