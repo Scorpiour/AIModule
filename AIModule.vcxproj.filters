@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Main\Modules">
+      <UniqueIdentifier>{9caf0abd-4866-4f3b-9bb1-3900173c82e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\RigidBody">
+      <UniqueIdentifier>{f78325bc-b3af-430d-86e3-6fe72aab72f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Graphics">
+      <UniqueIdentifier>{f687777f-5056-4146-b364-2f6793feb47c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Global">
+      <UniqueIdentifier>{63cf282d-b1e4-4d63-b149-48dfb0b320d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Graphics\Shaders">
+      <UniqueIdentifier>{1d87a58b-9f47-42b8-b1ad-6ebacb313454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Graphics\Sprites">
+      <UniqueIdentifier>{af76d554-288c-4518-9cf5-40f7fcd1fe53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Graphics\ShaderProgram">
+      <UniqueIdentifier>{9f42b3e3-4c8c-4448-9ea6-2dffc5ce29c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Graphics\Camera">
+      <UniqueIdentifier>{30bce505-ee98-4457-9905-d59dff296e97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Graphics\Light">
+      <UniqueIdentifier>{ff1ab08a-cdf9-46c2-a5c9-690d114b853b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Fuzzy">
+      <UniqueIdentifier>{53f76da9-d74d-43b5-8770-013d549217a8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ModuleBase.h">
+      <Filter>Main\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Main\RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Main\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalMacro.h">
+      <Filter>Main\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsEngine.h">
+      <Filter>Main\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>Main\Graphics\ShaderProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Main\Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVariable.h">
+      <Filter>Main\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GMMHeap.h">
+      <Filter>Main\Global</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ModuleBase.cpp">
+      <Filter>Main\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="AIPotentialField.cpp">
+      <Filter>Main\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="FuzzyLogic.cpp">
+      <Filter>Main\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main\Global</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsEngine.cpp">
+      <Filter>Main\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="Robot.cpp">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Main\Graphics\ShaderProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Main\Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVariable.cpp">
+      <Filter>Main\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Main\RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="AStarSearch.cpp">
+      <Filter>Main\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="TrailPoints.cpp">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualAttractivePoint.cpp">
+      <Filter>Main\RigidBody</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sphere.fsd">
+      <Filter>Main\Graphics\Shaders</Filter>
+    </None>
+    <None Include="sphere.tcsd">
+      <Filter>Main\Graphics\Shaders</Filter>
+    </None>
+    <None Include="sphere.tesd">
+      <Filter>Main\Graphics\Shaders</Filter>
+    </None>
+    <None Include="sphere.vsd">
+      <Filter>Main\Graphics\Shaders</Filter>
+    </None>
+    <None Include="box.fsd">
+      <Filter>Main\Graphics\Shaders</Filter>
+    </None>
+    <None Include="box.vsd">
+      <Filter>Main\Graphics\Shaders</Filter>
+    </None>
+    <None Include="Fuzzy_Angle.fuzzy">
+      <Filter>Main\Fuzzy</Filter>
+    </None>
+  </ItemGroup>
+</Project>

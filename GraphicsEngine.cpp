@@ -1338,5 +1338,4 @@ void GraphicsEngine::handleAction(double time){
 	this->main_camera->setTarget(nextTarget);
 	this->main_camera->setPosition(nextPosition);
 
-
 }
