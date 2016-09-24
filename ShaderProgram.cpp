@@ -128,6 +128,8 @@ bool ShaderProgram::load(const std::map<int,string>& shaderTable){
 
 	shaderList.push_back(fragShader);
 	shaderList.push_back(vertShader);*/
+    
+    return true;
 }
 
 GLint ShaderProgram::getLoc(const std::string& locName){

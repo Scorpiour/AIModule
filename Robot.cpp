@@ -96,20 +96,22 @@ void Robot::move(double dt){
 	}
 
 
-	float rsx = this->sx;
-	float rsy = this->sy;
+	//float rsx = this->sx;
+	//float rsy = this->sy;
 	
-	float ax = virtualForce.x / mass;
-	float ay = virtualForce.y / mass;
-
+	float ax = (virtualForce.x + collisionForce.x )/ mass;
+	float ay = (virtualForce.y + collisionForce.y )/ mass;
+    
+    /*
 	if(this->collisionForce.y * sy < 0){
-		//ay = 0.f;//collisionForce.y / mass;
+		
+        //ay = 0.f;//collisionForce.y / mass;
 		sy = 0.f;
 	}
 	if(this->collisionForce.x * sx < 0){
 		//ax = 0.f;//collisionForce.x / mass;
 		sx = 0.f;
-	}
+	}*/
 
 	sx += ax * dt;
 	sy += ay * dt;
@@ -223,17 +225,24 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 					this->path->clear();
 
 					Point2F pt;
-
+                    //GMMPriorityQueue<float, Point2F> pq;
+                    
 					for(int i=0;i<data.dataSize/2;i++){
 						pt.x = data.dataList[i*2] / 10.f;
 						pt.y = data.dataList[i*2+1] / 10.f;
 						this->path->addPoint(pt);
+                        
+                        //float dist = RigidController::getInstance().calculateDistanceLevel(pt);
+                        
+                        //pq.join(dist,pt);
 					}
 					
 
 
 					pt.x = data.dataList[data.dataSize-4];
 					pt.y = data.dataList[data.dataSize-3];
+                    
+                   
 
 					this->pTargetPoint->setPosition(pt);			
 				}

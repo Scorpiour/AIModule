@@ -105,4 +105,5 @@ void Camera::draw(pShaderProgram _program){
 	glUniformMatrix4fv(_program->getLoc("ViewMatrix"),1,GL_TRUE,view);
 	glUniform3fv(_program->getLoc("lightPos"),1,glm::value_ptr(this->position));
 	glUniform1f(_program->getLoc("worldW"),1.f);
+
 }

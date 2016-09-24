@@ -52,7 +52,7 @@ bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,doub
 	float distance = sqrt(dx*dx + dy*dy);
 
 	//float value = (distance > mr) ? 10.f:0.f;
-	float value = 5.f;
+	float value = 50.f;
 	result.x = value * cos(arc);
 	result.y = value * sin(arc);
 

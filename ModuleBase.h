@@ -221,4 +221,5 @@ public:
 
 	virtual void init(pAStarSearchNode _startNode, pAStarSearchNode _goalNode,uint32_t _level);
 }*pAIAStarSearch;
+
 #endif

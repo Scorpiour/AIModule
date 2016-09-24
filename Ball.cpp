@@ -137,7 +137,6 @@ void Ball::move(double dt){
 		this->position.x += sx;
 		this->position.z += sy;
 	}else{
-
 		float phi = atan2(collisionForce.y, collisionForce.x);
 		while(phi < 0){
 			phi += M_PI * 2.f;

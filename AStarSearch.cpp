@@ -132,7 +132,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 					nextPosition.x = startNode->position.x + nextCoord.x*div_x;
 					nextPosition.y = startNode->position.y + nextCoord.y*div_y;
 
-					if(abs(nextPosition.x) > 110 || abs(nextPosition.y) > 90){
+					if(abs(nextPosition.x) > 125 || abs(nextPosition.y) > 90){
 						continue;
 					}
 
@@ -193,11 +193,11 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 				ptr = ptr->next;
 			}
 
-			cout<<"Path found : "<<size<<" steps"<<endl;
+			//cout<<"Path found : "<<size<<" steps"<<endl;
 
 		}else{
 			pInternalData->idxSize = 1;
-			cout<<"No Result Found"<<endl;
+			//cout<<"No Result Found"<<endl;
 
 		}
 

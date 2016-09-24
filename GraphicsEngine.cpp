@@ -1055,7 +1055,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
 
 	//Obstacles;
-
+    
 	srand(time(NULL));
 
 	for(int i=0;i<10;i++){
@@ -1337,6 +1337,5 @@ void GraphicsEngine::handleAction(double time){
 
 	this->main_camera->setTarget(nextTarget);
 	this->main_camera->setPosition(nextPosition);
-
 
 }

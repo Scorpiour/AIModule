@@ -82,6 +82,12 @@ enum Position {LEFT_SIDE, RIGHT_SIDE};
 
 #include <cmath>
 
+#ifndef FLT_MAX
+#define FLT_MAX 1e+37
+#endif
+
+
+
 typedef struct Point2F{
 	float x;
 	float y;
@@ -102,7 +108,7 @@ typedef struct Point2F{
 	}
 
 	operator bool(){
-		if(abs(x) < 1E-7 && abs(y) < 1E-7){
+		if(fabs(x) < 1E-7 && fabs(y) < 1E-7){
 			return false;
 		}
 		return true;

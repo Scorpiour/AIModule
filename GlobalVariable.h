@@ -11,10 +11,10 @@
 #include <algorithm>
 
 #include "GL/glew.h"
-#include "glfw3.h"
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
+#include "GLFW/glfw3.h"
+#include "GLM/glm.hpp"
+#include "GLM/gtc/matrix_transform.hpp"
+#include "GLM/gtc/type_ptr.hpp"
 #include "SOIL.h"
 
 #include "GlobalMacro.h"
