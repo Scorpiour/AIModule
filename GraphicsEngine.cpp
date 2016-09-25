@@ -66,6 +66,18 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
 	if(action == GLFW_PRESS){	
 		switch(key){
+
+		case GLFW_KEY_F1:
+			{
+				static bool mb = false;
+				auto m = graphics->getModel("RegObs");
+				m->enable(mb);
+				m->visible(mb);
+				mb = !mb;
+
+			}break;
+
+
 		case GLFW_KEY_ESCAPE:
 			{
 				glfwSetWindowShouldClose(window,GL_TRUE);
@@ -1055,7 +1067,10 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
 
 	//Obstacles;
-    
+    string name = "RegObs";
+	Model* m = new Model(name);
+	this->modelList.insert(make_pair(name,m));
+
 	srand(time(NULL));
 
 	for(int i=0;i<10;i++){
@@ -1078,6 +1093,7 @@ bool GraphicsEngine::prepareSprites(void){
 		pObs->setScale(glm::vec3(0.7,0.7,0.7));
 		pObs->setAngle(glm::vec3(0,2*M_PI/p,0));
 		//pObs->setMovable(false);
+		m->addSprite(pObs);
 	}
 
 	/*
@@ -1158,12 +1174,25 @@ bool GraphicsEngine::clear(void){
 	glDeleteVertexArrays(1,&(this->box_vao));
 	glDeleteVertexArrays(1,&(this->plate_vao));
 
+	for(auto& p : this->modelList){
+		delete p.second;
+	}
+	modelList.clear();
+
 	/*
 	for(auto& sp : this->spriteList){
 		delete sp;
 	}*/
 
 	return true;
+}
+
+Model* GraphicsEngine::getModel(const std::string& name){
+	auto iter = this->modelList.find(name);
+	if(iter!=this->modelList.end()){
+		return iter->second;
+	}
+	return nullptr;
 }
 
 bool GraphicsEngine::loadProgram(void){

@@ -9,8 +9,7 @@ Ball::Ball():Sprite(),RigidBody(){
 	data.dataList = new double[10];
 	data.idxSize = 6;
 	data.idxList = new int[6];
-	nextVelo.x = 0;
-	nextVelo.y = 0;
+	nextVelo = 0.f;
 
 	this->id = 0;
 
@@ -121,7 +120,7 @@ void Ball::setFriction(float f){
 	this->friction = f;
 }
 
-void Ball::forceMove(const Point2F& velo){
+void Ball::forceAccel(float velo){
 	nextVelo = velo;
 }
 
@@ -129,16 +128,6 @@ void Ball::move(double dt){
 
 	float speed = sqrt(sx*sx + sy*sy);
 
-	if(nextVelo){
-		float ns = sqrt(nextVelo.x * nextVelo.x  + nextVelo.y * nextVelo.y);
-		if(speed < ns);
-		speed = ns;
-		nextVelo.x = 0.f;
-		nextVelo.y = 0.f;
-
-		//sx = nextVelo.x;
-		//sy = nextVelo.y;
-	}
 	float reduce = friction * dt / 1000 / mass;
 
 	float varc = atan2(sy,sx);
@@ -155,6 +144,28 @@ void Ball::move(double dt){
 		this->position.x += sx;
 		this->position.z += sy;
 	}else{
+
+		float speed = 0.f;
+		if(nextVelo != 0){
+			float ax = collisionForce.x / mass;
+			float ay = collisionForce.y / mass;
+
+			sx += ax;
+			sy += ay;
+
+			speed = nextVelo;
+			nextVelo = 0.f;
+		}else{
+			speed = sqrt(sy*sy + sx*sx);	
+		}
+
+		float arc = atan2(sy,sx);
+		
+		sx = speed*cos(arc);
+		sy = speed*sin(arc);
+
+
+
 		float phi = atan2(collisionForce.y, collisionForce.x);
 		while(phi < 0){
 			phi += M_PI * 2.f;
@@ -176,8 +187,9 @@ void Ball::move(double dt){
 			}
 			theta2 = phi*2 - theta2;
 
-			float speed = sqrt(sy*sy + sx*sx);
-			speed = (speed < speedlimit)?speed:speedlimit;
+			
+			//float speed = sqrt(sy*sy + sx*sx);
+			//speed = (speed < speedlimit)?speed:speedlimit;
 
 			sx = speed * cos(theta2);
 			sy = speed * sin(theta2);

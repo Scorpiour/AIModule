@@ -31,6 +31,12 @@ void Obstacle::move(double dt){
 
 bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
+	if(!this->isEnable){
+		result.x = 0.f;
+		result.y = 0.f;
+		return 0.f;
+	}
+
 	if(dest->getID() == -2){
 		return false;
 	}
@@ -160,6 +166,9 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 }
 
 float Obstacle::calculateDistance(const Point2F& point,float rad){
+	if(!this->isEnable){
+		return FLT_MAX;
+	}
 	float ix = this->getX();
 	float iy = this->getY();
 	float ir = this->getRadius();
@@ -242,6 +251,9 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
 }
 
 float Obstacle::calculateDistance(RigidBody* dest){
+	if(!this->isEnable){
+		return FLT_MAX;
+	}
 	float ix = this->getX();
 	float iy = this->getY();
 	float ir = this->getRadius();

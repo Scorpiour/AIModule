@@ -49,6 +49,8 @@ protected:	//Lamp
 	glm::vec3 lightPosition;
 protected:  //External Function
 	std::function<void*(double,void*)> externalFunc;
+protected:  //Models
+	std::map<std::string,Model*> modelList;
 protected:	//Constructor / Destructor
 	static GraphicsEngine* instance;
 	explicit GraphicsEngine(void);
@@ -72,6 +74,7 @@ public:
 	bool setExternalFunction(std::function<void*(double,void*)> _ext);	//This function will be called BEFORE all the object updated, after handelAction at each loop
 	bool mainLoop();
 	bool clear(void);
+	Model* getModel(const std::string& name);
 public:
 	static GraphicsEngine* getInstance(void);
 	static void releaseInstance(void);

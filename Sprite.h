@@ -144,7 +144,7 @@ class Ball : public Sprite,public RigidBody{
 protected:
 	float friction;
 	AIData data;
-	Point2F nextVelo;
+	float nextVelo;
 protected:
 	virtual ~Ball();
 public:
@@ -166,7 +166,7 @@ public:
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
 
-	virtual void forceMove(const Point2F& velo);
+	virtual void forceAccel(float velo);
 };
 
 class Obstacle : public Robot{

@@ -267,10 +267,8 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	if(id==0){
 
 		if(result){
-			Point2F ns;
-			ns.x = sx*2.f;
-			ns.y = sy*2.f;
-			dynamic_cast<Ball*>(dest)->forceMove(ns);
+
+			dynamic_cast<Ball*>(dest)->forceAccel(speedlimit*2);
 
 		}
 

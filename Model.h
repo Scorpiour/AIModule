@@ -8,12 +8,16 @@
 
 class Model{
 public:
-	Model();
+	explicit Model(const std::string& _name);
 	virtual ~Model();
 
 
 	const std::string& getModelName()const;
 
+	void addSprite(Sprite* _sp);
+
+	void enable(bool _e);
+	void visible(bool _v);
 protected:
 	std::string modelName;
 	std::set<Sprite*> spriteList;
