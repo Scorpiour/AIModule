@@ -81,6 +81,12 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
 			}break;
 
+		case GLFW_KEY_F3:
+			{
+				auto m = graphics->getModel("Wiggle");
+				m->swithActive();
+
+			}break;
 		case GLFW_KEY_ESCAPE:
 			{
 				glfwSetWindowShouldClose(window,GL_TRUE);
@@ -1070,6 +1076,8 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
 
 	//Obstacles;
+
+	//10 Regular Obstacles
     string name = "RegObs";
 	Model* m = new Model(name);
 	this->modelList.insert(make_pair(name,m));
@@ -1099,6 +1107,8 @@ bool GraphicsEngine::prepareSprites(void){
 		m->addSprite(pObs);
 	}
 
+
+	//Corners
 	name = "Block";
 	m = new Model(name);
 	this->modelList.insert(make_pair(name,m));
@@ -1140,7 +1150,31 @@ bool GraphicsEngine::prepareSprites(void){
 	m->addSprite(pObs);
 
 	m->setActive(false);
-	
+
+	//Wiggle
+	name = "Wiggle";
+	m = new Model(name);
+	this->modelList.insert(make_pair(name,m));
+
+	for(int i=0;i<5;i++){
+		float  y = (float(i%2)-0.5)*9;
+		float x = -8 + 4*i;
+
+		pObs = new Obstacle();
+		pObs->setProgram(this->box_program);
+		pObs->setVAO(this->box_vao);
+		pObs->setCamera(this->main_camera);
+		pObs->setColour(glm::vec3(0.3,0.3,0.3));
+		pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+		pObs->setPosition(glm::vec3(x,-0.15,y));
+		pObs->setScale(glm::vec3(1.5,0.7,9.0));
+		pObs->setAngle(glm::vec3(0,0,0));
+		pObs->setMovable(false);
+		m->addSprite(pObs);
+
+	}
+
+	m->setActive(false);
 	return true;
 }
 
@@ -1204,6 +1238,15 @@ Model* GraphicsEngine::getModel(const std::string& name){
 		return iter->second;
 	}
 	return nullptr;
+}
+
+bool GraphicsEngine::loadModel(const std::string& name, Model* pm){
+	auto iter = this->modelList.find(name);
+	if(iter == this->modelList.end()){
+		this->modelList.insert(make_pair(name,pm));
+		return true;
+	}
+	return false;
 }
 
 bool GraphicsEngine::loadProgram(void){

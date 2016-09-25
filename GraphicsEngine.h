@@ -75,6 +75,7 @@ public:
 	bool mainLoop();
 	bool clear(void);
 	Model* getModel(const std::string& name);
+	bool loadModel(const std::string& name, Model* pm);
 public:
 	static GraphicsEngine* getInstance(void);
 	static void releaseInstance(void);
