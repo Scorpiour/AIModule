@@ -71,6 +71,9 @@
     <ClInclude Include="GMMHeap.h">
       <Filter>Main\Global</Filter>
     </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleBase.cpp">
@@ -123,6 +126,9 @@
     </ClCompile>
     <ClCompile Include="VirtualAttractivePoint.cpp">
       <Filter>Main\RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Main\Graphics\Sprites</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

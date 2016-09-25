@@ -9,6 +9,8 @@ Ball::Ball():Sprite(),RigidBody(){
 	data.dataList = new double[10];
 	data.idxSize = 6;
 	data.idxList = new int[6];
+	nextVelo.x = 0;
+	nextVelo.y = 0;
 
 	this->id = 0;
 
@@ -119,10 +121,26 @@ void Ball::setFriction(float f){
 	this->friction = f;
 }
 
+void Ball::forceMove(const Point2F& velo){
+	nextVelo = velo;
+}
+
 void Ball::move(double dt){
 
-	float reduce = friction * dt / 1000 / mass;
 	float speed = sqrt(sx*sx + sy*sy);
+
+	if(nextVelo){
+		float ns = sqrt(nextVelo.x * nextVelo.x  + nextVelo.y * nextVelo.y);
+		if(speed < ns);
+		speed = ns;
+		nextVelo.x = 0.f;
+		nextVelo.y = 0.f;
+
+		//sx = nextVelo.x;
+		//sy = nextVelo.y;
+	}
+	float reduce = friction * dt / 1000 / mass;
+
 	float varc = atan2(sy,sx);
 	if(speed > reduce){
 		speed -= reduce;

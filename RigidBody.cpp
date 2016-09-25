@@ -79,28 +79,12 @@ void RigidBody::setID(int _id){
 	this->id = _id;
 }
 
-void RigidBody::setVisible(bool isVisible){
-	this->visible = isVisible;
-}
-
-bool RigidBody::isVisible()const{
-	return this->visible;
-}
-
 void RigidBody::setMovable(bool isMovable){
 	this->movable = isMovable;
 }
 
 bool RigidBody::isMovable()const{
 	return this->movable;
-}
-
-void RigidBody::setEnable(bool enable){
-	this->enabled = enable;
-}
-
-bool RigidBody::isEnabled()const{
-	return this->enabled;
 }
 
 void RigidBody::setCollisionForce(float fx,float fy){
@@ -132,9 +116,7 @@ RigidBody::RigidBody(){
 	forceFunc = nullptr;
 	id = -1;
 	movable = true;
-	visible = true;
-	enabled = true;
-	
+
 	RigidController::getInstance().addToController(this);
 }
 

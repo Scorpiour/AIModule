@@ -15,9 +15,7 @@
 
 typedef class RigidBody{
 protected:
-	bool visible;
 	bool movable;
-	bool enabled;
 
 	float sx;
 	float sy;
@@ -52,14 +50,10 @@ public:
 	virtual void setID(int _id);
 	virtual int getID()const;
 
-	virtual void setVisible(bool isVisible);
-	virtual bool isVisible()const;
 
 	virtual void setMovable(bool isMovable);
 	virtual bool isMovable()const;
 
-	virtual void setEnable(bool enable);
-	virtual bool isEnabled()const;
 }*pRigidBody;
 
 

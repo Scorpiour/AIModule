@@ -26,6 +26,8 @@ protected:
 	GLfloat rotateMatrix[16];
 	GLfloat scaleMatrix[16];
 	double radius;
+	bool isVisible;
+	bool isEnable;
 protected:
 	std::map<std::string,AIModuleBase*> modules;
 public:
@@ -48,6 +50,9 @@ public:
 	//DO NOT DELETE ANY AIMODULES, JUST NEW THEM AND USE DIRECTLY
 	virtual void addModule(const std::string& name, AIModuleBase* pModule);
 	virtual void removeModule(const std::string& name);
+
+	virtual void visible(bool _v);
+	virtual void enable(bool _e);
 
 }*pSprite;
 
@@ -139,6 +144,7 @@ class Ball : public Sprite,public RigidBody{
 protected:
 	float friction;
 	AIData data;
+	Point2F nextVelo;
 protected:
 	virtual ~Ball();
 public:
@@ -159,6 +165,8 @@ public:
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
+
+	virtual void forceMove(const Point2F& velo);
 };
 
 class Obstacle : public Robot{

@@ -2,7 +2,7 @@
 #define __INCLUDE_GRAPHICS_ENGINE_H__
 
 
-#include "Sprite.h"
+#include "Model.h"
 #include "Camera.h"
 
 

@@ -32,7 +32,9 @@ void SpriteManager::removeFromManager(pSprite & p){
 void SpriteManager::updateAll(double dt){
 	for(auto ptr : this->spriteList){
 		if(ptr){
-			ptr->update(dt);
+			if(ptr->isEnable){
+				ptr->update(dt);
+			}
 		}
 	}
 }
@@ -40,7 +42,9 @@ void SpriteManager::updateAll(double dt){
 void SpriteManager::drawAll(double dt){
 	for(auto ptr : this->spriteList){
 		if(ptr){
-			ptr->draw(dt);
+			if(ptr->isVisible){
+				ptr->draw(dt);
+			}
 		}
 	}
 }
@@ -64,6 +68,8 @@ Sprite::Sprite(){
 
 	angles = glm::vec3(0,0,0);
 	radius = 1.f;
+	isVisible = true;
+	isEnable = true;
 
 	auto manager = SpriteManager::getInstance();
 	manager->addToManager(this);
@@ -71,6 +77,14 @@ Sprite::Sprite(){
 
 Sprite::~Sprite(){
 
+}
+
+void Sprite::visible(bool _v){
+	this->isVisible = _v;
+}
+
+void Sprite::enable(bool _e){
+	this->isEnable = _e;
 }
 
 void Sprite::setProgram(pShaderProgram _program){

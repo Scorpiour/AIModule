@@ -170,91 +170,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	float tr = dest->getRadius();
 
 	int id = dest->getID();
-	if(id==0){
-
-		float dx = tx - ix;
-		float dy = ty - iy;
-		float distance = sqrt(dx*dx + dy*dy);
-
-		if(distance > tr + ir + 10){
-
-		
-
-		/*
-		std::string robot_module_name = "Robot Fuzzy";
-
-		auto iter  = this->modules.find(robot_module_name);
-
-		if(iter != modules.end()){
-			auto fuzzy = iter->second;
-
-			this->data.dataList[0] = tx;
-			this->data.dataList[1] = ty;
-
-			fuzzy->loadAIData(&(this->data));
-			fuzzy->processAIData(dt);
-			fuzzy->outputAIData(&(this->data));
-		}*/
-
-		//if(this->data.idxSize == 0){
-			
-			std::string robot_module_name = "Robot AStar Search";
-			auto iter  = this->modules.find(robot_module_name);
-
-			if(iter != modules.end()){
-				auto pAStar = dynamic_cast<AIAStarSearch*>(iter->second);
-
-				AStarSearchNode startNode;
-				AStarSearchNode goalNode;
-
-				startNode.position.x = this->getX();
-				startNode.position.y = this->getY();
-
-				goalNode.position.x = dest->getX();
-				goalNode.position.y = dest->getY();
-
-				//clear old datas
-				this->data.clear();
-
-				pAStar->init(&startNode, &goalNode, 6);
-				pAStar->loadAIData(&(this->data));
-				pAStar->processAIData(0);
-				pAStar->outputAIData(&(this->data));
-
-				if(this->data.idxSize != 0 && this->data.dataSize != 0){
-					this->path->clear();
-
-					Point2F pt;
-                    //GMMPriorityQueue<float, Point2F> pq;
-                    
-					for(int i=0;i<data.dataSize/2;i++){
-						pt.x = data.dataList[i*2] / 10.f;
-						pt.y = data.dataList[i*2+1] / 10.f;
-						this->path->addPoint(pt);
-                        
-                        //float dist = RigidController::getInstance().calculateDistanceLevel(pt);
-                        
-                        //pq.join(dist,pt);
-					}
-					
-
-
-					pt.x = data.dataList[data.dataSize-4];
-					pt.y = data.dataList[data.dataSize-3];
-                    
-                   
-
-					this->pTargetPoint->setPosition(pt);			
-				}
-
-				this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
-			}
-
-
-
-		}
-
-	}
+	
 
 	float dx = tx - ix;
 	float dy = ty - iy;
@@ -346,6 +262,107 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		result.x = 0;
 		result.y = 0;
 	}
+
+
+	if(id==0){
+
+		if(result){
+			Point2F ns;
+			ns.x = sx*2.f;
+			ns.y = sy*2.f;
+			dynamic_cast<Ball*>(dest)->forceMove(ns);
+
+		}
+
+
+		float dx = tx - ix;
+		float dy = ty - iy;
+		float distance = sqrt(dx*dx + dy*dy);
+
+		if(distance > tr + ir + 10){
+
+		
+
+		/*
+		std::string robot_module_name = "Robot Fuzzy";
+
+		auto iter  = this->modules.find(robot_module_name);
+
+		if(iter != modules.end()){
+			auto fuzzy = iter->second;
+
+			this->data.dataList[0] = tx;
+			this->data.dataList[1] = ty;
+
+			fuzzy->loadAIData(&(this->data));
+			fuzzy->processAIData(dt);
+			fuzzy->outputAIData(&(this->data));
+		}*/
+
+		//if(this->data.idxSize == 0){
+			
+			std::string robot_module_name = "Robot AStar Search";
+			auto iter  = this->modules.find(robot_module_name);
+
+			if(iter != modules.end()){
+				auto pAStar = dynamic_cast<AIAStarSearch*>(iter->second);
+
+				AStarSearchNode startNode;
+				AStarSearchNode goalNode;
+
+				startNode.position.x = this->getX();
+				startNode.position.y = this->getY();
+
+				goalNode.position.x = dest->getX();
+				goalNode.position.y = dest->getY();
+
+				//clear old datas
+				this->data.clear();
+
+				int baseLevel = 2;
+				baseLevel += distance / 55;
+
+
+				pAStar->init(&startNode, &goalNode, baseLevel);
+				pAStar->loadAIData(&(this->data));
+				pAStar->processAIData(0);
+				pAStar->outputAIData(&(this->data));
+
+				if(this->data.idxSize != 0 && this->data.dataSize != 0){
+					this->path->clear();
+
+					Point2F pt;
+                    //GMMPriorityQueue<float, Point2F> pq;
+                    
+					for(int i=0;i<data.dataSize/2;i++){
+						pt.x = data.dataList[i*2] / 10.f;
+						pt.y = data.dataList[i*2+1] / 10.f;
+						this->path->addPoint(pt);
+                        
+                        //float dist = RigidController::getInstance().calculateDistanceLevel(pt);
+                        
+                        //pq.join(dist,pt);
+					}
+					
+
+
+					pt.x = data.dataList[data.dataSize-4];
+					pt.y = data.dataList[data.dataSize-3];
+                    
+                   
+
+					this->pTargetPoint->setPosition(pt);			
+				}
+
+				this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
+			}
+
+
+
+		}
+
+	}
+
 
 
 	return true;
