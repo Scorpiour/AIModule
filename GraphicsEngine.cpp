@@ -69,14 +69,17 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
 		case GLFW_KEY_F1:
 			{
-				static bool mb = false;
 				auto m = graphics->getModel("RegObs");
-				m->enable(mb);
-				m->visible(mb);
-				mb = !mb;
+				m->swithActive();
 
 			}break;
 
+		case GLFW_KEY_F2:
+			{
+				auto m = graphics->getModel("Block");
+				m->swithActive();
+
+			}break;
 
 		case GLFW_KEY_ESCAPE:
 			{
@@ -1096,7 +1099,10 @@ bool GraphicsEngine::prepareSprites(void){
 		m->addSprite(pObs);
 	}
 
-	/*
+	name = "Block";
+	m = new Model(name);
+	this->modelList.insert(make_pair(name,m));
+
 	auto pObs = new Obstacle();
 	pObs->setProgram(this->box_program);
 	pObs->setVAO(this->box_vao);
@@ -1107,6 +1113,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setScale(glm::vec3(8.0,0.7,2.0));
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
+	m->addSprite(pObs);
 
 	pObs = new Obstacle();
 	pObs->setProgram(this->box_program);
@@ -1118,6 +1125,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setScale(glm::vec3(12.0,0.7,2.0));
 	pObs->setAngle(glm::vec3(0,M_PI*2/3,0));
 	pObs->setMovable(false);
+	m->addSprite(pObs);
 
 	pObs = new Obstacle();
 	pObs->setProgram(this->box_program);
@@ -1129,7 +1137,10 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setScale(glm::vec3(8.0,0.7,2.0));
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
-	*/
+	m->addSprite(pObs);
+
+	m->setActive(false);
+	
 	return true;
 }
 

@@ -18,9 +18,15 @@ public:
 
 	void enable(bool _e);
 	void visible(bool _v);
+
+	void swithActive();
+
+	bool getActive()const;
+	void setActive(bool _a);
 protected:
 	std::string modelName;
 	std::set<Sprite*> spriteList;
+	bool active;
 };
 
 

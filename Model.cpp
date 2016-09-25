@@ -3,7 +3,7 @@
 using namespace std;
 
 Model::Model(const std::string& _name):modelName(_name){
-
+	active = true;
 }
 
 Model::~Model(){
@@ -30,4 +30,19 @@ void Model::visible(bool _v){
 	}
 }
 
+void Model::swithActive(){
+	active = !active;
+	this->enable(active);
+	this->visible(active);
+}
+
+bool Model::getActive()const{
+	return this->active;
+}
+
+void Model::setActive(bool _a){
+	this->active = _a;
+	this->enable(_a);
+	this->visible(_a);
+}
 
