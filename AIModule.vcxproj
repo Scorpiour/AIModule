@@ -68,12 +68,24 @@ xcopy /Y /Q "$(ProjectDir)glew32.dll" "$(OutDir)"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+		<AdditionalIncludeDirectories>..\..\glew1130\glew-1.13.0\include;..\..\glfw\include;..\..\glm;..\..\soil\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+		<AdditionalLibraryDirectories>..\..\glew1130\glew-1.13.0\lib\Release\Win32;..\..\glfw\src\Debug;..\..\soil\Simple OpenGL Image Library\projects\VC9\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glew32s.lib;glfw3.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+	 <PostBuildEvent>
+      <Command>xcopy /Y /Q "$(ProjectDir)box.fsd" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)box.vsd" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)sphere.fsd" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)sphere.tesd" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)sphere.tcsd" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)sphere.vsd" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)glew32.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
