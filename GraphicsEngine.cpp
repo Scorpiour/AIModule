@@ -67,25 +67,31 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 	if(action == GLFW_PRESS){	
 		switch(key){
 
-		case GLFW_KEY_F1:
+		case GLFW_KEY_1:
 			{
 				auto m = graphics->getModel("RegObs");
 				m->swithActive();
 
 			}break;
 
-		case GLFW_KEY_F2:
+		case GLFW_KEY_2:
 			{
 				auto m = graphics->getModel("Block");
 				m->swithActive();
 
 			}break;
 
-		case GLFW_KEY_F3:
+		case GLFW_KEY_3:
 			{
 				auto m = graphics->getModel("Wiggle");
 				m->swithActive();
 
+			}break;
+		case GLFW_KEY_4:
+			{
+				auto m = graphics->getModel("Trap");
+				m->swithActive();
+				
 			}break;
 		case GLFW_KEY_ESCAPE:
 			{
@@ -1148,7 +1154,6 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
 	m->addSprite(pObs);
-
 	m->setActive(false);
 
 	//Wiggle
@@ -1157,7 +1162,7 @@ bool GraphicsEngine::prepareSprites(void){
 	this->modelList.insert(make_pair(name,m));
 
 	for(int i=0;i<5;i++){
-		float  y = (float(i%2)-0.5)*9;
+		float y = (float(i%2)-0.5)*9;
 		float x = -8 + 4*i;
 
 		pObs = new Obstacle();
@@ -1173,8 +1178,40 @@ bool GraphicsEngine::prepareSprites(void){
 		m->addSprite(pObs);
 
 	}
-
 	m->setActive(false);
+
+	//Trap
+	name = "Trap";
+	m = new Model(name);
+	this->modelList.insert(make_pair(name,m));
+
+	float gap = 2.f;
+
+	for(int i=-1;i<2;i++){
+		for(int j=-1;j<2;j++){
+
+			if(!i && !j){
+				continue;
+			}
+
+			float y = i*gap;
+			float x = j*gap;
+
+			auto pObs = new Obstacle();
+			pObs->setProgram(this->box_program);
+			pObs->setVAO(this->box_vao);
+			pObs->setCamera(this->main_camera);
+			pObs->setColour(glm::vec3(0.3,0.3,0.3));
+			pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+			pObs->setPosition(glm::vec3(x,-0.15,y));
+			pObs->setScale(glm::vec3(0.7,0.7,0.7));
+			pObs->setAngle(glm::vec3(0,0,0));
+			//pObs->setMovable(false);
+			m->addSprite(pObs);
+		}
+	}
+	m->setActive(false);
+
 	return true;
 }
 
@@ -1314,7 +1351,12 @@ bool GraphicsEngine::mainLoop(){
 		this->pb->setPosition(glm::vec3(worldPos.x, -0.2, worldPos.y));
 		this->pb->setSX(0);
 		this->pb->setSY(0);
+		
+		this->pr->setSX(0.f);
+		this->pr->setSY(0.f);
 		this->pr->clearAIData();
+
+
 
 		resetBall = false;
 	}
