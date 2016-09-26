@@ -318,7 +318,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 				this->data.clear();
 
 				int baseLevel = 2;
-				baseLevel += distance / 55;
+				baseLevel += distance / 22;
 
 
 				pAStar->init(&startNode, &goalNode, baseLevel);

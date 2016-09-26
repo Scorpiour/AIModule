@@ -66,7 +66,10 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
 	if(action == GLFW_PRESS){	
 		switch(key){
-
+		case GLFW_KEY_0:
+			{
+				graphics->inactiveAllModels();
+			}break;
 		case GLFW_KEY_1:
 			{
 				auto m = graphics->getModel("RegObs");
@@ -92,6 +95,11 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 				auto m = graphics->getModel("Trap");
 				m->swithActive();
 				
+			}break;
+		case GLFW_KEY_5:
+			{
+				auto m = graphics->getModel("Cross");
+				m->swithActive();
 			}break;
 		case GLFW_KEY_ESCAPE:
 			{
@@ -1212,6 +1220,36 @@ bool GraphicsEngine::prepareSprites(void){
 	}
 	m->setActive(false);
 
+	//Cross
+	name = "Cross";
+	m = new Model(name);
+	this->modelList.insert(make_pair(name,m));
+
+	pObs = new Obstacle();
+	pObs->setProgram(this->box_program);
+	pObs->setVAO(this->box_vao);
+	pObs->setCamera(this->main_camera);
+	pObs->setColour(glm::vec3(0.3,0.3,0.3));
+	pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+	pObs->setPosition(glm::vec3(0,-0.15,0));
+	pObs->setScale(glm::vec3(12.0,0.7,2.0));
+	pObs->setAngle(glm::vec3(0,M_PI/2,0));
+	pObs->setMovable(false);
+	m->addSprite(pObs);
+
+	pObs = new Obstacle();
+	pObs->setProgram(this->box_program);
+	pObs->setVAO(this->box_vao);
+	pObs->setCamera(this->main_camera);
+	pObs->setColour(glm::vec3(0.3,0.3,0.3));
+	pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+	pObs->setPosition(glm::vec3(0,-0.15,0));
+	pObs->setScale(glm::vec3(12.0,0.7,2.0));
+	pObs->setAngle(glm::vec3(0,0,0));
+	pObs->setMovable(false);
+	m->addSprite(pObs);
+
+	m->setActive(false);
 	return true;
 }
 
@@ -1284,6 +1322,12 @@ bool GraphicsEngine::loadModel(const std::string& name, Model* pm){
 		return true;
 	}
 	return false;
+}
+
+void GraphicsEngine::inactiveAllModels(){
+	for(auto& pr : this->modelList){
+		(pr.second)->setActive(false);
+	}
 }
 
 bool GraphicsEngine::loadProgram(void){

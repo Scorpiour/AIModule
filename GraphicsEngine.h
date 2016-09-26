@@ -76,6 +76,8 @@ public:
 	bool clear(void);
 	Model* getModel(const std::string& name);
 	bool loadModel(const std::string& name, Model* pm);
+
+	void inactiveAllModels();
 public:
 	static GraphicsEngine* getInstance(void);
 	static void releaseInstance(void);
