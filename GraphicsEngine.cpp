@@ -75,6 +75,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 				graphics->inactiveAllModels();
 				auto m = graphics->getModel("RegObs");
 				m->swithActive();
+                graphics->resetObject(Point2F(50,50),Point2F(-50,-50));
 
 			}break;
 
@@ -83,6 +84,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 				graphics->inactiveAllModels();
 				auto m = graphics->getModel("Block");
 				m->swithActive();
+                graphics->resetObject(Point2F(-50,-50),Point2F(50,50));
 
 			}break;
 
@@ -91,6 +93,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 				graphics->inactiveAllModels();
 				auto m = graphics->getModel("Wiggle");
 				m->swithActive();
+                graphics->resetObject(Point2F(100,-50),Point2F(-70,50));
 
 			}break;
 		case GLFW_KEY_4:
@@ -98,6 +101,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 				graphics->inactiveAllModels();
 				auto m = graphics->getModel("Trap");
 				m->swithActive();
+                graphics->resetObject(Point2F(-90,-60),Point2F(0,0));
 				
 			}break;
 		case GLFW_KEY_5:
@@ -105,6 +109,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 				graphics->inactiveAllModels();
 				auto m = graphics->getModel("Cross");
 				m->swithActive();
+                graphics->resetObject(Point2F(-40,-40),Point2F(40,40));
 			}break;
 		case GLFW_KEY_ESCAPE:
 			{
