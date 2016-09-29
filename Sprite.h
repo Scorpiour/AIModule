@@ -2,6 +2,7 @@
 #define __INCLUDE_SPRITE_H__
 
 #include <set>
+#include <ctime>
 
 #include "Camera.h"
 #include "RigidBody.h"
@@ -109,6 +110,8 @@ protected:
 
 	Point2F virtualForce;
 
+	bool inTouch;
+	int touchCount;
 protected:
 	virtual ~Robot();
 public:
@@ -137,6 +140,8 @@ public:
 	void setTargetPoint(pVirtualAttractivePoint pTP);
 
 	void clearAIData();
+
+	void resetTouchCount();
 };
 
 class Ball : public Sprite,public RigidBody{
@@ -145,6 +150,7 @@ protected:
 	float friction;
 	AIData data;
 	float nextVelo;
+	clock_t startTime;
 protected:
 	virtual ~Ball();
 public:
@@ -167,6 +173,7 @@ public:
 	virtual float calculateDistance(const Point2F& point, float rad) override;
 
 	virtual void forceAccel(float velo);
+	void resetTimer();
 };
 
 class Obstacle : public Robot{

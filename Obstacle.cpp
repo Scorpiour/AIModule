@@ -37,6 +37,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		return 0.f;
 	}
 
+	
 	if(dest->getID() == -2){
 		return false;
 	}

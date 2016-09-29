@@ -3,6 +3,7 @@
 using namespace std;
 
 VirtualAttractivePoint::VirtualAttractivePoint():RigidBody(),position(Point2F(0,0)){ 
+	this->id = -4;
 }
 
 VirtualAttractivePoint::~VirtualAttractivePoint(){  }
@@ -52,7 +53,7 @@ bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,doub
 	float distance = sqrt(dx*dx + dy*dy);
 
 	//float value = (distance > mr) ? 10.f:0.f;
-	float value = 100.f;
+	float value = 200.f;
 	result.x = value * cos(arc);
 	result.y = value * sin(arc);
 

@@ -426,7 +426,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 
 		*/
 
-		cout<<"Total Timespend of A* : "<<clock()-c<<"ms"<<endl;
+		//cout<<"Total Timespend of A* : "<<clock()-c<<"ms"<<endl;
 
 		return GlobalFlag_Success;
 	}

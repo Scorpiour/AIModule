@@ -72,6 +72,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 			}break;
 		case GLFW_KEY_1:
 			{
+				graphics->inactiveAllModels();
 				auto m = graphics->getModel("RegObs");
 				m->swithActive();
 
@@ -79,6 +80,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
 		case GLFW_KEY_2:
 			{
+				graphics->inactiveAllModels();
 				auto m = graphics->getModel("Block");
 				m->swithActive();
 
@@ -86,18 +88,21 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
 		case GLFW_KEY_3:
 			{
+				graphics->inactiveAllModels();
 				auto m = graphics->getModel("Wiggle");
 				m->swithActive();
 
 			}break;
 		case GLFW_KEY_4:
 			{
+				graphics->inactiveAllModels();
 				auto m = graphics->getModel("Trap");
 				m->swithActive();
 				
 			}break;
 		case GLFW_KEY_5:
 			{
+				graphics->inactiveAllModels();
 				auto m = graphics->getModel("Cross");
 				m->swithActive();
 			}break;
@@ -105,6 +110,22 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 			{
 				glfwSetWindowShouldClose(window,GL_TRUE);
 			}break;
+
+		case GLFW_KEY_R:
+			{
+				graphics->inactiveAllModels();
+				Point2F rp;
+				rp.x = 50.f;
+				rp.y = 50.f;
+
+				Point2F bp;
+				bp.x = -50.f;
+				bp.y = -50.f;
+
+				graphics->resetObject(rp,bp);
+
+			}break;
+
 		case GLFW_KEY_W:
 			{
 				graphics->keyWHold = true;
@@ -1328,6 +1349,19 @@ void GraphicsEngine::inactiveAllModels(){
 	for(auto& pr : this->modelList){
 		(pr.second)->setActive(false);
 	}
+}
+
+void GraphicsEngine::resetObject(const Point2F& robotPos, const Point2F& ballPos){
+
+	this->pr->setPosition(glm::vec3(robotPos.x / 10.f, -0.15, robotPos.y / 10.f));
+	this->pr->setSX(0);
+	this->pr->setSY(0);
+	this->pr->resetTouchCount();
+
+	this->pb->setPosition(glm::vec3(ballPos.x / 10.f, -0.2, ballPos.y / 10.f));
+	this->pb->setSX(0);
+	this->pb->setSY(0);
+	this->pb->resetTimer();
 }
 
 bool GraphicsEngine::loadProgram(void){

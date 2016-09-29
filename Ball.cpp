@@ -10,6 +10,7 @@ Ball::Ball():Sprite(),RigidBody(){
 	data.idxSize = 6;
 	data.idxList = new int[6];
 	nextVelo = 0.f;
+	startTime = clock();
 
 	this->id = 0;
 
@@ -124,6 +125,10 @@ void Ball::forceAccel(float velo){
 	nextVelo = velo;
 }
 
+void Ball::resetTimer(){
+	this->startTime = clock();
+}
+
 void Ball::move(double dt){
 
 	float speed = sqrt(sx*sx + sy*sy);
@@ -155,6 +160,9 @@ void Ball::move(double dt){
 
 			speed = nextVelo;
 			nextVelo = 0.f;
+
+			cout<<"Timer : "<<clock() - startTime <<" ms"<<endl;
+
 		}else{
 			speed = sqrt(sy*sy + sx*sx);	
 		}

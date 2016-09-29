@@ -9,6 +9,8 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->pTargetPoint = nullptr;
 	this->id = 1;
 	this->virtualForce = Point2F(0,0);
+	this->inTouch = false;
+	this->touchCount = 0;
 }
 
 Robot::~Robot(){
@@ -88,6 +90,9 @@ void Robot::setScale(glm::vec3 _scale){
 	this->radius = sqrt(scalex*scalex + scalez*scalez)/2;
 }
 
+void Robot::resetTouchCount(){
+	this->touchCount = 0;
+}
 
 void Robot::move(double dt){
 
@@ -99,6 +104,14 @@ void Robot::move(double dt){
 	//float rsx = this->sx;
 	//float rsy = this->sy;
 	
+	if(!collisionForce){
+		inTouch = false;
+	}else if(!inTouch){
+		inTouch = true;
+		touchCount++;
+		cout<<"Touch Count : "<<touchCount<<endl;
+	}
+
 	float ax = (virtualForce.x + collisionForce.x )/ mass;
 	float ay = (virtualForce.y + collisionForce.y )/ mass;
     
@@ -332,6 +345,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 					Point2F pt;
                     //GMMPriorityQueue<float, Point2F> pq;
                     
+					/*
 					for(int i=0;i<data.dataSize/2;i++){
 						pt.x = data.dataList[i*2] / 10.f;
 						pt.y = data.dataList[i*2+1] / 10.f;
@@ -342,14 +356,39 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
                         //pq.join(dist,pt);
 					}
 					
+					
+					//pt.x = data.dataList[data.dataSize-4];
+					//pt.y = data.dataList[data.dataSize-3];
+					*/
 
+					float rd = this->getRadius() * 4.f;
 
-					pt.x = data.dataList[data.dataSize-4];
-					pt.y = data.dataList[data.dataSize-3];
-                    
-                   
+					Point2F tarp;
+					tarp.x = data.dataList[0];
+					tarp.y = data.dataList[1];
 
-					this->pTargetPoint->setPosition(pt);			
+					
+					if(data.dataSize > 2){ 
+
+						for(int i=1;i<data.dataSize/2 - 1;i++){
+							pt.x = data.dataList[i*2];
+							pt.y = data.dataList[i*2+1];
+
+							float dl = RigidController::getInstance().calculateDistanceLevel(pt);
+
+							if(dl > rd){
+								continue;
+							}else{
+							
+								tarp = pt;
+								pt.x *= 0.1f;
+								pt.y *= 0.1f;
+								this->path->addPoint(pt);
+							}
+						}	
+					}
+
+					this->pTargetPoint->setPosition(tarp);			
 				}
 
 				this->pTargetPoint->calculateForce(this,this->virtualForce,dt);

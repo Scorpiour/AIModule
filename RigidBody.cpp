@@ -36,6 +36,9 @@ void RigidController::calculateCollisionForce(double dt){
 			if(src == agent){
 				continue;
 			}
+			if(src->getID() == -4){
+				continue;
+			}
 
 			Point2F force;
 			force.x = 0.f;

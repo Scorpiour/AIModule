@@ -78,6 +78,7 @@ public:
 	bool loadModel(const std::string& name, Model* pm);
 
 	void inactiveAllModels();
+	void resetObject(const Point2F& robotPos, const Point2F& ballPos);
 public:
 	static GraphicsEngine* getInstance(void);
 	static void releaseInstance(void);
