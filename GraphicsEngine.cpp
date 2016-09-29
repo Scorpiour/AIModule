@@ -111,6 +111,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 				glfwSetWindowShouldClose(window,GL_TRUE);
 			}break;
 
+			//Reset Ball & Robot Position
 		case GLFW_KEY_R:
 			{
 				//graphics->inactiveAllModels();
@@ -124,6 +125,16 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
 				graphics->resetObject(rp,bp);
 
+			}break;
+
+		case GLFW_KEY_P:
+			{
+				graphics->pr->activeAIModule("Robot AStar Search",1);
+			}break;
+
+		case GLFW_KEY_O:
+			{
+				graphics->pr->activeAIModule("Potential Field",2);
 			}break;
 
 		case GLFW_KEY_W:
@@ -1141,7 +1152,7 @@ bool GraphicsEngine::prepareSprites(void){
 		pObs->setPosition(glm::vec3(x,-0.15,y));
 		pObs->setScale(glm::vec3(0.7,0.7,0.7));
 		pObs->setAngle(glm::vec3(0,2*M_PI/p,0));
-		//pObs->setMovable(false);
+		pObs->setMovable(false);
 		m->addSprite(pObs);
 	}
 
@@ -1238,7 +1249,7 @@ bool GraphicsEngine::prepareSprites(void){
 			pObs->setPosition(glm::vec3(x,-0.15,y));
 			pObs->setScale(glm::vec3(0.7,0.7,0.7));
 			pObs->setAngle(glm::vec3(0,0,0));
-			//pObs->setMovable(false);
+			pObs->setMovable(false);
 			m->addSprite(pObs);
 		}
 	}
