@@ -14,6 +14,7 @@ Ball::Ball():Sprite(),RigidBody(){
 
 	this->id = 0;
 
+	/*
 	std::string ball_module_name = "Ball Potential Field";
 
 	auto potentialfield = new AIPotentialField(ball_module_name);
@@ -50,6 +51,7 @@ Ball::Ball():Sprite(),RigidBody(){
 	potentialfield->setProcessFunction(pffunc);
 
 	this->addModule(ball_module_name, potentialfield);
+	*/
 }
 
 Ball::~Ball(){
@@ -205,6 +207,30 @@ void Ball::move(double dt){
 			this->position.z += sy;
 		}
 	}
+}
+
+bool Ball::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
+
+	float tx = dest->getX();
+	float ty = dest->getY();
+
+	float ix = this->getX();
+	float iy = this->getY();
+
+	float dx = ix - tx;
+	float dy = iy - ty;
+
+	float arc = atan2(dy,dx);
+
+	float distance = sqrt(dx*dx + dy*dy);
+
+	float value = distance;
+
+	result.x = value * cos(arc);
+	result.y = value * sin(arc);
+
+
+	return true;
 }
 
 bool Ball::calculateForce(RigidBody* dest,Point2F& result,double dt){

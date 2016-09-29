@@ -35,6 +35,11 @@ void VirtualAttractivePoint::move(double dt) {
 
 }
 
+bool VirtualAttractivePoint::calculateVirtualForce(RigidBody* dest,Point2F& result,double dt) {
+
+	return false;
+}
+
 bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,double dt) { 
 
 	if(dest->getID() != 1){

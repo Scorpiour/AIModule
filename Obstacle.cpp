@@ -28,6 +28,130 @@ void Obstacle::move(double dt){
 	//this->setAngle(glm::vec3(0,arc,0));
 }
 
+bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
+	if(!this->isEnable){
+		result.x = 0.f;
+		result.y = 0.f;
+		return 0.f;
+	}
+
+	
+	if(dest->getID() == -2){
+		return false;
+	}
+
+	float ix = this->getX();
+	float iy = this->getY();
+	float ir = this->getRadius();
+	
+	float tx = dest->getX();
+	float ty = dest->getY();
+	float tr = dest->getRadius();
+
+	int id = dest->getID();
+
+	float dx = tx - ix;
+	float dy = ty - iy;
+
+	float distance = sqrt(dy*dy + dx*dx);
+	/*
+	if(distance > ir + tr){
+		result.x = 0;
+		result.y = 0;
+		return true;
+	}*/
+
+	float phi = atan2(dy,dx);
+	float theta = this->angles.y;
+
+	while(phi < 0){
+		phi += 2*M_PI;
+	}
+	while(theta <0){
+		theta += 2*M_PI;
+	}
+	while(phi < theta){
+		phi += 2*M_PI;
+	}
+
+	float delta = phi - theta;
+	float denom = atan2(length,width);
+	
+	Point2F forceDirection;
+	forceDirection.x = 0;
+	forceDirection.y = 0;
+	float r = 0;
+
+	if(delta < denom){
+		forceDirection.x = cos(theta);
+		forceDirection.y = sin(theta);
+		distance *= cos(delta);
+		r = width/2;
+		distance -= r;
+	}else if(delta == denom){
+		forceDirection.x = cos(phi);
+		forceDirection.y = sin(phi);
+		r = ir;
+		distance -= r;
+	}else if(delta < M_PI-denom){
+		forceDirection.x = -sin(theta);
+		forceDirection.y = cos(theta);
+		distance *= sin(delta);
+		r = length/2;
+		distance -= r;
+	}else if(delta == M_PI-denom){
+		forceDirection.x = cos(phi);
+		forceDirection.y = sin(phi);
+		r = ir;
+		distance -= r;
+	}else if(delta < M_PI+denom){
+		forceDirection.x = -cos(theta);
+		forceDirection.y = -sin(theta);
+		distance *= cos(delta);
+		r = width/2;
+		distance -= r;
+	}else if(delta == M_PI+denom){
+		forceDirection.x = cos(phi);
+		forceDirection.y = sin(phi);
+		r = ir;
+		distance -= r;
+	}else if(delta < 2*M_PI-denom){
+		forceDirection.x = sin(theta);
+		forceDirection.y = -cos(theta);
+		distance *= sin(delta);
+		r = length/2;
+		distance -= r;
+	}else if(delta == 2*M_PI-denom){
+		forceDirection.x = cos(phi);
+		forceDirection.y = sin(phi);
+		r = ir;
+		distance -= r;
+	}else{
+		forceDirection.x = cos(theta);
+		forceDirection.y = sin(theta);
+		distance *= cos(delta);
+		r = width/2;
+		distance -= r;
+	}
+
+	distance = abs(distance);
+
+	if(distance > r + tr + 7){
+		result.x = 0;
+		result.y = 0;
+		return false;
+	}
+
+	float value = 1000.f/distance;
+
+	float arc = atan2(forceDirection.y, forceDirection.x);
+
+	result.x = value*cos(arc);
+	result.y = value*sin(arc);
+	
+	return true;
+
+}
 
 bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 

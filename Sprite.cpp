@@ -70,6 +70,8 @@ Sprite::Sprite(){
 	radius = 1.f;
 	isVisible = true;
 	isEnable = true;
+	activeModule = nullptr;
+	activeModuleIndex = 0;
 
 	auto manager = SpriteManager::getInstance();
 	manager->addToManager(this);
@@ -186,4 +188,15 @@ void Sprite::removeModule(const std::string& name){
 	if(iter != modules.end()){
 		modules.erase(iter);
 	}
+}
+
+void Sprite::activeAIModule(const std::string& name, int idx){
+	this->activeModule = nullptr;
+
+	auto iter = this->modules.find(name);
+	if(iter != this->modules.end()){
+		this->activeModule = iter->second;
+	}
+
+	activeModuleIndex = idx;
 }

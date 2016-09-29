@@ -245,6 +245,7 @@ void GraphicsEngine::resizeFramebufferCallback(GLFWwindow* window, int width, in
 void GraphicsEngine::mouseButtonCallback(GLFWwindow* window, int btn, int action, int mode){
 	if(btn == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
 		GraphicsEngine::getInstance()->resetBall = true;
+		GraphicsEngine::getInstance()->pr->resetTouchCount();
 	}
 }
 
@@ -602,7 +603,8 @@ bool GraphicsEngine::prepareSprites(void){
 	std::string robot_module_name = "Robot AStar Search";
 	auto pAStar = new AIAStarSearch(robot_module_name);
 	pRobot->addModule(robot_module_name,pAStar);
-
+	//pRobot->activeAIModule(robot_module_name,1);
+	pRobot->activeAIModule("",2);
 	this->pr = pRobot;
 
 	//Walls

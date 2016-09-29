@@ -172,6 +172,11 @@ void Robot::move(double dt){
     }
 }
 
+bool Robot::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
+
+	return false;
+}
+
 bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	float ix = this->getX();
@@ -312,87 +317,106 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 		//if(this->data.idxSize == 0){
 			
-			std::string robot_module_name = "Robot AStar Search";
-			auto iter  = this->modules.find(robot_module_name);
+			//std::string robot_module_name = "Robot AStar Search";
+			//auto iter  = this->modules.find(robot_module_name);
 
-			if(iter != modules.end()){
-				auto pAStar = dynamic_cast<AIAStarSearch*>(iter->second);
+			
+				
+			switch(activeModuleIndex){
 
-				AStarSearchNode startNode;
-				AStarSearchNode goalNode;
+				case 1:
+					{
+						if(this->activeModule != nullptr){
+							auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
 
-				startNode.position.x = this->getX();
-				startNode.position.y = this->getY();
+							AStarSearchNode startNode;
+							AStarSearchNode goalNode;
 
-				goalNode.position.x = dest->getX();
-				goalNode.position.y = dest->getY();
+							startNode.position.x = this->getX();
+							startNode.position.y = this->getY();
 
-				//clear old datas
-				this->data.clear();
+							goalNode.position.x = dest->getX();
+							goalNode.position.y = dest->getY();
 
-				int baseLevel = 2;
-				baseLevel += distance / 22;
+							//clear old datas
+							this->data.clear();
+
+							int baseLevel = 2;
+							baseLevel += distance / 22;
 
 
-				pAStar->init(&startNode, &goalNode, baseLevel);
-				pAStar->loadAIData(&(this->data));
-				pAStar->processAIData(0);
-				pAStar->outputAIData(&(this->data));
+							pAStar->init(&startNode, &goalNode, baseLevel);
+							pAStar->loadAIData(&(this->data));
+							pAStar->processAIData(0);
+							pAStar->outputAIData(&(this->data));
 
-				if(this->data.idxSize != 0 && this->data.dataSize != 0){
-					this->path->clear();
+							if(this->data.idxSize != 0 && this->data.dataSize != 0){
+								this->path->clear();
 
-					Point2F pt;
-                    //GMMPriorityQueue<float, Point2F> pq;
+								Point2F pt;
+								//GMMPriorityQueue<float, Point2F> pq;
                     
-					/*
-					for(int i=0;i<data.dataSize/2;i++){
-						pt.x = data.dataList[i*2] / 10.f;
-						pt.y = data.dataList[i*2+1] / 10.f;
-						this->path->addPoint(pt);
+								/*
+								for(int i=0;i<data.dataSize/2;i++){
+									pt.x = data.dataList[i*2] / 10.f;
+									pt.y = data.dataList[i*2+1] / 10.f;
+									this->path->addPoint(pt);
                         
-                        //float dist = RigidController::getInstance().calculateDistanceLevel(pt);
+									//float dist = RigidController::getInstance().calculateDistanceLevel(pt);
                         
-                        //pq.join(dist,pt);
-					}
+									//pq.join(dist,pt);
+								}
 					
 					
-					//pt.x = data.dataList[data.dataSize-4];
-					//pt.y = data.dataList[data.dataSize-3];
-					*/
+								//pt.x = data.dataList[data.dataSize-4];
+								//pt.y = data.dataList[data.dataSize-3];
+								*/
 
-					float rd = this->getRadius() * 4.f;
+								float rd = this->getRadius() * 4.f;
 
-					Point2F tarp;
-					tarp.x = data.dataList[0];
-					tarp.y = data.dataList[1];
+								Point2F tarp;
+								tarp.x = data.dataList[0];
+								tarp.y = data.dataList[1];
 
 					
-					if(data.dataSize > 2){ 
+								if(data.dataSize > 2){ 
 
-						for(int i=1;i<data.dataSize/2 - 1;i++){
-							pt.x = data.dataList[i*2];
-							pt.y = data.dataList[i*2+1];
+									for(int i=1;i<data.dataSize/2 - 1;i++){
+										pt.x = data.dataList[i*2];
+										pt.y = data.dataList[i*2+1];
 
-							float dl = RigidController::getInstance().calculateDistanceLevel(pt);
+										float dl = RigidController::getInstance().calculateDistanceLevel(pt);
 
-							if(dl > rd){
-								continue;
-							}else{
+										if(dl > rd){
+											continue;
+										}else{
 							
-								tarp = pt;
-								pt.x *= 0.1f;
-								pt.y *= 0.1f;
-								this->path->addPoint(pt);
+											tarp = pt;
+											pt.x *= 0.1f;
+											pt.y *= 0.1f;
+											this->path->addPoint(pt);
+										}
+									}	
+								}
+
+								this->pTargetPoint->setPosition(tarp);			
 							}
-						}	
-					}
 
-					this->pTargetPoint->setPosition(tarp);			
-				}
+							this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
 
-				this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
+
+						}
+
+					}break;
+
+				case 2:
+					{
+						RigidController::getInstance().calculateVirtualForce(this,this->virtualForce,dt);
+							
+
+					}break;
 			}
+
 
 
 

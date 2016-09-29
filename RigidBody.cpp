@@ -24,6 +24,31 @@ void RigidController::removeFromController(RigidBody* body){
 	this->rigids.erase(body);
 }
 
+void RigidController::calculateVirtualForce(RigidBody* dest, Point2F& result, double dt){
+	Point2F netForce;
+	netForce.x = 0.f;
+	netForce.y = 0.f;
+	for(auto& src : this->rigids){
+		if(src == dest){
+			continue;
+		}
+		if(src->getID() == -4){
+			continue;
+		}
+
+		Point2F force;
+		force.x = 0.f;
+		force.y = 0.f;
+
+		if(src->calculateVirtualForce(dest,force,dt)){
+			netForce.x += force.x;
+			netForce.y += force.y;
+		}
+	}
+	result.x = netForce.x;
+	result.y = netForce.y;
+}
+
 void RigidController::calculateCollisionForce(double dt){
 
 	for(auto& agent : this->rigids){

@@ -81,6 +81,89 @@ bool Wall::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	return false;
 }
 
+bool Wall::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
+
+	if(this->forceFunc != nullptr){
+
+		float angle = this->angles.y;
+		float length = this->scaleMatrix[0] * 10;
+		float x = this->getX();
+		float y = this->getY();
+
+		float r = length / 2;
+
+		Point2F p1;
+		Point2F p2;
+
+		float cost = r*cos(angle);
+		float sint = r*sin(angle);
+
+		p1.x = x - cost;
+		p1.y = y - sint;
+		p2.x = x + cost;
+		p2.y = y + sint;
+
+		if(p1.x > p2.x){
+			std::swap(p1.x,p2.x);
+			std::swap(p1.y,p2.y);
+		}
+
+		float tx = dest->getX();
+		float ty = dest->getY();
+
+		float a = (p2.y - p1.y);
+		float b = (p1.x - p2.x);
+		float c = p1.y*(p2.x-p1.x) + p1.x*(p1.y-p2.y);
+
+		if(a==0&&b==0){
+			result.x = 0;
+			result.y = 0;
+			return false;
+		}
+
+		float denom = 1/sqrt(a*a+b*b);
+		
+		Point2F foot;
+		foot.x = (b*b*tx - a*b*ty - a*c)*denom*denom;
+		foot.y = (a*a*ty - a*b*tx - b*c)*denom*denom;
+
+		float distance = -1.f;
+		float margin = 7.f;
+
+		if(foot.x < p1.x){
+			result.x = 0;
+			result.y = 0;
+			return false;
+		}else if(foot.x > p2.x){
+			result.x = 0;
+			result.y = 0;
+			return false;
+		}else{
+			distance = abs(a*tx + b*ty + c)*denom;
+		}
+		
+		if(distance > margin){
+			result.x = 0;
+			result.y = 0;
+			return false;
+		}
+
+		float dx = tx - foot.x;
+		float dy = ty - foot.y;
+		float arc = atan2(dy,dx);
+
+		float value = 1000.f/distance;
+		result.x = value * cos(arc);
+		result.y = value * sin(arc);
+		return true;
+
+		//return distance;
+	}
+
+
+	return false;
+}
+
 float Wall::calculateDistance(const Point2F& point, float rad){
 
 	if(this->forceFunc != nullptr){

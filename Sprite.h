@@ -30,6 +30,8 @@ protected:
 	bool isVisible;
 	bool isEnable;
 protected:
+	AIModuleBase* activeModule;
+	int activeModuleIndex;
 	std::map<std::string,AIModuleBase*> modules;
 public:
 	Sprite();
@@ -51,6 +53,7 @@ public:
 	//DO NOT DELETE ANY AIMODULES, JUST NEW THEM AND USE DIRECTLY
 	virtual void addModule(const std::string& name, AIModuleBase* pModule);
 	virtual void removeModule(const std::string& name);
+	virtual void activeAIModule(const std::string& name,int idx);
 
 	virtual void visible(bool _v);
 	virtual void enable(bool _e);
@@ -112,6 +115,8 @@ protected:
 
 	bool inTouch;
 	int touchCount;
+
+	
 protected:
 	virtual ~Robot();
 public:
@@ -131,6 +136,7 @@ public:
 
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
+	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
 
 	virtual void setScale(glm::vec3 _scale) override;
@@ -170,6 +176,7 @@ public:
 
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
+	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
 
 	virtual void forceAccel(float velo);
@@ -185,6 +192,7 @@ public:
 	
 	virtual void move(double)override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
+	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(RigidBody* dest);
 	virtual float calculateDistance(const Point2F& point,float rad) override;
 
@@ -210,6 +218,7 @@ public:
 
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
+	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
 };
 
