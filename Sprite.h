@@ -191,6 +191,7 @@ public:
 	Obstacle();
 	
 	virtual void move(double)override;
+	virtual void setScale(glm::vec3 _scale)override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(RigidBody* dest);

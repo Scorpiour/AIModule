@@ -87,7 +87,7 @@ void Robot::setScale(glm::vec3 _scale){
 	this->width = scalex;
 	this->length = scalez;
 
-	this->radius = max(this->width,this->length);
+	this->radius = max(this->width/2,this->length/2);
 }
 
 void Robot::resetTouchCount(){

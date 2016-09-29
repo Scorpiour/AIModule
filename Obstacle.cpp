@@ -10,6 +10,21 @@ Obstacle::~Obstacle(){
 
 }
 
+void Obstacle::setScale(glm::vec3 _scale){
+
+	Sprite::setScale(_scale);
+	float scalex = this->scaleMatrix[0];
+	float scalez = this->scaleMatrix[10];
+
+	scalex *= 10.f;
+	scalez *= 10.f;
+
+	this->width = scalex;
+	this->length = scalez;
+
+	this->radius = sqrt(scalex*scalex + scalez*scalez)/2;
+}
+
 void Obstacle::move(double dt){
 	if(!movable){
 		return;
@@ -142,7 +157,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 		return false;
 	}
 
-	float value = 500.f/(1+exp(distance-7));//1000.f/distance;
+	float value = 1500.f/(1+exp(distance-7));//1000.f/distance;
 
 	float arc = atan2(forceDirection.y, forceDirection.x);
 
@@ -180,12 +195,13 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	float dy = ty - iy;
 
 	float distance = sqrt(dy*dy + dx*dx);
-	/*
+	
+	
 	if(distance > ir + tr){
 		result.x = 0;
 		result.y = 0;
 		return true;
-	}*/
+	}
 
 	float phi = atan2(dy,dx);
 	float theta = this->angles.y;
