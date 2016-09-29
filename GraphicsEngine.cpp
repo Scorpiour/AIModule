@@ -113,7 +113,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
 		case GLFW_KEY_R:
 			{
-				graphics->inactiveAllModels();
+				//graphics->inactiveAllModels();
 				Point2F rp;
 				rp.x = 50.f;
 				rp.y = 50.f;
@@ -246,6 +246,7 @@ void GraphicsEngine::mouseButtonCallback(GLFWwindow* window, int btn, int action
 	if(btn == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
 		GraphicsEngine::getInstance()->resetBall = true;
 		GraphicsEngine::getInstance()->pr->resetTouchCount();
+		GraphicsEngine::getInstance()->pb->resetTimer();
 	}
 }
 

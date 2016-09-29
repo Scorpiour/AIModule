@@ -136,13 +136,13 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 
 	distance = abs(distance);
 
-	if(distance > r + tr + 7){
+	if(distance > r + tr + 20){
 		result.x = 0;
 		result.y = 0;
 		return false;
 	}
 
-	float value = 1000.f/distance;
+	float value = 500.f/(1+exp(distance-7));//1000.f/distance;
 
 	float arc = atan2(forceDirection.y, forceDirection.x);
 
@@ -261,7 +261,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	}
 
 	distance = abs(distance);
-	float value = 100.f;
+	float value = 1000.f;
 	float arc = atan2(forceDirection.y, forceDirection.x);
 
 	result.x = value*cos(arc);

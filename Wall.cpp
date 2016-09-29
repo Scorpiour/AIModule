@@ -142,7 +142,7 @@ bool Wall::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 			distance = abs(a*tx + b*ty + c)*denom;
 		}
 		
-		if(distance > margin){
+		if(distance > margin + dest->getRadius()){
 			result.x = 0;
 			result.y = 0;
 			return false;
@@ -152,7 +152,7 @@ bool Wall::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 		float dy = ty - foot.y;
 		float arc = atan2(dy,dx);
 
-		float value = 1000.f/distance;
+		float value =  500.f/(1+exp(distance-7));//1000.f/distance;
 		result.x = value * cos(arc);
 		result.y = value * sin(arc);
 		return true;

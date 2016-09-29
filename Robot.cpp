@@ -112,9 +112,20 @@ void Robot::move(double dt){
 		cout<<"Touch Count : "<<touchCount<<endl;
 	}
 
+	/*
 	float ax = (virtualForce.x + collisionForce.x )/ mass;
 	float ay = (virtualForce.y + collisionForce.y )/ mass;
-    
+    */
+	float ax,ay;
+	if(collisionForce){
+		ax = collisionForce.x / mass;
+		ay = collisionForce.y / mass;
+	}else{
+		ax = virtualForce.x / mass;
+		ay = virtualForce.y / mass;
+	}
+
+
     /*
 	if(this->collisionForce.y * sy < 0){
 		
