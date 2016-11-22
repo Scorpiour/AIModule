@@ -302,8 +302,24 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		}
 
 
+		/*
+			Kicking target
+		*/
+
+		bool kickingpos = false;
+
 		float dx = tx - ix;
 		float dy = ty - iy;
+
+		float alpha = atan2(dy,dx);
+		if(fabs(alpha) > M_PI*0.25){
+			dx -= 30;
+			kickingpos = true;
+			
+		}else{
+			kickingpos = false;
+		}
+
 		float distance = sqrt(dx*dx + dy*dy);
 
 		if(distance > tr + ir + 10){
@@ -348,6 +364,10 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 							goalNode.position.x = dest->getX();
 							goalNode.position.y = dest->getY();
+
+							if(kickingpos){
+								goalNode.position.x -= 35;
+							}
 
 							//clear old datas
 							this->data.clear();
