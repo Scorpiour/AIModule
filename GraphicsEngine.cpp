@@ -121,12 +121,12 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 			{
 				//graphics->inactiveAllModels();
 				Point2F rp;
-				rp.x = 50.f;
-				rp.y = 50.f;
+				rp.x = 10.f;
+				rp.y = 10.f;
 
 				Point2F bp;
-				bp.x = -50.f;
-				bp.y = -50.f;
+				bp.x = 0.f;
+				bp.y = 0.f;
 
 				graphics->resetObject(rp,bp);
 
