@@ -423,8 +423,9 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 								goalNode.position.y = dest->getY();
 
 								if(kickingpos){
-									goalNode.position.x -= kdx;
-									goalNode.position.y -= kdy;
+									//goalNode.position.x -= kdx;
+									//goalNode.position.y -= kdy;
+									goalNode.position = ep;
 									dest->activeDistanceCalculate(true);
 								}
 
