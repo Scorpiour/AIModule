@@ -22,6 +22,7 @@ protected:
 	int id;
 
 	Point2F collisionForce;
+	bool activeDistance;
 
 	std::function<bool(RigidBody*,Point2F&)> forceFunc;
 public:
@@ -50,6 +51,7 @@ public:
 	virtual void setCollisionForce(float fx,float fy);
 	virtual void setID(int _id);
 	virtual int getID()const;
+	virtual void activeDistanceCalculate(bool b);
 
 
 	virtual void setMovable(bool isMovable);

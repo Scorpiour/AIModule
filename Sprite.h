@@ -113,8 +113,20 @@ protected:
 
 	Point2F virtualForce;
 
+	float maxSpeed;
+
 	bool inTouch;
 	int touchCount;
+
+	//for FSM
+	//status list:
+	/*
+		- 0: init status
+		- 1: not in kicking pos
+		- 2: try kicking
+	*/
+	int currentStatus;
+	
 
 	
 protected:
@@ -180,6 +192,8 @@ public:
 	virtual float calculateDistance(const Point2F& point, float rad) override;
 
 	virtual void forceAccel(float velo);
+
+	virtual Point2F getKickingPos(float gap);
 	void resetTimer();
 };
 

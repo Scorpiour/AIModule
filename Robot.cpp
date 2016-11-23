@@ -11,6 +11,8 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->virtualForce = Point2F(0,0);
 	this->inTouch = false;
 	this->touchCount = 0;
+	this->maxSpeed = speedlimit;
+	this->currentStatus = 0;
 }
 
 Robot::~Robot(){
@@ -144,9 +146,9 @@ void Robot::move(double dt){
 
 	float arc = atan2(sy,sx);
 
-	if(s > speedlimit){
-		sx = speedlimit * cos(arc);
-		sy = speedlimit * sin(arc);
+	if(s > maxSpeed){
+		sx = maxSpeed * cos(arc);
+		sy = maxSpeed * sin(arc);
 	}
 
 
@@ -293,34 +295,84 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	}
 
 
+	
+
 	if(id==0){
-
+		Ball* pb = dynamic_cast<Ball*>(dest);
 		if(result){
-
-			dynamic_cast<Ball*>(dest)->forceAccel(speedlimit*1.25);
+	
+			pb->forceAccel(speedlimit*1.25);
 
 		}
 
+		dest->activeDistanceCalculate(false);
+
+		//FSM to switch between behaviours
 
 		/*
 			Kicking target
 		*/
 
-		bool kickingpos = false;
+
+		bool kickingpos = true;
 
 		float dx = tx - ix;
 		float dy = ty - iy;
 
+		Point2F ep = pb->getKickingPos(25.f);
+
+		float kdx = tx - ep.x;
+		float kdy = ty - ep.y;
+
 		float alpha = atan2(dy,dx);
-		if(fabs(alpha) > M_PI*0.25){
-			dx -= 30;
-			kickingpos = true;
+		
+		//if(fabs(alpha) > M_PI*0.25){
+			//dx -= kdx;
+			//dy -= kdy;
+			//kickingpos = true;
 			
-		}else{
-			kickingpos = false;
-		}
+			switch(currentStatus){
+			case 0:
+				{
+					dx -= kdx;
+					dy -= kdy;
+					kickingpos = true;
+					currentStatus = 1;
+				}break;
+			case 1:
+				{
+					dx -= kdx;
+					dy -= kdy;
+					kickingpos = true;
+
+					float ddx = tx - kdx;
+					float ddy = ty - kdy;
+					ddx = ddx - ix;
+					ddy = ddy - iy;
+					float vdist = sqrt(ddx*ddx + ddy*ddy);
+
+					if(vdist <= 1){
+						currentStatus = 2;
+					}
+				}break;
+			case 2:
+				{
+					kickingpos = false;
+					if(distance < tr + ir){
+						currentStatus = 0;
+					}
+				}break;
+
+			}
+
+			
+		//}else{
+		//	kickingpos = false;
+		//}
 
 		float distance = sqrt(dx*dx + dy*dy);
+
+		this->maxSpeed = speedlimit;
 
 		if(distance > tr + ir + 10){
 
@@ -349,109 +401,118 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 			
 				
-			switch(activeModuleIndex){
+				switch(activeModuleIndex){
 
-				case 1:
-					{
-						if(this->activeModule != nullptr){
-							auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
+					case 1:
+						{
+							if(this->activeModule != nullptr){
+							
+								if(distance < tr){
+									break;
+								}
+							
+								auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
 
-							AStarSearchNode startNode;
-							AStarSearchNode goalNode;
+								AStarSearchNode startNode;
+								AStarSearchNode goalNode;
 
-							startNode.position.x = this->getX();
-							startNode.position.y = this->getY();
+								startNode.position.x = this->getX();
+								startNode.position.y = this->getY();
 
-							goalNode.position.x = dest->getX();
-							goalNode.position.y = dest->getY();
+								goalNode.position.x = dest->getX();
+								goalNode.position.y = dest->getY();
 
-							if(kickingpos){
-								goalNode.position.x -= 35;
-							}
+								if(kickingpos){
+									goalNode.position.x -= kdx;
+									goalNode.position.y -= kdy;
+									dest->activeDistanceCalculate(true);
+								}
 
-							//clear old datas
-							this->data.clear();
+								//clear old datas
+								this->data.clear();
 
-							int baseLevel = 2;
-							baseLevel += distance / 22;
+								int baseLevel = 2;
+								baseLevel += distance / 22;
 
 
-							pAStar->init(&startNode, &goalNode, baseLevel);
-							pAStar->loadAIData(&(this->data));
-							pAStar->processAIData(0);
-							pAStar->outputAIData(&(this->data));
+								pAStar->init(&startNode, &goalNode, baseLevel);
+								pAStar->loadAIData(&(this->data));
+								pAStar->processAIData(0);
+								pAStar->outputAIData(&(this->data));
 
-							if(this->data.idxSize != 0 && this->data.dataSize != 0){
-								this->path->clear();
+								if(this->data.idxSize != 0 && this->data.dataSize != 0){
+									this->path->clear();
 
-								Point2F pt;
-								//GMMPriorityQueue<float, Point2F> pq;
+									Point2F pt;
+									//GMMPriorityQueue<float, Point2F> pq;
                     
-								/*
-								for(int i=0;i<data.dataSize/2;i++){
-									pt.x = data.dataList[i*2] / 10.f;
-									pt.y = data.dataList[i*2+1] / 10.f;
-									this->path->addPoint(pt);
+									/*
+									for(int i=0;i<data.dataSize/2;i++){
+										pt.x = data.dataList[i*2] / 10.f;
+										pt.y = data.dataList[i*2+1] / 10.f;
+										this->path->addPoint(pt);
                         
-									//float dist = RigidController::getInstance().calculateDistanceLevel(pt);
+										//float dist = RigidController::getInstance().calculateDistanceLevel(pt);
                         
-									//pq.join(dist,pt);
-								}
+										//pq.join(dist,pt);
+									}
 					
 					
-								//pt.x = data.dataList[data.dataSize-4];
-								//pt.y = data.dataList[data.dataSize-3];
-								*/
+									//pt.x = data.dataList[data.dataSize-4];
+									//pt.y = data.dataList[data.dataSize-3];
+									*/
 
-								float rd = this->getRadius() * 4.f;
+									float rd = this->getRadius() * 4.f;
 
-								Point2F tarp;
-								tarp.x = data.dataList[0];
-								tarp.y = data.dataList[1];
+									Point2F tarp;
+									tarp.x = data.dataList[0];
+									tarp.y = data.dataList[1];
 
+									this->path->addPoint(tarp);
 					
-								if(data.dataSize > 2){ 
+									if(data.dataSize > 2){ 
 
-									for(int i=1;i<data.dataSize/2 - 1;i++){
-										pt.x = data.dataList[i*2];
-										pt.y = data.dataList[i*2+1];
+										for(int i=1;i<data.dataSize/2 - 1;i++){
+											pt.x = data.dataList[i*2];
+											pt.y = data.dataList[i*2+1];
 
-										float dl = RigidController::getInstance().calculateDistanceLevel(pt);
+											float dl = RigidController::getInstance().calculateDistanceLevel(pt);
 
-										if(dl > rd){
-											continue;
-										}else{
+											if(dl > rd){
+												continue;
+											}else{
 							
-											tarp = pt;
-											pt.x *= 0.1f;
-											pt.y *= 0.1f;
-											this->path->addPoint(pt);
-										}
-									}	
+												tarp = pt;
+												pt.x *= 0.1f;
+												pt.y *= 0.1f;
+												this->path->addPoint(pt);
+											}
+										}	
+									}
+
+									this->pTargetPoint->setPosition(tarp);			
 								}
 
-								this->pTargetPoint->setPosition(tarp);			
+								this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
+
+
 							}
 
-							this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
+						}break;
 
-
-						}
-
-					}break;
-
-				case 2:
-					{
-						RigidController::getInstance().calculateVirtualForce(this,this->virtualForce,dt);
+					case 2:
+						{
+							RigidController::getInstance().calculateVirtualForce(this,this->virtualForce,dt);
 							
 
-					}break;
-			}
+						}break;
+				}
 
+			}else{
 
+				this->maxSpeed = speedlimit * ( distance / (tr+ir+10) );
 
-
-		}
+				}
 
 	}
 

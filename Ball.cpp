@@ -4,7 +4,7 @@ using namespace std;
 
 Ball::Ball():Sprite(),RigidBody(){
 	mass = 1.f;
-	friction = 0.f;
+	friction = 150.f;
 	data.dataSize = 10;
 	data.dataList = new double[10];
 	data.idxSize = 6;
@@ -125,6 +125,36 @@ void Ball::setFriction(float f){
 
 void Ball::forceAccel(float velo){
 	nextVelo = velo;
+}
+
+Point2F Ball::getKickingPos(float gap){
+	
+	Point2F ret;
+
+	
+	float ix = this->getX();
+	float iy = this->getY();
+	float ir = this->getRadius();
+
+	float tx = 110;
+	float ty = 0;
+
+	float dx = tx - ix;
+	float dy = ty - iy;
+
+	float distance = sqrt(dx*dx + dy*dy);
+
+	if((distance < ir)||gap < 1e-6){
+		ret.x = ix - gap;
+		ret.y = iy;
+		return ret;
+	}
+
+	ret.x = ix - dx * gap/distance;
+	ret.y = iy - dy * gap/distance;
+
+	return ret;
+	
 }
 
 void Ball::resetTimer(){
@@ -280,19 +310,22 @@ bool Ball::calculateForce(RigidBody* dest,Point2F& result,double dt){
 }
 
 float Ball::calculateDistance(const Point2F& point, float rad){
-	float ix = this->getX();
-	float iy = this->getY();
-	float ir = this->getRadius();
+	if(this->activeDistance){
+		float ix = this->getX();
+		float iy = this->getY();
+		float ir = this->getRadius();
 
-	float tx = point.x;
-	float ty = point.y;
+		float tx = point.x;
+		float ty = point.y;
 
-	float dx = tx-ix;
-	float dy = ty-iy;
+		float dx = tx-ix;
+		float dy = ty-iy;
 
-	float distance = sqrt(dx*dx + dy*dy);
+		float distance = sqrt(dx*dx + dy*dy);
 
-	distance = distance - rad - ir;
+		distance = distance - rad - ir;
 
-	return distance;
+		return distance;
+	}
+	return FLT_MAX;
 }

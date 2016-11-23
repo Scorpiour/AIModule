@@ -87,7 +87,9 @@ float RigidController::calculateDistanceLevel(const Point2F& pt){
 	float dv = FLT_MAX;
 	
 	for(auto& target : this->rigids){
-		if(target->getID() == -2){
+		
+		int id = target->getID();
+		if((id == -2)||(id == 0)){
 			float distance = target->calculateDistance(pt,0);
 
 			if(distance < dv){
@@ -135,6 +137,10 @@ void RigidBody::removeForceFunc(){
 	this->forceFunc = nullptr;
 }
 
+void RigidBody::activeDistanceCalculate(bool b){
+	this->activeDistance = b;
+}
+
 RigidBody::RigidBody(){
 	mass = 0;
 	collisionForce.x = 0;
@@ -144,6 +150,7 @@ RigidBody::RigidBody(){
 	forceFunc = nullptr;
 	id = -1;
 	movable = true;
+	activeDistance = false;
 
 	RigidController::getInstance().addToController(this);
 }
