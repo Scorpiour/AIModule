@@ -88,8 +88,9 @@ float RigidController::calculateDistanceLevel(const Point2F& pt){
 	
 	for(auto& target : this->rigids){
 		
+		
 		int id = target->getID();
-		if((id == -2)||(id == 0)){
+		if(/*(id == -2)||(id == 0)*/ id != -4){
 			float distance = target->calculateDistance(pt,0);
 
 			if(distance < dv){
@@ -150,7 +151,7 @@ RigidBody::RigidBody(){
 	forceFunc = nullptr;
 	id = -1;
 	movable = true;
-	activeDistance = false;
+	activeDistance = true;
 
 	RigidController::getInstance().addToController(this);
 }

@@ -67,6 +67,10 @@ bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,doub
 
 float VirtualAttractivePoint::calculateDistance(const Point2F& point, float rad) {
 
+	if(!activeDistance){
+		return FLT_MAX;
+	}
+
 	float dx = point.x - position.x;
 	float dy = point.y - position.y;
 

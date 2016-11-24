@@ -157,7 +157,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 		return false;
 	}
 
-	float value = 1500.f/(1+exp(distance-7));//1000.f/distance;
+	float value = 1500.f/(1+exp(distance-20));//1000.f/distance;
 
 	float arc = atan2(forceDirection.y, forceDirection.x);
 
@@ -308,6 +308,9 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 float Obstacle::calculateDistance(const Point2F& point,float rad){
 	if(!this->isEnable){
+		return FLT_MAX;
+	}
+	if(!this->activeDistance){
 		return FLT_MAX;
 	}
 	float ix = this->getX();

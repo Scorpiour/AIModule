@@ -13,6 +13,7 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->touchCount = 0;
 	this->maxSpeed = speedlimit;
 	this->currentStatus = 0;
+	this->activeDistance = false;
 }
 
 Robot::~Robot(){
@@ -313,13 +314,15 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			Kicking target
 		*/
 
+		Point2F ep;
+
 
 		bool kickingpos = true;
 
 		float dx = tx - ix;
 		float dy = ty - iy;
 
-		Point2F ep = pb->getKickingPos(25.f);
+		ep = pb->getKickingPos(25);
 
 		float kdx = tx - ep.x;
 		float kdy = ty - ep.y;
@@ -536,6 +539,9 @@ void Robot::addPathview(pTrailPoints _path){
 
 
 float Robot::calculateDistance(const Point2F& point,float rad){
+	if(!this->activeDistance){
+		return FLT_MAX;
+	}
 	float ix = this->getX();
 	float iy = this->getY();
 	float ir = this->getRadius();

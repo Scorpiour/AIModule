@@ -4,7 +4,7 @@ using namespace std;
 
 Ball::Ball():Sprite(),RigidBody(){
 	mass = 1.f;
-	friction = 150.f;
+	friction = 100.f;
 	data.dataSize = 10;
 	data.dataList = new double[10];
 	data.idxSize = 6;
@@ -135,6 +135,12 @@ Point2F Ball::getKickingPos(float gap){
 	float ix = this->getX();
 	float iy = this->getY();
 	float ir = this->getRadius();
+
+	if(gap < 1e-6){
+		ret.x = ix;
+		ret.y = iy;
+		return ret;
+	}
 
 	float tx = 110;
 	float ty = 0;

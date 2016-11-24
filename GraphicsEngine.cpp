@@ -1108,6 +1108,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setPosition(glm::vec3(0,-0.5,0));
 	pWall->setScale(glm::vec3(22,18,1));
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
+	pWall->activeDistanceCalculate(false);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -1118,6 +1119,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setPosition(glm::vec3(11.75,-0.5,0));
 	pWall->setScale(glm::vec3(1.5,4.0,1));
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
+	pWall->activeDistanceCalculate(false);
 
 	pWall = new Wall();
 	pWall->setProgram(this->box_program);
@@ -1128,6 +1130,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setPosition(glm::vec3(-11.75,-0.5,0));
 	pWall->setScale(glm::vec3(1.5,4.0,1));
 	pWall->setAngle(glm::vec3(M_PI/2,0,0));
+	pWall->activeDistanceCalculate(false);
 
 	//Obstacles;
 
