@@ -41,6 +41,12 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 
 		float div_x =  ( goalNode->position.x - startNode->position.x ) / (float)(level)  ;
 		float div_y =  ( goalNode->position.y - startNode->position.y ) / (float)(level)  ;
+        //float div_x = (goalNode->position.x - startNode->position.x);
+        //float div_y = (goalNode->position.y - startNode->position.y);
+        //div_x = div_x / fabs(div_x);
+        //div_y = div_y / fabs(div_y);
+        //div_x *= 1;
+        //div_y *= 1;
 		float div_z = sqrt(div_x*div_x + div_y*div_y);
 
 		startNode->coord = Point2I(0,0);

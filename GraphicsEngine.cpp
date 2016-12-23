@@ -121,12 +121,12 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 			{
 				//graphics->inactiveAllModels();
 				Point2F rp;
-				rp.x = 10.f;
-				rp.y = 10.f;
+				rp.x = -50.f;
+				rp.y = -10.f;
 
 				Point2F bp;
-				bp.x = 0.f;
-				bp.y = 0.f;
+				bp.x = 50.f;
+				bp.y = 10.f;
 
 				graphics->resetObject(rp,bp);
 
@@ -577,7 +577,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pball->setRadius(0.3);
 	pball->setSX(1.0);
 	pball->setSY(1.0);
-
+    //pball->setMovable(false);
 	this->pb = pball;
     
     auto pTrailer = new TrailPoints(30);
@@ -1181,7 +1181,8 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
 	m->addSprite(pObs);
-
+    
+    /*
 	pObs = new Obstacle();
 	pObs->setProgram(this->box_program);
 	pObs->setVAO(this->box_vao);
@@ -1205,8 +1206,11 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
 	m->addSprite(pObs);
+     */
 	m->setActive(false);
-
+     
+    
+    
 	//Wiggle
 	name = "Wiggle";
 	m = new Model(name);
@@ -1432,7 +1436,8 @@ bool GraphicsEngine::mainLoop(){
 
 	prevtime = time;
 	time = glfwGetTime();
-
+    //time += 0.01f;
+    
 	dt = time - prevtime;
 
 	this->handleAction(dt);

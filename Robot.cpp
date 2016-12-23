@@ -87,8 +87,8 @@ void Robot::setScale(glm::vec3 _scale){
 	scalex *= 10.f;
 	scalez *= 10.f;
 
-	this->width = scalex;
-	this->length = scalez;
+	this->width = scalez;
+	this->length = scalex;
 
 	this->radius = max(this->width/2,this->length/2);
 }
@@ -99,6 +99,15 @@ void Robot::resetTouchCount(){
 
 void Robot::move(double dt){
 
+    if(this->pts != nullptr){
+        Point2F pos;
+        pos.x = this->position.x;
+        pos.y = this->position.z;
+        
+        this->pts->addPoint(pos);
+    }
+    
+    
 	if(!movable){
 		return;
 	}
@@ -120,7 +129,8 @@ void Robot::move(double dt){
 	float ay = (virtualForce.y + collisionForce.y )/ mass;
     */
 	float ax,ay;
-	if(collisionForce){
+	
+    if(collisionForce){
 		ax = collisionForce.x / mass;
 		ay = collisionForce.y / mass;
 	}else{
@@ -128,6 +138,22 @@ void Robot::move(double dt){
 		ay = virtualForce.y / mass;
 	}
 
+    //ax = (collisionForce.x + virtualForce.x) / mass;
+    //ay = (collisionForce.y + virtualForce.y) / mass;
+    
+    if(collisionForce){
+        sx = 0;
+        sy = 0;
+    }
+    
+    /*
+    if(collisionForce.x * sx < 0){
+        sx = 0;
+    }
+    if(collisionForce.y * sy < 0){
+        sy = 0;
+    }*/
+    
 
     /*
 	if(this->collisionForce.y * sy < 0){
@@ -177,13 +203,7 @@ void Robot::move(double dt){
 	
 		this->setAngle(glm::vec3(0,-angle,0));
 	}*/
-    if(this->pts != nullptr){
-        Point2F pos;
-        pos.x = this->position.x;
-        pos.y = this->position.z;
-    
-        this->pts->addPoint(pos);
-    }
+
 }
 
 bool Robot::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
@@ -479,18 +499,18 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 										for(int i=1;i<data.dataSize/2 - 1;i++){
 											pt.x = data.dataList[i*2];
 											pt.y = data.dataList[i*2+1];
-
+                                            /*
 											float dl = RigidController::getInstance().calculateDistanceLevel(pt);
 
 											if(dl > rd){
 												continue;
 											}else{
-							
+                                            */
 												tarp = pt;
 												pt.x *= 0.1f;
 												pt.y *= 0.1f;
 												this->path->addPoint(pt);
-											}
+											//}
 										}	
 									}
 

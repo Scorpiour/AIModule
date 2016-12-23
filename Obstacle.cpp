@@ -19,8 +19,8 @@ void Obstacle::setScale(glm::vec3 _scale){
 	scalex *= 10.f;
 	scalez *= 10.f;
 
-	this->width = scalex;
-	this->length = scalez;
+	this->width = scalez;
+	this->length = scalex;
 
 	this->radius = sqrt(scalex*scalex + scalez*scalez)/2;
 }
@@ -50,7 +50,11 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 		return 0.f;
 	}
 
-	
+    result.x = 0;
+    result.y = 0;
+    return true;
+    
+    
 	if(dest->getID() == -2){
 		return false;
 	}
@@ -64,17 +68,22 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 	float tr = dest->getRadius();
 
 	int id = dest->getID();
-
+    
+    
+    float dx = tx - ix;
+    float dy = ty - iy;
+    
+    /*
 	float dx = tx - ix;
 	float dy = ty - iy;
 
 	float distance = sqrt(dy*dy + dx*dx);
-	/*
+	
 	if(distance > ir + tr){
 		result.x = 0;
 		result.y = 0;
 		return true;
-	}*/
+	}
 
 	float phi = atan2(dy,dx);
 	float theta = this->angles.y;
@@ -163,7 +172,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 
 	result.x = value*cos(arc);
 	result.y = value*sin(arc);
-	
+	*/
 	return true;
 
 }
@@ -188,9 +197,93 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	float tx = dest->getX();
 	float ty = dest->getY();
 	float tr = dest->getRadius();
-
+    
 	int id = dest->getID();
-
+    
+    float dx = tx - ix;
+    float dy = ty - iy;
+    
+    float phi = atan2(dy,dx);
+    float theta = atan2(this->getSY(),this->getSX());
+    
+    while(theta < 0){
+        theta += 2*M_PI;
+    }
+    while(theta > 2*M_PI){
+        theta -= 2*M_PI;
+    }
+    
+    while(phi < 0){
+        phi += 2*M_PI;
+    }
+    while(phi > 2*M_PI){
+        phi -= 2*M_PI;
+    }
+    
+    float psi = phi - theta;
+    
+    float d1 = sqrt(dy*dy + dx*dx);
+    float d2 = fabs(d1 * cos(psi)) - length/2;
+    float d3 = fabs(d1 * sin(psi)) - width/2;
+    
+    float dist = 0;
+    
+    bool inside = true;
+    
+    if(d2 < 0 && d3 < 0){
+        dist = 0;   //inside
+    }else if(d2 < 0){
+        dist = d3;
+        inside = false;
+    }else if(d3 < 0){
+        dist = d2;
+        inside = false;
+    }else{
+        dist = sqrt(d2*d2 + d3*d3);
+        inside = false;
+    }
+    
+    if(!inside){
+        
+        result.x = 0;
+        result.y = 0;
+        
+        return true;
+    }
+    
+    //inside
+    
+    float eta = atan2(width,length);
+    while(eta < 0){
+        eta += 2*M_PI;
+    }
+    while(eta > 2*M_PI){
+        eta -= 2*M_PI;
+    }
+    
+    result.x = 0;
+    result.y = 0;
+    
+    float value = 1000.f;
+    
+    if(psi < eta){
+        result.x = value * cos(theta);
+        result.y = value * sin(theta);
+    }else if(psi < M_PI - eta){
+        result.x = value * cos(theta + 0.5*M_PI);
+        result.y = value * sin(theta + 0.5*M_PI);
+    }else if (psi < M_PI + eta){
+        result.x = value * cos(theta + M_PI);
+        result.y = value * sin(theta + M_PI);
+    }else if (psi < 2*M_PI - eta){
+        result.x = value * cos(theta + 1.5*M_PI);
+        result.y = value * sin(theta + 1.5*M_PI);
+    }else{
+        result.x = value * cos(theta);
+        result.y = value * sin(theta);
+    }
+    
+    /*
 	float dx = tx - ix;
 	float dy = ty - iy;
 
@@ -289,7 +382,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		result.y = 0;
 	}
 
-
+     */
 	/*
 	if(id == 1){
 		dest->setForceFunc([=](RigidBody* rbdy,Point2F& force)->bool{
