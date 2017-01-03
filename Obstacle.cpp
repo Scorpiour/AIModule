@@ -406,20 +406,69 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
 	if(!this->activeDistance){
 		return FLT_MAX;
 	}
-	float ix = this->getX();
-	float iy = this->getY();
-	float ir = this->getRadius();
 	
-	float tx = point.x;
-	float ty = point.y;
-
-	float dx = tx - ix;
-	float dy = ty - iy;
-
-	float distance = sqrt(dy*dy + dx*dx);
-
-	float phi = atan2(dy,dx);
-	float theta = this->angles.y;
+    float ix = this->getX();
+    float iy = this->getY();
+    float ir = this->getRadius();
+    
+    float tx = point.x;
+    float ty = point.y;
+    float tr = rad;
+    
+    //int id = dest->getID();
+    
+    float dx = tx - ix;
+    float dy = ty - iy;
+    
+    float phi = atan2(dy,dx);
+    float theta = this->angles.y;//atan2(this->getSY(),this->getSX());
+    
+    while(theta < 0){
+        theta += 2*M_PI;
+    }
+    while(theta > 2*M_PI){
+        theta -= 2*M_PI;
+    }
+    
+    while(phi < 0){
+        phi += 2*M_PI;
+    }
+    while(phi > 2*M_PI){
+        phi -= 2*M_PI;
+    }
+    
+    float psi = phi - theta;
+    
+    float d1 = sqrt(dy*dy + dx*dx);
+    float d2 = fabs(d1 * cos(psi)) - length/2;
+    float d3 = fabs(d1 * sin(psi)) - width/2;
+    
+    float dist = 0;
+    
+    bool inside = true;
+    
+    if(d2 < 0 && d3 < 0){
+        dist = 0;   //inside
+    }else if(d2 < 0){
+        dist = d3;
+        inside = false;
+    }else if(d3 < 0){
+        dist = d2;
+        inside = false;
+    }else{
+        dist = sqrt(d2*d2 + d3*d3);
+        inside = false;
+    }
+    
+    if(inside){
+        return -1.f;
+    }
+    
+    return dist;
+    
+    /*
+     float phi = atan2(dy,dx);
+     float theta = this->angles.y;
 
 	while(phi < 0){
 		phi += 2*M_PI;
@@ -485,6 +534,9 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
 	distance = abs(distance);
 	
 	return distance - r;
+     */
+    
+    
 }
 
 float Obstacle::calculateDistance(RigidBody* dest){

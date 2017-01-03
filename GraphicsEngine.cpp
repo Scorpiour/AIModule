@@ -1182,7 +1182,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setMovable(false);
 	m->addSprite(pObs);
     
-    /*
+    
 	pObs = new Obstacle();
 	pObs->setProgram(this->box_program);
 	pObs->setVAO(this->box_vao);
@@ -1206,7 +1206,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pObs->setAngle(glm::vec3(0,M_PI/6,0));
 	pObs->setMovable(false);
 	m->addSprite(pObs);
-     */
+     
 	m->setActive(false);
      
     
