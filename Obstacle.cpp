@@ -204,7 +204,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
     float dy = ty - iy;
     
     float phi = atan2(dy,dx);
-    float theta = atan2(this->getSY(),this->getSX());
+    float theta = this->angles.y;//atan2(this->getSY(),this->getSX());
     
     while(theta < 0){
         theta += 2*M_PI;
