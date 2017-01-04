@@ -73,7 +73,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			float distLevel = RigidController::getInstance().calculateDistanceLevel(p1);
 			
 			if(distLevel < 0.f){
-				return FLT_MAX;
+				return -1.f;
 			}
 			if(distLevel < 1.f){
 				distLevel = 1.f;
@@ -83,7 +83,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			
 			float distance = distanceFunc(p1,p2);
             distance = 1.f/distance;
-			float result = 500.f * (distLevel - distance);
+			float result = 500.f * (distLevel + distance);
 			return result;
 		};
 
@@ -162,7 +162,12 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 						nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
 						hMap.insert(make_pair(nextNode->coord,nextNode->heuristic));
 					}
-
+                    
+                    if(nextNode->heuristic < 0){
+                        delete nextNode;
+                        continue;
+                    }
+                    
 					nextNode->next = currentNode;
 					nodeBuffer.insert(nextNode);
 
@@ -198,12 +203,25 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 				pInternalData->dataList[i*2+1] = ptr->position.y;
 				ptr = ptr->next;
 			}
-
-			//cout<<"Path found : "<<size<<" steps"<<endl;
+            
+            //validate result and find where the issue it might be
+            
+            ptr = result;
+            
+            for(size_t i = 0; i < size; i++){
+                float checkDist = RigidController::getInstance().calculateDistanceLevel(result->position);
+                if(checkDist < 0){
+                    cout<<"Validate Fail at waypoint "<<i<<" pos "<<result->position.x<<':'<<result->position.y<<endl;
+                }
+                result = result->next;
+                
+            }
+            
+			cout<<"Path found : "<<size<<" steps"<<endl;
 
 		}else{
 			pInternalData->idxSize = 1;
-			//cout<<"No Result Found"<<endl;
+			cout<<"No Result Found"<<endl;
 
 		}
 

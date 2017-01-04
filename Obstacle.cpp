@@ -4,6 +4,7 @@ using namespace std;
 
 Obstacle::Obstacle():Robot(){
 	id = -2;
+    this->activeDistance = true;
 }
 
 Obstacle::~Obstacle(){
@@ -403,7 +404,7 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
 	if(!this->isEnable){
 		return FLT_MAX;
 	}
-	if(!this->activeDistance){
+	if(!this->activeDistance){ //wtf???
 		return FLT_MAX;
 	}
 	
@@ -464,7 +465,7 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
         return -1.f;
     }
     
-    return dist;
+    return dist - tr;
     
     /*
      float phi = atan2(dy,dx);
@@ -540,96 +541,72 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
 }
 
 float Obstacle::calculateDistance(RigidBody* dest){
-	if(!this->isEnable){
-		return FLT_MAX;
-	}
-	float ix = this->getX();
-	float iy = this->getY();
-	float ir = this->getRadius();
+    if(!this->isEnable){
+        return FLT_MAX;
+    }
+    if(!this->activeDistance){
+        return FLT_MAX;
+    }
+    
+    float ix = this->getX();
+    float iy = this->getY();
+    float ir = this->getRadius();
+    
+    float tx = dest->getX();
+    float ty = dest->getY();;
+    float tr = dest->getRadius();
+    
+    //int id = dest->getID();
+    
+    float dx = tx - ix;
+    float dy = ty - iy;
+    
+    float phi = atan2(dy,dx);
+    float theta = this->angles.y;//atan2(this->getSY(),this->getSX());
+    
+    while(theta < 0){
+        theta += 2*M_PI;
+    }
+    while(theta > 2*M_PI){
+        theta -= 2*M_PI;
+    }
+    
+    while(phi < 0){
+        phi += 2*M_PI;
+    }
+    while(phi > 2*M_PI){
+        phi -= 2*M_PI;
+    }
+    
+    float psi = phi - theta;
+    
+    float d1 = sqrt(dy*dy + dx*dx);
+    float d2 = fabs(d1 * cos(psi)) - length/2;
+    float d3 = fabs(d1 * sin(psi)) - width/2;
+    
+    float dist = 0;
+    
+    bool inside = true;
+    
+    if(d2 < 0 && d3 < 0){
+        dist = -1;   //inside
+    }else if(d2 < 0){
+        dist = d3;
+        inside = false;
+    }else if(d3 < 0){
+        dist = d2;
+        inside = false;
+    }else{
+        dist = sqrt(d2*d2 + d3*d3);
+        inside = false;
+    }
+    
+    if(inside){
+        return -1.f;
+    }
+    
+    return dist - tr;
+    
+    
 	
-	float tx = dest->getX();
-	float ty = dest->getY();
-	float tr = dest->getRadius();
-
-	float dx = tx - ix;
-	float dy = ty - iy;
-
-	float distance = sqrt(dy*dy + dx*dx);
-
-	float phi = atan2(dy,dx);
-	float theta = this->angles.y;
-
-	while(phi < 0){
-		phi += 2*M_PI;
-	}
-	while(theta <0){
-		theta += 2*M_PI;
-	}
-	while(phi < theta){
-		phi += 2*M_PI;
-	}
-
-	float delta = phi - theta;
-	float denom = atan2(length,width);
-	
-	Point2F forceDirection;
-	forceDirection.x = 0;
-	forceDirection.y = 0;
-	float r = 0;
-
-	if(delta < denom){
-		forceDirection.x = cos(theta);
-		forceDirection.y = sin(theta);
-		distance *= cos(delta);
-		r = width/2;
-		distance -= r;
-	}else if(delta == denom){
-		forceDirection.x = cos(phi);
-		forceDirection.y = sin(phi);
-		r = ir;
-		distance -= r;
-	}else if(delta < M_PI-denom){
-		forceDirection.x = -sin(theta);
-		forceDirection.y = cos(theta);
-		distance *= sin(delta);
-		r = length/2;
-		distance -= r;
-	}else if(delta == M_PI-denom){
-		forceDirection.x = cos(phi);
-		forceDirection.y = sin(phi);
-		r = ir;
-		distance -= r;
-	}else if(delta < M_PI+denom){
-		forceDirection.x = -cos(theta);
-		forceDirection.y = -sin(theta);
-		distance *= cos(delta);
-		r = width/2;
-		distance -= r;
-	}else if(delta == M_PI+denom){
-		forceDirection.x = cos(phi);
-		forceDirection.y = sin(phi);
-		r = ir;
-		distance -= r;
-	}else if(delta < 2*M_PI-denom){
-		forceDirection.x = sin(theta);
-		forceDirection.y = -cos(theta);
-		distance *= sin(delta);
-		r = length/2;
-		distance -= r;
-	}else if(delta == 2*M_PI-denom){
-		forceDirection.x = cos(phi);
-		forceDirection.y = sin(phi);
-		r = ir;
-		distance -= r;
-	}else{
-		forceDirection.x = cos(theta);
-		forceDirection.y = sin(theta);
-		distance *= cos(delta);
-		r = width/2;
-		distance -= r;
-	}
-
-	distance = abs(distance);
-	
-	return distance - tr;
 }
