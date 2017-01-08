@@ -57,6 +57,7 @@ protected:	//Lamp
 protected:  //External Function
 	std::function<void*(double,void*)> externalFunc;
 protected:  //Models
+    Model* activedModel;
 	std::map<std::string,Model*> modelList;
 protected:	//Constructor / Destructor
 	static GraphicsEngine* instance;
@@ -86,6 +87,7 @@ public:
 
 	void inactiveAllModels();
     void activeModel(const std::string& name);
+    void resetObject(void);
 	void resetObject(const Point2F& robotPos, const Point2F& ballPos);
 public:
 	static GraphicsEngine* getInstance(void);

@@ -58,6 +58,7 @@ GraphicsEngine::GraphicsEngine(){
 	this->box_program = nullptr;
 	this->main_camera = nullptr;
 	this->externalFunc = nullptr;
+    this->activedModel = nullptr;
 }
 
 GraphicsEngine::~GraphicsEngine(){
@@ -130,15 +131,16 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 		case GLFW_KEY_R:
 			{
 				//graphics->inactiveAllModels();
+                /*
 				Point2F rp;
 				rp.x = -50.f;
 				rp.y = -10.f;
 
 				Point2F bp;
 				bp.x = 50.f;
-				bp.y = 10.f;
+				bp.y = 10.f;*/
 
-				graphics->resetObject(rp,bp);
+				graphics->resetObject();
 
 			}break;
 
@@ -1240,7 +1242,7 @@ bool GraphicsEngine::prepareSprites(void){
     
 	//Wiggle
 	name = "Wiggle";
-	m = new Model(name,Point2F(-90,-70),Point2F(90,70));
+	m = new Model(name,Point2F(-100,-70),Point2F(100,70));
 	this->modelList.insert(make_pair(name,m));
 
 	for(int i=0;i<5;i++){
@@ -1402,6 +1404,7 @@ void GraphicsEngine::inactiveAllModels(){
 	for(auto& pr : this->modelList){
 		(pr.second)->setActive(false);
 	}
+    this->activedModel = nullptr;
 }
 
 void GraphicsEngine::activeModel(const std::string& name){
@@ -1410,10 +1413,17 @@ void GraphicsEngine::activeModel(const std::string& name){
         this->inactiveAllModels();
         auto m = iter->second;
         m->swithActive();
-        this->resetObject(m->getRobotPos(),m->getBallPos());
+        this->activedModel = m;
+        this->resetObject();
     }
     
     
+}
+
+void GraphicsEngine::resetObject(void){
+    if(this->activedModel != nullptr){
+        this->resetObject(this->activedModel->getRobotPos(),this->activedModel->getBallPos());
+    }
 }
 
 void GraphicsEngine::resetObject(const Point2F& robotPos, const Point2F& ballPos){
