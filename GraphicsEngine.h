@@ -18,6 +18,9 @@ protected:	//flags
 	bool keyXHold;
 	bool keyUPHold;
 	bool keyDOWNHold;
+    
+    bool keyALTHold;    //Key Option on Mac
+    
 	bool manualFlag;
 protected:	//General Members
 	float speedcoe;// = 1.0f;
@@ -45,6 +48,10 @@ protected:	//Buffers & Shaders
 	std::vector<GLuint> bufferList;
 protected:	//Camara
 	pCamera main_camera;
+    glm::vec3 prevTarget;
+    glm::vec3 prevPosition;
+    float prev_angle;
+    bool recordLock;
 protected:	//Lamp
 	glm::vec3 lightPosition;
 protected:  //External Function

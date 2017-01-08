@@ -39,7 +39,12 @@ GraphicsEngine::GraphicsEngine(){
 	this->keyEHold = false;
 	this->keyCHold = false;
 	this->keyXHold = false;
-
+    
+    this->keyUPHold = false;
+    this->keyDOWNHold = false;
+    this->keyALTHold = false;
+    this->recordLock = false;
+    
 	this->manualFlag = true;
 	this->pausetime = 0;
 	this->pauseFlag = false;
@@ -68,23 +73,46 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 		switch(key){
 		case GLFW_KEY_0:
 			{
-				graphics->inactiveAllModels();
+                if(graphics->keyALTHold == true){
+                    if(graphics->recordLock){
+                        graphics->main_camera->setTarget(graphics->prevTarget);
+                        graphics->main_camera->setPosition(graphics->prevPosition);
+                        graphics->persp_angle = graphics->prev_angle;
+                        graphics->recordLock = false;
+                        cout<<"Reset Camera!"<<endl;
+                    }
+                    
+                }else{
+                    graphics->inactiveAllModels();
+                }
 			}break;
 		case GLFW_KEY_1:
 			{
-				graphics->inactiveAllModels();
-				auto m = graphics->getModel("RegObs");
-				m->swithActive();
-                graphics->resetObject(Point2F(50,50),Point2F(-50,-50));
+                if(graphics->keyALTHold == true){
+                    graphics->persp_angle = 0;
+                    graphics->main_camera->setTarget(glm::vec3(0,-500,0));
+                    graphics->main_camera->setPosition(glm::vec3(0,25,0));
+                    graphics->recordLock = true;
+
+                }else{
+                    graphics->inactiveAllModels();
+                    auto m = graphics->getModel("RegObs");
+                    m->swithActive();
+                    graphics->resetObject(Point2F(50,50),Point2F(-50,-50));
+                }
 
 			}break;
 
 		case GLFW_KEY_2:
 			{
-				graphics->inactiveAllModels();
-				auto m = graphics->getModel("Block");
-				m->swithActive();
-                graphics->resetObject(Point2F(-50,-50),Point2F(50,50));
+                if(graphics->keyALTHold == true){
+                    
+                }else{
+                    graphics->inactiveAllModels();
+                    auto m = graphics->getModel("Block");
+                    m->swithActive();
+                    graphics->resetObject(Point2F(-50,-50),Point2F(50,50));
+                }
 
 			}break;
 
@@ -197,6 +225,18 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 			{
 				graphics->keyDOWNHold = true;
 			}break;
+        case GLFW_KEY_LEFT_ALT:
+        case GLFW_KEY_RIGHT_ALT:
+            {
+                if(graphics->recordLock == false){
+                    graphics->prevTarget = graphics->main_camera->getTarget();
+                    graphics->prevPosition = graphics->main_camera->getPosition();
+                    graphics->prev_angle = graphics->persp_angle;
+                    graphics->recordLock = true;
+                    cout<<"Record Camera"<<endl;
+                }
+                graphics->keyALTHold = true;
+            }break;
 		case GLFW_KEY_SPACE:
 			{
 				graphics->pauseFlag = !(graphics->pauseFlag);
@@ -244,6 +284,11 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 			{
 				graphics->keyDOWNHold = false;
 			}break;
+        case GLFW_KEY_LEFT_ALT:
+        case GLFW_KEY_RIGHT_ALT:
+            {
+                graphics->keyALTHold = false;
+            }break;
 		}
 	}
 }
