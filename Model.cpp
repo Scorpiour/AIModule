@@ -4,6 +4,18 @@ using namespace std;
 
 Model::Model(const std::string& _name):modelName(_name){
 	active = true;
+    ballPos.x = 50;
+    ballPos.y = 50;
+    robotPos.x = -50;
+    robotPos.y = -50;
+}
+
+Model::Model(const std::string& _name,const Point2F& robot,const Point2F& ball):modelName(_name),robotPos(robot),ballPos(ball){
+    active = true;
+}
+
+Model::Model(const std::string& _name,Point2F && robot,Point2F && ball):modelName(_name),robotPos(robot),ballPos(ball){
+    active = true;
 }
 
 Model::~Model(){
@@ -46,3 +58,23 @@ void Model::setActive(bool _a){
 	this->visible(_a);
 }
 
+void Model::setRobotPos(const Point2F& pos){
+    this->robotPos = pos;
+}
+void Model::setBallPos(const Point2F& pos){
+    this->ballPos = pos;
+}
+
+void Model::setRobotPos(Point2F && pos){
+    this->robotPos = pos;
+}
+void Model::setBallPos(Point2F && pos){
+    this->ballPos = pos;
+}
+
+const Point2F& Model::getRobotPos(void)const{
+    return this->robotPos;
+}
+const Point2F& Model::getBallPos(void)const{
+    return this->ballPos;
+}

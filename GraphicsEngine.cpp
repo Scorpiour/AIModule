@@ -79,7 +79,6 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
                         graphics->main_camera->setPosition(graphics->prevPosition);
                         graphics->persp_angle = graphics->prev_angle;
                         graphics->recordLock = false;
-                        cout<<"Reset Camera!"<<endl;
                     }
                     
                 }else{
@@ -95,10 +94,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
                     graphics->recordLock = true;
 
                 }else{
-                    graphics->inactiveAllModels();
-                    auto m = graphics->getModel("RegObs");
-                    m->swithActive();
-                    graphics->resetObject(Point2F(50,50),Point2F(-50,-50));
+                    graphics->activeModel("RegObs");
                 }
 
 			}break;
@@ -108,37 +104,23 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
                 if(graphics->keyALTHold == true){
                     
                 }else{
-                    graphics->inactiveAllModels();
-                    auto m = graphics->getModel("Block");
-                    m->swithActive();
-                    graphics->resetObject(Point2F(-50,-50),Point2F(50,50));
+                    graphics->activeModel("Block");
                 }
 
 			}break;
 
 		case GLFW_KEY_3:
 			{
-				graphics->inactiveAllModels();
-				auto m = graphics->getModel("Wiggle");
-				m->swithActive();
-                graphics->resetObject(Point2F(100,-50),Point2F(-70,50));
-
-			}break;
+                graphics->activeModel("Wiggle");
+            }break;
 		case GLFW_KEY_4:
 			{
-				graphics->inactiveAllModels();
-				auto m = graphics->getModel("Trap");
-				m->swithActive();
-                graphics->resetObject(Point2F(-90,-60),Point2F(0,0));
-				
+                graphics->activeModel("Trap");
 			}break;
 		case GLFW_KEY_5:
 			{
-				graphics->inactiveAllModels();
-				auto m = graphics->getModel("Cross");
-				m->swithActive();
-                graphics->resetObject(Point2F(-40,-40),Point2F(40,40));
-			}break;
+                graphics->activeModel("Cross");
+            }break;
 		case GLFW_KEY_ESCAPE:
 			{
 				glfwSetWindowShouldClose(window,GL_TRUE);
@@ -1212,7 +1194,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Corners
 	name = "Block";
-	m = new Model(name);
+	m = new Model(name,Point2F(-50,-50),Point2F(50,50));
 	this->modelList.insert(make_pair(name,m));
 
 	auto pObs = new Obstacle();
@@ -1258,7 +1240,7 @@ bool GraphicsEngine::prepareSprites(void){
     
 	//Wiggle
 	name = "Wiggle";
-	m = new Model(name);
+	m = new Model(name,Point2F(-90,-70),Point2F(90,70));
 	this->modelList.insert(make_pair(name,m));
 
 	for(int i=0;i<5;i++){
@@ -1282,7 +1264,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Trap
 	name = "Trap";
-	m = new Model(name);
+	m = new Model(name,Point2F(-90,0),Point2F(0,0));
 	this->modelList.insert(make_pair(name,m));
 
 	float gap = 2.f;
@@ -1314,7 +1296,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Cross
 	name = "Cross";
-	m = new Model(name);
+	m = new Model(name,Point2F(-30,-30),Point2F(50,50));
 	this->modelList.insert(make_pair(name,m));
 
 	pObs = new Obstacle();
@@ -1420,6 +1402,18 @@ void GraphicsEngine::inactiveAllModels(){
 	for(auto& pr : this->modelList){
 		(pr.second)->setActive(false);
 	}
+}
+
+void GraphicsEngine::activeModel(const std::string& name){
+    auto iter = this->modelList.find(name);
+    if(iter != this->modelList.end()){
+        this->inactiveAllModels();
+        auto m = iter->second;
+        m->swithActive();
+        this->resetObject(m->getRobotPos(),m->getBallPos());
+    }
+    
+    
 }
 
 void GraphicsEngine::resetObject(const Point2F& robotPos, const Point2F& ballPos){

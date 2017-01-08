@@ -455,7 +455,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 								//clear old datas
 								this->data.clear();
 
-								int baseLevel = 1;
+								int baseLevel = 3;
 								baseLevel += distance / 22;
 
 
