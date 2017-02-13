@@ -3,7 +3,7 @@
 using namespace std;
 
 Obstacle::Obstacle():Robot(){
-	id = -2;
+    id = RigidTypeID::RigidType_Obstacle;
     this->activeDistance = true;
 }
 
@@ -51,12 +51,13 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 		return 0.f;
 	}
 
+    /*
     result.x = 0;
     result.y = 0;
     return true;
+    */
     
-    
-	if(dest->getID() == -2){
+    if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 		return false;
 	}
 
@@ -68,7 +69,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 	float ty = dest->getY();
 	float tr = dest->getRadius();
 
-	int id = dest->getID();
+	RigidTypeID id = dest->getID();
     
     
     float dx = tx - ix;
@@ -187,7 +188,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	}
 
 	
-	if(dest->getID() == -2){
+    if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 		return false;
 	}
 
@@ -199,7 +200,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	float ty = dest->getY();
 	float tr = dest->getRadius();
     
-	int id = dest->getID();
+	RigidTypeID id = dest->getID();
     
     float dx = tx - ix;
     float dy = ty - iy;

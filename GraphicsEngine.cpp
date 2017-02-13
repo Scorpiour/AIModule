@@ -596,7 +596,7 @@ bool GraphicsEngine::prepareVBO(const std::string& dataPath){
 bool GraphicsEngine::prepareSprites(void){
 
 	auto pball = new Ball();
-	pball->setID(0);
+    pball->setID(RigidTypeID::RigidType_Ball);
 	pball->setProgram(this->sphere_program);
 	pball->setVAO(this->sphere_vao);
 	pball->setCamera(this->main_camera);
@@ -630,7 +630,7 @@ bool GraphicsEngine::prepareSprites(void){
 	auto pTargetPoint = new VirtualAttractivePoint;
 
 	auto pRobot = new Robot();
-	pRobot->setID(1);
+    pRobot->setID(RigidTypeID::RigidType_Robot);
 	pRobot->setProgram(this->box_program);
 	pRobot->setVAO(this->box_vao);
 	pRobot->setCamera(this->main_camera);
@@ -665,7 +665,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(20.6,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+        if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -693,7 +693,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(20.6,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -722,7 +722,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(6.3,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -750,7 +750,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(6.3,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -778,7 +778,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(6.3,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -806,7 +806,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(6.3,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -836,7 +836,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(1.5,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -864,7 +864,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(1.5,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -892,7 +892,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(4,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -922,7 +922,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(1.5,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 		pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -950,7 +950,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(1.5,1,1));
 	pWall->setAngle(glm::vec3(0,0,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -978,7 +978,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(4,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/2,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -1009,7 +1009,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(length,1,1));
 	pWall->setAngle(glm::vec3(0,3*M_PI/4,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -1041,7 +1041,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(length,1,1));
 	pWall->setAngle(glm::vec3(0,3*M_PI/4,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -1073,7 +1073,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(length,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/4,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -1105,7 +1105,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pWall->setScale(glm::vec3(length,1,1));
 	pWall->setAngle(glm::vec3(0,M_PI/4,0));
 	pWall->setForceFunc([pWall](RigidBody* dest, Point2F& result)->bool{
-		if(dest->getID() == -2){
+		if(dest->getID() == RigidTypeID::RigidType_Obstacle){
 			return true;
 		}
 		float ty = dest->getY();
@@ -1242,7 +1242,7 @@ bool GraphicsEngine::prepareSprites(void){
     
 	//Wiggle
 	name = "Wiggle";
-	m = new Model(name,Point2F(-100,-70),Point2F(100,70));
+	m = new Model(name,Point2F(-100,70),Point2F(100,70));
 	this->modelList.insert(make_pair(name,m));
 
 	for(int i=0;i<5;i++){
@@ -1432,6 +1432,9 @@ void GraphicsEngine::resetObject(const Point2F& robotPos, const Point2F& ballPos
 	this->pr->setSX(0);
 	this->pr->setSY(0);
 	this->pr->resetTouchCount();
+    this->pr->clearAIData();
+    
+    //this->pr->resetTargetpoint(ballPos);
 
 	this->pb->setPosition(glm::vec3(ballPos.x / 10.f, -0.2, ballPos.y / 10.f));
 	this->pb->setSX(0);

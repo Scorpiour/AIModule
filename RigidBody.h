@@ -13,13 +13,24 @@
 #include <algorithm>
 #include "GlobalMacro.h"
 
+enum class RigidTypeID{
+    RigidType_Ball          = 0,
+    RigidType_Robot         = 1,
+    RigidType_Keeper        = 2,
+    
+    RigidType_Unknown       = -1,
+    RigidType_Obstacle      = -2,
+    RigidType_VirtualObject = -4,
+    
+};
+
 typedef class RigidBody{
 protected:
 	bool movable;
 
 	float sx;
 	float sy;
-	int id;
+	RigidTypeID id;
 
 	Point2F collisionForce;
 	bool activeDistance;
@@ -49,8 +60,8 @@ public:
 	virtual void removeForceFunc();
 
 	virtual void setCollisionForce(float fx,float fy);
-	virtual void setID(int _id);
-	virtual int getID()const;
+	virtual void setID(RigidTypeID _id);
+	virtual RigidTypeID getID()const;
 	virtual void activeDistanceCalculate(bool b);
 
 

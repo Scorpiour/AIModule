@@ -3,7 +3,7 @@
 using namespace std;
 
 VirtualAttractivePoint::VirtualAttractivePoint():RigidBody(),position(Point2F(0,0)){ 
-	this->id = -4;
+    this->id = RigidTypeID::RigidType_VirtualObject;
 }
 
 VirtualAttractivePoint::~VirtualAttractivePoint(){  }
@@ -42,7 +42,7 @@ bool VirtualAttractivePoint::calculateVirtualForce(RigidBody* dest,Point2F& resu
 
 bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,double dt) { 
 
-	if(dest->getID() != 1){
+    if(dest->getID() != RigidTypeID::RigidType_Robot){
 		result.x = 0.f;
 		result.y = 0.f;
 		return true;
@@ -51,11 +51,11 @@ bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,doub
 	float dx = position.x - dest->getX();
 	float dy = position.y - dest->getY();
 
-	float mr = dest->getRadius();
+	//float mr = dest->getRadius();
 
 	float arc = atan2(dy,dx);
 
-	float distance = sqrt(dx*dx + dy*dy);
+	//float distance = sqrt(dx*dx + dy*dy);
 
 	//float value = (distance > mr) ? 10.f:0.f;
 	float value = 200.f;

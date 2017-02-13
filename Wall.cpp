@@ -3,7 +3,7 @@
 using namespace std;
 
 Wall::Wall():Sprite(),RigidBody(){
-	this->id = -2;
+    this->id = RigidTypeID::RigidType_Obstacle;
 }
 
 Wall::~Wall(){

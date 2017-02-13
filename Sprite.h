@@ -145,7 +145,6 @@ public:
 	virtual float getSY()const override;
 	virtual float getRadius()const override;
 
-
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
@@ -153,6 +152,7 @@ public:
 
 	virtual void setScale(glm::vec3 _scale) override;
     
+    void resetTargetpoint(const Point2F& pt);
     void addTrailer(pTrailPoints _pts);
 	void addPathview(pTrailPoints _path);
 	void setTargetPoint(pVirtualAttractivePoint pTP);
@@ -195,6 +195,40 @@ public:
 
 	virtual Point2F getKickingPos(float gap);
 	void resetTimer();
+};
+
+class Keeper : public Robot{
+    friend class SpriteManager;
+protected:
+    virtual ~Keeper();
+protected:
+    enum class KeeperStatus{
+        Keeper_Parking = 0,
+        Keeper_Waiting = 1,
+        Keeper_Persuing = 2,
+        Keeper_Blocking = 3
+    };
+    
+    enum BallPosStatus{
+        BallPos_Far = 0x0,
+        BallPos_Middle = 0x1,
+        BallPos_Near = 0x2,
+        BallPos_Inside = 0x4,
+        
+        BallPos_Dangerous = BallPos_Middle | BallPos_Near
+    };
+    
+    KeeperStatus currentStatus;
+    
+public:
+    Keeper();
+    
+    virtual void move(double)override;
+    virtual void setScale(glm::vec3 _scale)override;
+    virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
+    virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
+    virtual float calculateDistance(RigidBody* dest);
+    virtual float calculateDistance(const Point2F& point,float rad) override;
 };
 
 class Obstacle : public Robot{

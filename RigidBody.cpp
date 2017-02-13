@@ -32,7 +32,7 @@ void RigidController::calculateVirtualForce(RigidBody* dest, Point2F& result, do
 		if(src == dest){
 			continue;
 		}
-		if(src->getID() == -4){
+        if(src->getID() == RigidTypeID::RigidType_VirtualObject){
 			continue;
 		}
 
@@ -61,7 +61,7 @@ void RigidController::calculateCollisionForce(double dt){
 			if(src == agent){
 				continue;
 			}
-			if(src->getID() == -4){
+			if(src->getID() == RigidTypeID::RigidType_VirtualObject){
 				continue;
 			}
 
@@ -89,8 +89,8 @@ float RigidController::calculateDistanceLevel(const Point2F& pt){
 	for(auto& target : this->rigids){
 		
 		
-		int id = target->getID();
-		if(/*(id == -2)||(id == 0)*/ id != -4){
+		RigidTypeID id = target->getID();
+        if(/*(id == -2)||(id == 0)*/ id != RigidTypeID::RigidType_VirtualObject){
 			float distance = target->calculateDistance(pt,0);
 
 			if(distance < dv){
@@ -102,11 +102,11 @@ float RigidController::calculateDistanceLevel(const Point2F& pt){
 	return dv;
 }
 
-int RigidBody::getID()const{
+RigidTypeID RigidBody::getID()const{
 	return this->id;
 }
 
-void RigidBody::setID(int _id){
+void RigidBody::setID(RigidTypeID _id){
 	this->id = _id;
 }
 
@@ -149,7 +149,7 @@ RigidBody::RigidBody(){
 	sx = 0;
 	sy = 0;
 	forceFunc = nullptr;
-	id = -1;
+    id = RigidTypeID::RigidType_Unknown;
 	movable = true;
 	activeDistance = true;
 

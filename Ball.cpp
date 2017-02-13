@@ -12,7 +12,7 @@ Ball::Ball():Sprite(),RigidBody(){
 	nextVelo = 0.f;
 	startTime = clock();
 
-	this->id = 0;
+    this->id = RigidTypeID::RigidType_Ball;
 
 	/*
 	std::string ball_module_name = "Ball Potential Field";
@@ -275,7 +275,7 @@ bool Ball::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	result.y = 0.f;
 	return true;
 
-	if(dest->getID() != 1){
+    if(dest->getID() != RigidTypeID::RigidType_Robot){
 		result.x = 0.f;
 		result.y = 0.f;
 		return true;

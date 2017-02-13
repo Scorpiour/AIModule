@@ -7,7 +7,7 @@ Robot::Robot():Sprite(),RigidBody(){
     this->pts = nullptr;
 	this->path = nullptr;
 	this->pTargetPoint = nullptr;
-	this->id = 1;
+    this->id = RigidTypeID::RigidType_Robot;
 	this->virtualForce = Point2F(0,0);
 	this->inTouch = false;
 	this->touchCount = 0;
@@ -95,6 +95,11 @@ void Robot::setScale(glm::vec3 _scale){
 
 void Robot::resetTouchCount(){
 	this->touchCount = 0;
+}
+
+void Robot::resetTargetpoint(const Point2F& pt){
+    this->pTargetPoint->setPosition(pt);
+    this->path->clear();
 }
 
 void Robot::move(double dt){
@@ -221,7 +226,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	float ty = dest->getY();
 	float tr = dest->getRadius();
 
-	int id = dest->getID();
+	RigidTypeID id = dest->getID();
 	
 
 	float dx = tx - ix;
@@ -318,7 +323,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	
 
-	if(id==0){
+    if(id==RigidTypeID::RigidType_Ball){
 		Ball* pb = dynamic_cast<Ball*>(dest);
 		if(result){
 	
