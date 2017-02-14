@@ -217,11 +217,11 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                 
             }
             
-			cout<<"Path found : "<<size<<" steps"<<endl;
+			//cout<<"Path found : "<<size<<" steps"<<endl;
 
 		}else{
 			pInternalData->idxSize = 1;
-			cout<<"No Result Found"<<endl;
+			//cout<<"No Result Found"<<endl;
 
 		}
 

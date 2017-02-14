@@ -92,6 +92,11 @@ public:
     void draw(double dt) override;
     
     void addPoint(const Point2F& pt);
+	void removeFrontPoint();
+	void removeBackPoint();
+	const Point2F& getFrontPoint()const;
+	const Point2F& getBackPoint()const;
+	size_t size()const;
     void clear();
 protected:
     size_t maxCount;
@@ -117,6 +122,8 @@ protected:
 
 	bool inTouch;
 	int touchCount;
+
+	bool resetPath;
 
 	//for FSM
 	//status list:

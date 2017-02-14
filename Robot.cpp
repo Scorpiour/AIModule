@@ -14,6 +14,7 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->maxSpeed = speedlimit;
 	this->currentStatus = 0;
 	this->activeDistance = false;
+	this->resetPath = true;
 }
 
 Robot::~Robot(){
@@ -192,6 +193,36 @@ void Robot::move(double dt){
 	this->position.z += dy;
 
 	this->setAngle(glm::vec3(0,arc,0));
+
+	float ix = this->getX();
+	float iy = this->getY();
+	float ir = this->getRadius();
+	float tx = this->pTargetPoint->getX();
+	float ty = this->pTargetPoint->getY();
+
+	dx = ix - tx;
+	dy = iy - ty;
+
+	s = sqrt(dx*dx + dy*dy);
+
+	if(s < ir){
+		
+		if(this->path->size() > 0){
+			Point2F nextTarget = this->path->getBackPoint();
+			nextTarget.x *= 10.f;
+			nextTarget.y *= 10.f;
+			this->pTargetPoint->setPosition(nextTarget);
+			this->path->removeBackPoint();
+
+		}else{
+			this->setMovable(false);
+			this->setSX(0);
+			this->setSY(0);
+
+		}
+
+	}
+
 
 	/*
 	float angle = this->data.dataList[this->data.dataSize -1];
@@ -438,95 +469,104 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 								if(distance < tr){
 									break;
 								}
-							
-								auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
+								
+								if(this->resetPath){
 
-								AStarSearchNode startNode;
-								AStarSearchNode goalNode;
+									auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
 
-								startNode.position.x = this->getX();
-								startNode.position.y = this->getY();
+									AStarSearchNode startNode;
+									AStarSearchNode goalNode;
 
-								goalNode.position.x = dest->getX();
-								goalNode.position.y = dest->getY();
+									startNode.position.x = this->getX();
+									startNode.position.y = this->getY();
 
-								if(kickingpos){
-									//goalNode.position.x -= kdx;
-									//goalNode.position.y -= kdy;
-									goalNode.position = ep;
-									dest->activeDistanceCalculate(true);
-								}
+									goalNode.position.x = dest->getX();
+									goalNode.position.y = dest->getY();
 
-								//clear old datas
-								this->data.clear();
+									if(kickingpos){
+										//goalNode.position.x -= kdx;
+										//goalNode.position.y -= kdy;
+										goalNode.position = ep;
+										dest->activeDistanceCalculate(true);
+									}
 
-								int baseLevel = 3;
-								baseLevel += distance / 22;
+									//clear old datas
+									this->data.clear();
+
+									int baseLevel = 3;
+									baseLevel += distance / 22;
 
 
-								pAStar->init(&startNode, &goalNode, baseLevel);
-								pAStar->loadAIData(&(this->data));
-								pAStar->processAIData(0);
-								pAStar->outputAIData(&(this->data));
+									pAStar->init(&startNode, &goalNode, baseLevel);
+									pAStar->loadAIData(&(this->data));
+									pAStar->processAIData(0);
+									pAStar->outputAIData(&(this->data));
 
-								if(this->data.idxSize != 0 && this->data.dataSize != 0){
-									this->path->clear();
+								
 
-									Point2F pt;
-									//GMMPriorityQueue<float, Point2F> pq;
+									if(this->data.idxSize != 0 && this->data.dataSize != 0){
+										this->path->clear();
+
+										Point2F pt;
+										//GMMPriorityQueue<float, Point2F> pq;
                     
-									/*
-									for(int i=0;i<data.dataSize/2;i++){
-										pt.x = data.dataList[i*2] / 10.f;
-										pt.y = data.dataList[i*2+1] / 10.f;
+										/*
+										for(int i=0;i<data.dataSize/2;i++){
+											pt.x = data.dataList[i*2] / 10.f;
+											pt.y = data.dataList[i*2+1] / 10.f;
+											this->path->addPoint(pt);
+                        
+											//float dist = RigidController::getInstance().calculateDistanceLevel(pt);
+                        
+											//pq.join(dist,pt);
+										}
+					
+					
+										//pt.x = data.dataList[data.dataSize-4];
+										//pt.y = data.dataList[data.dataSize-3];
+										*/
+
+										float rd = this->getRadius() * 4.f;
+
+										Point2F tarp;
+										pt.x = tarp.x = data.dataList[0];
+										pt.y = tarp.y = data.dataList[1];
+
+										pt.x *= 0.1f;
+										pt.y *= 0.f;
+
 										this->path->addPoint(pt);
-                        
-										//float dist = RigidController::getInstance().calculateDistanceLevel(pt);
-                        
-										//pq.join(dist,pt);
+					
+										if(data.dataSize > 2){ 
+
+											for(int i=1;i<data.dataSize/2 - 1;i++){
+												pt.x = data.dataList[i*2];
+												pt.y = data.dataList[i*2+1];
+												/*
+												float dl = RigidController::getInstance().calculateDistanceLevel(pt);
+
+												if(dl > rd){
+													continue;
+												}else{
+												*/
+													tarp = pt;
+													pt.x *= 0.1f;
+													pt.y *= 0.1f;
+													this->path->addPoint(pt);
+												//}
+											}	
+										}
+
+										this->pTargetPoint->setPosition(tarp);			
 									}
-					
-					
-									//pt.x = data.dataList[data.dataSize-4];
-									//pt.y = data.dataList[data.dataSize-3];
-									*/
+									this->resetPath = false;
 
-									float rd = this->getRadius() * 4.f;
-
-									Point2F tarp;
-									tarp.x = data.dataList[0];
-									tarp.y = data.dataList[1];
-
-									this->path->addPoint(tarp);
-					
-									if(data.dataSize > 2){ 
-
-										for(int i=1;i<data.dataSize/2 - 1;i++){
-											pt.x = data.dataList[i*2];
-											pt.y = data.dataList[i*2+1];
-                                            /*
-											float dl = RigidController::getInstance().calculateDistanceLevel(pt);
-
-											if(dl > rd){
-												continue;
-											}else{
-                                            */
-												tarp = pt;
-												pt.x *= 0.1f;
-												pt.y *= 0.1f;
-												this->path->addPoint(pt);
-											//}
-										}	
-									}
-
-									this->pTargetPoint->setPosition(tarp);			
 								}
-
 								this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
 
 
 							}
-
+							
 						}break;
 
 					case 2:
@@ -552,6 +592,8 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 void Robot::clearAIData(){
 	this->data.clear();
+	this->resetPath = true;
+	this->setMovable(true);
 }
 
 void Robot::addTrailer(pTrailPoints _pts){

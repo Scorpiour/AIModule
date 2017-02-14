@@ -23,6 +23,30 @@ void TrailPoints::addPoint(const Point2F& pt){
     }
 }
 
+void TrailPoints::removeFrontPoint(){
+	if(this->points.size() > 0){
+		this->points.pop_front();
+	}
+}
+
+void TrailPoints::removeBackPoint(){
+	if(this->points.size() > 0){
+		this->points.pop_back();
+	}
+}
+
+const Point2F& TrailPoints::getFrontPoint()const{
+	return this->points.front();
+}
+
+const Point2F& TrailPoints::getBackPoint()const{
+	return this->points.back();
+}
+
+size_t TrailPoints::size()const{
+	return this->points.size();
+}
+
 void TrailPoints::clear(){
 	this->points.clear();
 }
