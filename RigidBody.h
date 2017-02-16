@@ -113,6 +113,7 @@ public:
 	virtual float calculateDistance(const Point2F& point, float rad) override;
 
 	virtual void setPosition(const Point2F& pos);
+	virtual const Point2F& getPosition()const;
 
 protected:
 	Point2F position;

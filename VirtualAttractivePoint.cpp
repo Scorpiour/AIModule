@@ -80,3 +80,7 @@ float VirtualAttractivePoint::calculateDistance(const Point2F& point, float rad)
 void VirtualAttractivePoint::setPosition(const Point2F& pos){
 	this->position = pos;
 }
+
+const Point2F& VirtualAttractivePoint::getPosition()const{
+	return this->position;
+}

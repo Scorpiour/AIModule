@@ -608,6 +608,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pball->setSY(1.0);
     //pball->setMovable(false);
 	this->pb = pball;
+
     
     auto pTrailer = new TrailPoints(30);
     pTrailer->setProgram(this->sphere_program);
@@ -647,11 +648,35 @@ bool GraphicsEngine::prepareSprites(void){
 	pRobot->setTargetPoint(pTargetPoint);
 
 	std::string robot_module_name = "Robot AStar Search";
-	auto pAStar = new AIAStarSearch(robot_module_name);
-	pRobot->addModule(robot_module_name,pAStar);
+	auto pRobotAStar = new AIAStarSearch(robot_module_name);
+	pRobot->addModule(robot_module_name,pRobotAStar);
 	//pRobot->activeAIModule(robot_module_name,1);
 	pRobot->activeAIModule("",2);
 	this->pr = pRobot;
+
+
+	auto pkeeper = new Keeper();
+	pkeeper->setID(RigidTypeID::RigidType_Keeper);
+	pkeeper->setProgram(this->box_program);
+	pkeeper->setVAO(this->box_vao);
+	pkeeper->setCamera(this->main_camera);
+	pkeeper->setColour(glm::vec3(0,1,0));
+	pkeeper->setColourIntensity(glm::vec3(0.3,0.6,0.9));
+	pkeeper->setPosition(glm::vec3(5.f,-0.15,1.f));
+	pkeeper->setScale(glm::vec3(0.7,0.7,0.7));
+	pkeeper->setAngle(glm::vec3(0,0,0));
+	pkeeper->setSX(0);
+	pkeeper->setSY(0);
+
+	pkeeper->setMovable(false);
+	pkeeper->enable(false);
+	
+	std::string keeper_module_name = "Keeper AStar Search";
+	auto pKeeperAStar = new AIAStarSearch(keeper_module_name);
+	pkeeper->addModule(keeper_module_name,pKeeperAStar);
+	pkeeper->activeAIModule(keeper_module_name,1);
+
+
 
 	//Walls
 	//Top & Bottom Walls
@@ -1428,11 +1453,12 @@ void GraphicsEngine::resetObject(void){
 
 void GraphicsEngine::resetObject(const Point2F& robotPos, const Point2F& ballPos){
 
+
 	this->pr->setPosition(glm::vec3(robotPos.x / 10.f, -0.15, robotPos.y / 10.f));
 	this->pr->setSX(0);
 	this->pr->setSY(0);
 	this->pr->resetTouchCount();
-    this->pr->clearAIData();
+    this->pr->clearAIData(ballPos);
     
     //this->pr->resetTargetpoint(ballPos);
 
@@ -1509,9 +1535,13 @@ bool GraphicsEngine::mainLoop(){
 		this->pb->setSX(0);
 		this->pb->setSY(0);
 		
+		Point2F bpt;
+		bpt.x = worldPos.x * 10.f;
+		bpt.y = worldPos.y * 10.f;
+
 		this->pr->setSX(0.f);
 		this->pr->setSY(0.f);
-		this->pr->clearAIData();
+		this->pr->clearAIData(bpt);
 
 
 

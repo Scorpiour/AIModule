@@ -15,6 +15,7 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->currentStatus = 0;
 	this->activeDistance = false;
 	this->resetPath = true;
+	this->isPursuing = false;
 }
 
 Robot::~Robot(){
@@ -194,35 +195,41 @@ void Robot::move(double dt){
 
 	this->setAngle(glm::vec3(0,arc,0));
 
-	float ix = this->getX();
-	float iy = this->getY();
-	float ir = this->getRadius();
-	float tx = this->pTargetPoint->getX();
-	float ty = this->pTargetPoint->getY();
+	if(this->isPursuing){
 
-	dx = ix - tx;
-	dy = iy - ty;
+		float ix = this->getX();
+		float iy = this->getY();
+		float ir = this->getRadius();
+		float tx = this->pTargetPoint->getX();
+		float ty = this->pTargetPoint->getY();
 
-	s = sqrt(dx*dx + dy*dy);
+		dx = ix - tx;
+		dy = iy - ty;
 
-	if(s < ir){
+		s = sqrt(dx*dx + dy*dy);
+
+		if(s < ir){
 		
-		if(this->path->size() > 0){
-			Point2F nextTarget = this->path->getBackPoint();
-			nextTarget.x *= 10.f;
-			nextTarget.y *= 10.f;
-			this->pTargetPoint->setPosition(nextTarget);
-			this->path->removeBackPoint();
+			if(this->path->size() > 0){
+				Point2F nextTarget = this->path->getBackPoint();
+				nextTarget.x *= 10.f;
+				nextTarget.y *= 10.f;
+				this->pTargetPoint->setPosition(nextTarget);
+				this->path->removeBackPoint();
 
-		}else{
-			this->setMovable(false);
-			this->setSX(0);
-			this->setSY(0);
+			}else{
+				Point2F nextTarget = this->pTargetPoint->getPosition();
+				nextTarget.x *= 10.f;
+				nextTarget.y *= 10.f;
+				this->clearAIData(nextTarget);
+				//this->setMovable(false);
+				//this->setSX(0);
+				//this->setSY(0);
+
+			}
 
 		}
-
 	}
-
 
 	/*
 	float angle = this->data.dataList[this->data.dataSize -1];
@@ -390,6 +397,8 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			//dy -= kdy;
 			//kickingpos = true;
 			
+			int prevStatus = currentStatus;
+
 			switch(currentStatus){
 			case 0:
 				{
@@ -424,6 +433,10 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 			}
 
+			if(prevStatus != currentStatus){
+				this->resetPath = true;
+				this->setMovable(true);
+			}
 			
 		//}else{
 		//	kickingpos = false;
@@ -458,12 +471,14 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			//std::string robot_module_name = "Robot AStar Search";
 			//auto iter  = this->modules.find(robot_module_name);
 
-			
+			this->isPursuing = false;
 				
 				switch(activeModuleIndex){
 
 					case 1:
 						{
+							this->isPursuing = true;
+
 							if(this->activeModule != nullptr){
 							
 								if(distance < tr){
@@ -533,7 +548,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 										pt.y = tarp.y = data.dataList[1];
 
 										pt.x *= 0.1f;
-										pt.y *= 0.f;
+										pt.y *= 0.1f;
 
 										this->path->addPoint(pt);
 					
@@ -590,10 +605,14 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	return true;
 }
 
-void Robot::clearAIData(){
+void Robot::clearAIData(const Point2F& defaultTargetPos){
 	this->data.clear();
 	this->resetPath = true;
 	this->setMovable(true);
+	Point2F dpt = defaultTargetPos;
+	dpt.x *= 0.1f;
+	dpt.y *= 0.1f;
+	this->pTargetPoint->setPosition(dpt);
 }
 
 void Robot::addTrailer(pTrailPoints _pts){

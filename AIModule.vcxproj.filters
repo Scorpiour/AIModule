@@ -130,6 +130,9 @@
     <ClCompile Include="Model.cpp">
       <Filter>Main\Graphics\Sprites</Filter>
     </ClCompile>
+    <ClCompile Include="Keeper.cpp">
+      <Filter>Main\Graphics\Sprites</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sphere.fsd">

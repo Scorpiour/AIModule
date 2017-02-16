@@ -124,7 +124,7 @@ protected:
 	int touchCount;
 
 	bool resetPath;
-
+	bool isPursuing;
 	//for FSM
 	//status list:
 	/*
@@ -164,7 +164,7 @@ public:
 	void addPathview(pTrailPoints _path);
 	void setTargetPoint(pVirtualAttractivePoint pTP);
 
-	void clearAIData();
+	void clearAIData(const Point2F& defaultTargetPos);
 
 	void resetTouchCount();
 };
