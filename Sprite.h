@@ -124,7 +124,6 @@ protected:
 	int touchCount;
 
 	bool resetPath;
-	bool isPursuing;
 	//for FSM
 	//status list:
 	/*
@@ -133,6 +132,7 @@ protected:
 		- 2: try kicking
 	*/
 	int currentStatus;
+	int prevStatus;
 	
 
 	
@@ -210,10 +210,10 @@ protected:
     virtual ~Keeper();
 protected:
     enum class KeeperStatus{
-        Keeper_Parking = 0,
-        Keeper_Waiting = 1,
-        Keeper_Persuing = 2,
-        Keeper_Blocking = 3
+        Keeper_Parking = 0,		//navigate the keeper to gate area
+        Keeper_Waiting = 1,		//stay at gate area
+        Keeper_Persuing = 2,	//persue the ball
+        Keeper_Blocking = 3		//find a proper place to block the ball
     };
     
     enum BallPosStatus{

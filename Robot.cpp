@@ -13,9 +13,9 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->touchCount = 0;
 	this->maxSpeed = speedlimit;
 	this->currentStatus = 0;
+	this->prevStatus = 0;
 	this->activeDistance = false;
 	this->resetPath = true;
-	this->isPursuing = false;
 }
 
 Robot::~Robot(){
@@ -195,41 +195,7 @@ void Robot::move(double dt){
 
 	this->setAngle(glm::vec3(0,arc,0));
 
-	if(this->isPursuing){
 
-		float ix = this->getX();
-		float iy = this->getY();
-		float ir = this->getRadius();
-		float tx = this->pTargetPoint->getX();
-		float ty = this->pTargetPoint->getY();
-
-		dx = ix - tx;
-		dy = iy - ty;
-
-		s = sqrt(dx*dx + dy*dy);
-
-		if(s < ir){
-		
-			if(this->path->size() > 0){
-				Point2F nextTarget = this->path->getBackPoint();
-				nextTarget.x *= 10.f;
-				nextTarget.y *= 10.f;
-				this->pTargetPoint->setPosition(nextTarget);
-				this->path->removeBackPoint();
-
-			}else{
-				Point2F nextTarget = this->pTargetPoint->getPosition();
-				nextTarget.x *= 10.f;
-				nextTarget.y *= 10.f;
-				this->clearAIData(nextTarget);
-				//this->setMovable(false);
-				//this->setSX(0);
-				//this->setSY(0);
-
-			}
-
-		}
-	}
 
 	/*
 	float angle = this->data.dataList[this->data.dataSize -1];
@@ -360,247 +326,302 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 
 	
+	do{
+		if(id==RigidTypeID::RigidType_Ball){
 
-    if(id==RigidTypeID::RigidType_Ball){
-		Ball* pb = dynamic_cast<Ball*>(dest);
-		if(result){
+
+			//
+			{
+				float ix = this->getX();
+				float iy = this->getY();
+				float ir = this->getRadius();
+				float tx = this->pTargetPoint->getX();
+				float ty = this->pTargetPoint->getY();
+
+				float dx = ix - tx;
+				float dy = iy - ty;
+
+				float s = sqrt(dx*dx + dy*dy);
+
+				if(s < ir){
+		
+					if(this->path->size() > 0){
+						Point2F nextTarget = this->path->getBackPoint();
+						nextTarget.x *= 10.f;
+						nextTarget.y *= 10.f;
+						this->pTargetPoint->setPosition(nextTarget);
+						this->path->removeBackPoint();
+
+					}else{
+						Point2F nextTarget = this->pTargetPoint->getPosition();
+						nextTarget.x *= 10.f;
+						nextTarget.y *= 10.f;
+						this->clearAIData(nextTarget);
+						//this->setMovable(false);
+						//this->setSX(0);
+						//this->setSY(0);
+
+					}
+
+				}
+			}
+			
+
+
+
+			Ball* pb = dynamic_cast<Ball*>(dest);
+			if(result){
 	
-			pb->forceAccel(speedlimit*1.25);
+				pb->forceAccel(speedlimit*1.25);
+
+			}
+
+			dest->activeDistanceCalculate(false);
+
+			//FSM to switch between behaviours
+
+			/*
+				Kicking target
+			*/
+
+			Point2F ep;
+
+
+			bool kickingpos = true;
+
+			float dx = tx - ix;
+			float dy = ty - iy;
+
+			ep = pb->getKickingPos(25);
+
+			float kdx = tx - ep.x;
+			float kdy = ty - ep.y;
+
+			float alpha = atan2(dy,dx);
+		
+			//if(fabs(alpha) > M_PI*0.25){
+				//dx -= kdx;
+				//dy -= kdy;
+				//kickingpos = true;
+			
+				this->prevStatus = this->currentStatus;
+				//resetPath = false;
+
+				//if(prevStatus != currentStatus){
+					this->resetPath = true;
+					this->setMovable(true);
+
+					switch(currentStatus){
+					case 0:
+						{
+							dx -= kdx;
+							dy -= kdy;
+							kickingpos = true;
+							currentStatus = 1;
+						}break;
+					case 1:	//The condition is incorrect, need to fix
+						{
+							dx -= kdx;
+							dy -= kdy;
+							kickingpos = true;
+
+							float ddx = tx - kdx;
+							float ddy = ty - kdy;
+							ddx = ddx - ix;
+							ddy = ddy - iy;
+							float vdist = sqrt(ddx*ddx + ddy*ddy);
+
+							if(vdist <= ir){
+								currentStatus = 2;
+							}else{
+								currentStatus = 1;
+							}
+						}break;
+					case 2:
+						{
+							kickingpos = false;
+							if(distance < tr + ir){
+								currentStatus = 0;
+							}else{
+								currentStatus = 2;
+							}
+						}break;
+
+					}
+
+					if(this->prevStatus == this->currentStatus){
+						this->resetPath = false;
+					}else{
+						this->resetPath = true;
+					}
+				//}
+				
+			
+			//}else{
+			//	kickingpos = false;
+			//}
+
+			float distance = sqrt(dx*dx + dy*dy);
+
+			this->maxSpeed = speedlimit;
+
+			if(distance > tr + ir + 10){
+
+		
+
+			/*
+			std::string robot_module_name = "Robot Fuzzy";
+
+			auto iter  = this->modules.find(robot_module_name);
+
+			if(iter != modules.end()){
+				auto fuzzy = iter->second;
+
+				this->data.dataList[0] = tx;
+				this->data.dataList[1] = ty;
+
+				fuzzy->loadAIData(&(this->data));
+				fuzzy->processAIData(dt);
+				fuzzy->outputAIData(&(this->data));
+			}*/
+
+			//if(this->data.idxSize == 0){
+			
+				//std::string robot_module_name = "Robot AStar Search";
+				//auto iter  = this->modules.find(robot_module_name);
+
+				
+				
+					switch(activeModuleIndex){
+
+						case 1:
+							{
+
+								if(this->activeModule != nullptr){
+							
+									if(distance < tr){
+										break;
+									}
+								
+									if(this->resetPath){
+
+										cout<<"Do Replan"<<endl;
+
+										auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
+
+										AStarSearchNode startNode;
+										AStarSearchNode goalNode;
+
+										startNode.position.x = this->getX();
+										startNode.position.y = this->getY();
+
+										goalNode.position.x = dest->getX();
+										goalNode.position.y = dest->getY();
+
+										if(kickingpos){
+											//goalNode.position.x -= kdx;
+											//goalNode.position.y -= kdy;
+											goalNode.position = ep;
+											dest->activeDistanceCalculate(true);
+										}
+
+										//clear old datas
+										this->data.clear();
+
+										int baseLevel = 5;
+										baseLevel += distance / 22;
+
+
+										pAStar->init(&startNode, &goalNode, baseLevel);
+										pAStar->loadAIData(&(this->data));
+										pAStar->processAIData(0);
+										pAStar->outputAIData(&(this->data));
+
+								
+
+										if(this->data.idxSize != 0 && this->data.dataSize != 0){
+											this->path->clear();
+
+											Point2F pt;
+											//GMMPriorityQueue<float, Point2F> pq;
+                    
+											/*
+											for(int i=0;i<data.dataSize/2;i++){
+												pt.x = data.dataList[i*2] / 10.f;
+												pt.y = data.dataList[i*2+1] / 10.f;
+												this->path->addPoint(pt);
+                        
+												//float dist = RigidController::getInstance().calculateDistanceLevel(pt);
+                        
+												//pq.join(dist,pt);
+											}
+					
+					
+											//pt.x = data.dataList[data.dataSize-4];
+											//pt.y = data.dataList[data.dataSize-3];
+											*/
+
+											float rd = this->getRadius() * 4.f;
+
+											Point2F tarp;
+											pt.x = tarp.x = data.dataList[0];
+											pt.y = tarp.y = data.dataList[1];
+
+											pt.x *= 0.1f;
+											pt.y *= 0.1f;
+
+											this->path->addPoint(pt);
+					
+											if(data.dataSize > 2){ 
+
+												for(int i=1;i<data.dataSize/2 - 1;i++){
+													pt.x = data.dataList[i*2];
+													pt.y = data.dataList[i*2+1];
+													/*
+													float dl = RigidController::getInstance().calculateDistanceLevel(pt);
+
+													if(dl > rd){
+														continue;
+													}else{
+													*/
+														tarp = pt;
+														pt.x *= 0.1f;
+														pt.y *= 0.1f;
+														this->path->addPoint(pt);
+													//}
+												}	
+											}
+
+											this->pTargetPoint->setPosition(tarp);			
+										}
+										this->resetPath = false;
+										cout<<"Replan done!"<<endl;
+
+									}
+									this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
+
+
+								}
+							
+							}break;
+
+						case 2:
+							{
+								RigidController::getInstance().calculateVirtualForce(this,this->virtualForce,dt);
+							
+
+							}break;
+					}
+
+				}else{
+
+						this->maxSpeed = speedlimit * ( distance / (tr+ir+10) );
+
+					}
 
 		}
 
-		dest->activeDistanceCalculate(false);
-
-		//FSM to switch between behaviours
-
-		/*
-			Kicking target
-		*/
-
-		Point2F ep;
-
-
-		bool kickingpos = true;
-
-		float dx = tx - ix;
-		float dy = ty - iy;
-
-		ep = pb->getKickingPos(25);
-
-		float kdx = tx - ep.x;
-		float kdy = ty - ep.y;
-
-		float alpha = atan2(dy,dx);
-		
-		//if(fabs(alpha) > M_PI*0.25){
-			//dx -= kdx;
-			//dy -= kdy;
-			//kickingpos = true;
-			
-			int prevStatus = currentStatus;
-
-			switch(currentStatus){
-			case 0:
-				{
-					dx -= kdx;
-					dy -= kdy;
-					kickingpos = true;
-					currentStatus = 1;
-				}break;
-			case 1:
-				{
-					dx -= kdx;
-					dy -= kdy;
-					kickingpos = true;
-
-					float ddx = tx - kdx;
-					float ddy = ty - kdy;
-					ddx = ddx - ix;
-					ddy = ddy - iy;
-					float vdist = sqrt(ddx*ddx + ddy*ddy);
-
-					if(vdist <= 1){
-						currentStatus = 2;
-					}
-				}break;
-			case 2:
-				{
-					kickingpos = false;
-					if(distance < tr + ir){
-						currentStatus = 0;
-					}
-				}break;
-
-			}
-
-			if(prevStatus != currentStatus){
-				this->resetPath = true;
-				this->setMovable(true);
-			}
-			
-		//}else{
-		//	kickingpos = false;
-		//}
-
-		float distance = sqrt(dx*dx + dy*dy);
-
-		this->maxSpeed = speedlimit;
-
-		if(distance > tr + ir + 10){
-
-		
-
-		/*
-		std::string robot_module_name = "Robot Fuzzy";
-
-		auto iter  = this->modules.find(robot_module_name);
-
-		if(iter != modules.end()){
-			auto fuzzy = iter->second;
-
-			this->data.dataList[0] = tx;
-			this->data.dataList[1] = ty;
-
-			fuzzy->loadAIData(&(this->data));
-			fuzzy->processAIData(dt);
-			fuzzy->outputAIData(&(this->data));
-		}*/
-
-		//if(this->data.idxSize == 0){
-			
-			//std::string robot_module_name = "Robot AStar Search";
-			//auto iter  = this->modules.find(robot_module_name);
-
-			this->isPursuing = false;
-				
-				switch(activeModuleIndex){
-
-					case 1:
-						{
-							this->isPursuing = true;
-
-							if(this->activeModule != nullptr){
-							
-								if(distance < tr){
-									break;
-								}
-								
-								if(this->resetPath){
-
-									auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
-
-									AStarSearchNode startNode;
-									AStarSearchNode goalNode;
-
-									startNode.position.x = this->getX();
-									startNode.position.y = this->getY();
-
-									goalNode.position.x = dest->getX();
-									goalNode.position.y = dest->getY();
-
-									if(kickingpos){
-										//goalNode.position.x -= kdx;
-										//goalNode.position.y -= kdy;
-										goalNode.position = ep;
-										dest->activeDistanceCalculate(true);
-									}
-
-									//clear old datas
-									this->data.clear();
-
-									int baseLevel = 3;
-									baseLevel += distance / 22;
-
-
-									pAStar->init(&startNode, &goalNode, baseLevel);
-									pAStar->loadAIData(&(this->data));
-									pAStar->processAIData(0);
-									pAStar->outputAIData(&(this->data));
-
-								
-
-									if(this->data.idxSize != 0 && this->data.dataSize != 0){
-										this->path->clear();
-
-										Point2F pt;
-										//GMMPriorityQueue<float, Point2F> pq;
-                    
-										/*
-										for(int i=0;i<data.dataSize/2;i++){
-											pt.x = data.dataList[i*2] / 10.f;
-											pt.y = data.dataList[i*2+1] / 10.f;
-											this->path->addPoint(pt);
-                        
-											//float dist = RigidController::getInstance().calculateDistanceLevel(pt);
-                        
-											//pq.join(dist,pt);
-										}
-					
-					
-										//pt.x = data.dataList[data.dataSize-4];
-										//pt.y = data.dataList[data.dataSize-3];
-										*/
-
-										float rd = this->getRadius() * 4.f;
-
-										Point2F tarp;
-										pt.x = tarp.x = data.dataList[0];
-										pt.y = tarp.y = data.dataList[1];
-
-										pt.x *= 0.1f;
-										pt.y *= 0.1f;
-
-										this->path->addPoint(pt);
-					
-										if(data.dataSize > 2){ 
-
-											for(int i=1;i<data.dataSize/2 - 1;i++){
-												pt.x = data.dataList[i*2];
-												pt.y = data.dataList[i*2+1];
-												/*
-												float dl = RigidController::getInstance().calculateDistanceLevel(pt);
-
-												if(dl > rd){
-													continue;
-												}else{
-												*/
-													tarp = pt;
-													pt.x *= 0.1f;
-													pt.y *= 0.1f;
-													this->path->addPoint(pt);
-												//}
-											}	
-										}
-
-										this->pTargetPoint->setPosition(tarp);			
-									}
-									this->resetPath = false;
-
-								}
-								this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
-
-
-							}
-							
-						}break;
-
-					case 2:
-						{
-							RigidController::getInstance().calculateVirtualForce(this,this->virtualForce,dt);
-							
-
-						}break;
-				}
-
-			}else{
-
-				this->maxSpeed = speedlimit * ( distance / (tr+ir+10) );
-
-				}
-
-	}
-
-
+	}while(0);
 
 	return true;
 }
@@ -609,6 +630,8 @@ void Robot::clearAIData(const Point2F& defaultTargetPos){
 	this->data.clear();
 	this->resetPath = true;
 	this->setMovable(true);
+	this->currentStatus = 0;
+	this->prevStatus = 0;
 	Point2F dpt = defaultTargetPos;
 	dpt.x *= 0.1f;
 	dpt.y *= 0.1f;

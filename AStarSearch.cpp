@@ -78,12 +78,13 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			if(distLevel < 1.f){
 				distLevel = 1.f;
 			}
-			distLevel = 1.f/(1+exp(distLevel-12));
+			distLevel = 200.f/(1+exp(distLevel-7));
 			//distLevel = 2.f/(distLevel*distLevel);
 			
 			float distance = distanceFunc(p1,p2);
-            distance = 1.f/distance;
-			float result = 500.f * (distLevel + distance);
+            //distance = 1.f/distance;
+			//float result = 500.f * (distLevel + distance);
+			float result = distance + distLevel;
 			return result;
 		};
 

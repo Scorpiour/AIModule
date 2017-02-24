@@ -121,92 +121,125 @@ bool Keeper::calculateForce(RigidBody* dest,Point2F& result,double dt){
     }
     
     
-    if(id == RigidTypeID::RigidType_Ball){
+	do{
+
+		if(id == RigidTypeID::RigidType_Ball){
         
-        Point2F ballpos;
-        ballpos.x = tx;
-        ballpos.y = ty;
+			Point2F ballpos;
+			ballpos.x = tx;
+			ballpos.y = ty;
         
-        auto ballPosFunc = [](const Point2F& ballpos)->BallPosStatus{
+			auto ballPosFunc = [](const Point2F& ballpos)->BallPosStatus{
             
-            BallPosStatus ret = BallPosStatus::BallPos_Inside;
+				BallPosStatus ret = BallPosStatus::BallPos_Inside;
             
-            if((ballpos.y < 40) && (ballpos.y > -40)){
+				if((ballpos.y < 40) && (ballpos.y > -40)){
                 
-                if(ballpos.x > 110){
-                    ret = BallPosStatus::BallPos_Inside;
-                }else if(ballpos.x > 85){
-                    ret = BallPosStatus::BallPos_Near;
-                }else if(ballpos.x > 0){
-                    ret = BallPosStatus::BallPos_Middle;
-                }else{
-                    ret = BallPosStatus::BallPos_Far;
-                }
+					if(ballpos.x > 110){
+						ret = BallPosStatus::BallPos_Inside;
+					}else if(ballpos.x > 85){
+						ret = BallPosStatus::BallPos_Near;
+					}else if(ballpos.x > 0){
+						ret = BallPosStatus::BallPos_Middle;
+					}else{
+						ret = BallPosStatus::BallPos_Far;
+					}
                 
-            }else if(ballpos.x > 0){
-                ret = BallPosStatus::BallPos_Middle;
-            }else{
-                ret = BallPosStatus::BallPos_Far;
-            }
+				}else if(ballpos.x > 0){
+					ret = BallPosStatus::BallPos_Middle;
+				}else{
+					ret = BallPosStatus::BallPos_Far;
+				}
             
-            return ret;
-        };
+				return ret;
+			};
         
-        BallPosStatus ballStatus = ballPosFunc(ballpos);
-        KeeperStatus nextStatus = KeeperStatus::Keeper_Waiting;
+			BallPosStatus ballStatus = ballPosFunc(ballpos);
+			KeeperStatus nextStatus = KeeperStatus::Keeper_Waiting;
         
-        switch(currentStatus){
-            case KeeperStatus::Keeper_Parking:{
-                if( ballStatus & BallPosStatus::BallPos_Dangerous){
-                    nextStatus = KeeperStatus::Keeper_Persuing;
-                }else{
-                    Point2F parkpos;
-                    parkpos.y = 0;
-                    parkpos.x = 110;
+			switch(currentStatus){
+				case KeeperStatus::Keeper_Parking:{
+					if( ballStatus & BallPosStatus::BallPos_Dangerous){
+						nextStatus = KeeperStatus::Keeper_Persuing;
+					}else{
+						Point2F parkpos;
+						parkpos.y = 0;
+						parkpos.x = 110;
                     
-                    dx = parkpos.x - ix;
-                    dy = parkpos.y - iy;
+						dx = parkpos.x - ix;
+						dy = parkpos.y - iy;
                     
-                    float parkdist = sqrt(dx*dx + dy*dy);
+						float parkdist = sqrt(dx*dx + dy*dy);
                     
-                    if(parkdist < ir+3){
-                        nextStatus = KeeperStatus::Keeper_Waiting;
-                    }else{
-                        nextStatus = KeeperStatus::Keeper_Parking;
-                    }
-                }
+						if(parkdist < ir+3){
+							nextStatus = KeeperStatus::Keeper_Waiting;
+						}else{
+							nextStatus = KeeperStatus::Keeper_Parking;
+						}
+					}
             
-            }break;
+				}break;
             
-            case KeeperStatus::Keeper_Waiting:{
-                if(ballStatus == BallPosStatus::BallPos_Near){
-                    nextStatus = KeeperStatus::Keeper_Blocking;
-                }else if(ballStatus == BallPosStatus::BallPos_Middle){
-                    nextStatus = KeeperStatus::Keeper_Persuing;
-                }else{
-                    nextStatus = KeeperStatus::Keeper_Waiting;
-                }
-            }break;
+				case KeeperStatus::Keeper_Waiting:{
+					if(ballStatus == BallPosStatus::BallPos_Near){
+						nextStatus = KeeperStatus::Keeper_Persuing;
+					}else if(ballStatus == BallPosStatus::BallPos_Middle){
+						nextStatus = KeeperStatus::Keeper_Blocking;
+					}else{
+						nextStatus = KeeperStatus::Keeper_Waiting;
+					}
+				}break;
             
-            case KeeperStatus::Keeper_Blocking:{
-                if(ballStatus & BallPosStatus::BallPos_Dangerous){
-                    nextStatus = KeeperStatus::Keeper_Blocking;
-                }else{
-                    nextStatus = KeeperStatus::Keeper_Parking;
-                }
-            }break;
+				case KeeperStatus::Keeper_Blocking:{
+					if(ballStatus & BallPosStatus::BallPos_Dangerous){
+						nextStatus = KeeperStatus::Keeper_Blocking;
+					}else{
+						nextStatus = KeeperStatus::Keeper_Parking;
+					}
+				}break;
             
-            case KeeperStatus::Keeper_Persuing:{
-                if(!inside && dist < 10){
-                    nextStatus = KeeperStatus::Keeper_Blocking;
-                }else if(ballStatus == BallPosStatus::BallPos_Far){
-                    nextStatus = KeeperStatus::Keeper_Parking;
-                }else {
-                    nextStatus = KeeperStatus::Keeper_Blocking;
-                }
-            }break;
-        }
-    }
+				case KeeperStatus::Keeper_Persuing:{
+					if(!inside && dist < 10){
+						nextStatus = KeeperStatus::Keeper_Blocking;
+					}else if(ballStatus == BallPosStatus::BallPos_Far){
+						nextStatus = KeeperStatus::Keeper_Parking;
+					}else {
+						nextStatus = KeeperStatus::Keeper_Blocking;
+					}
+				}break;
+			}
+		
+			if(currentStatus == nextStatus){
+				currentStatus = nextStatus;
+				break;
+			}
+			
+			//do replaning
+
+			switch(nextStatus){
+				case KeeperStatus::Keeper_Blocking:{
+
+					}break;
+				case KeeperStatus::Keeper_Parking:{
+						
+					}break;
+				case KeeperStatus::Keeper_Persuing:{
+					
+					}break;
+				case KeeperStatus::Keeper_Waiting:{
+
+					}break;
+			}
+
+			currentStatus = nextStatus;
+
+
+		}
+
+	}while(false);
+
+	
+
     //return Robot::calculateForce(dest,result,dt);
     
     return true;

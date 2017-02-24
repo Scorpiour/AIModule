@@ -655,6 +655,29 @@ bool GraphicsEngine::prepareSprites(void){
 	this->pr = pRobot;
 
 
+
+	//Keeper
+
+	pTrailer = new TrailPoints(30);
+    pTrailer->setProgram(this->sphere_program);
+    pTrailer->setVAO(this->sphere_vao);
+    pTrailer->setCamera(this->main_camera);
+    pTrailer->setColour(glm::vec3(0,1,1));
+    pTrailer->setColourIntensity(glm::vec3(0.3,0.6,0.9));
+    pTrailer->setRadius(0.1);
+    pTrailer->setPosition(glm::vec3(0,-0.4,0));
+
+	pPath = new TrailPoints(100);
+	pPath->setProgram(this->sphere_program);
+    pPath->setVAO(this->sphere_vao);
+    pPath->setCamera(this->main_camera);
+    pPath->setColour(glm::vec3(1,0,1));
+    pPath->setColourIntensity(glm::vec3(0.3,0.6,0.9));
+    pPath->setRadius(0.1);
+    pPath->setPosition(glm::vec3(0,-0.4,0));
+
+	pTargetPoint = new VirtualAttractivePoint;
+
 	auto pkeeper = new Keeper();
 	pkeeper->setID(RigidTypeID::RigidType_Keeper);
 	pkeeper->setProgram(this->box_program);
@@ -668,8 +691,13 @@ bool GraphicsEngine::prepareSprites(void){
 	pkeeper->setSX(0);
 	pkeeper->setSY(0);
 
-	pkeeper->setMovable(false);
-	pkeeper->enable(false);
+	pkeeper->addTrailer(pTrailer);
+	pkeeper->addPathview(pPath);
+	pkeeper->setTargetPoint(pTargetPoint);
+
+	pkeeper->setMovable(true);
+	pkeeper->enable(true);
+
 	
 	std::string keeper_module_name = "Keeper AStar Search";
 	auto pKeeperAStar = new AIAStarSearch(keeper_module_name);
@@ -1506,6 +1534,7 @@ bool GraphicsEngine::setExternalFunction(std::function<void*(double,void*)> _ext
 
 bool GraphicsEngine::mainLoop(){
 
+
 	double dt;
 	static double prevtime;
 	static double time;
@@ -1513,7 +1542,16 @@ bool GraphicsEngine::mainLoop(){
 	auto sl = SpriteManager::getInstance();
 
 	prevtime = time;
-	time = glfwGetTime();
+	
+	if(pauseFlag){
+		glfwSetTime(pausetime);
+		time = pausetime;
+	}else{
+		time = this->pausetime = glfwGetTime();
+		
+	}
+	
+	//time = glfwGetTime();
     //time += 0.01f;
     
 	dt = time - prevtime;
@@ -1576,11 +1614,7 @@ bool GraphicsEngine::mainLoop(){
 //Action Handle
 void GraphicsEngine::handleAction(double time){
 	
-	if(pauseFlag){
-		glfwSetTime(pausetime);
-	}else{
-		this->pausetime = glfwGetTime();
-	}
+
 
 	
 	if(!this->manualFlag){
