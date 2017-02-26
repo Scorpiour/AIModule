@@ -35,6 +35,8 @@ protected:
 	Point2F collisionForce;
 	bool activeDistance;
 
+	float nextVelo;
+
 	std::function<bool(RigidBody*,Point2F&)> forceFunc;
 public:
 	static const float speedlimit;
@@ -64,6 +66,7 @@ public:
 	virtual RigidTypeID getID()const;
 	virtual void activeDistanceCalculate(bool b);
 
+	virtual void forceAccel(float velo);
 
 	virtual void setMovable(bool isMovable);
 	virtual bool isMovable()const;

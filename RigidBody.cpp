@@ -110,6 +110,10 @@ void RigidBody::setID(RigidTypeID _id){
 	this->id = _id;
 }
 
+void RigidBody::forceAccel(float velo){
+	nextVelo = velo;
+}
+
 void RigidBody::setMovable(bool isMovable){
 	this->movable = isMovable;
 }
@@ -152,6 +156,7 @@ RigidBody::RigidBody(){
     id = RigidTypeID::RigidType_Unknown;
 	movable = true;
 	activeDistance = true;
+	nextVelo = -1.f;
 
 	RigidController::getInstance().addToController(this);
 }

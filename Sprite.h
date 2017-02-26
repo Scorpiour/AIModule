@@ -174,7 +174,7 @@ class Ball : public Sprite,public RigidBody{
 protected:
 	float friction;
 	AIData data;
-	float nextVelo;
+	//float nextVelo;
 	clock_t startTime;
 protected:
 	virtual ~Ball();
@@ -198,7 +198,7 @@ public:
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
 
-	virtual void forceAccel(float velo);
+	//virtual void forceAccel(float velo);
 
 	virtual Point2F getKickingPos(float gap);
 	void resetTimer();

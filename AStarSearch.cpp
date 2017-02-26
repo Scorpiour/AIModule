@@ -49,6 +49,9 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
         //div_y *= 1;
 		float div_z = sqrt(div_x*div_x + div_y*div_y);
 
+		int xmax = 220/abs(div_x);
+		int ymax = 180/abs(div_y);
+
 		startNode->coord = Point2I(0,0);
 		goalNode->coord = Point2I(level,level);
 
@@ -130,6 +133,11 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 					nextCoord.x = currentNode->coord.x +j;
 					nextCoord.y = currentNode->coord.y + i;
 					
+					//ignore the waypoint out of range
+					if((abs(nextCoord.x) > xmax)||abs(nextCoord.y) > ymax){
+						continue;
+					}
+
 					//if the coord has been expanded, it means it belongs to a path that has been searched
 					if(expandList.end() != expandList.find(nextCoord)){
 						continue;

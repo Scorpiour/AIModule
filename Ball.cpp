@@ -9,7 +9,7 @@ Ball::Ball():Sprite(),RigidBody(){
 	data.dataList = new double[10];
 	data.idxSize = 6;
 	data.idxList = new int[6];
-	nextVelo = 0.f;
+	//nextVelo = 0.f;
 	startTime = clock();
 
     this->id = RigidTypeID::RigidType_Ball;
@@ -123,10 +123,6 @@ void Ball::setFriction(float f){
 	this->friction = f;
 }
 
-void Ball::forceAccel(float velo){
-	nextVelo = velo;
-}
-
 Point2F Ball::getKickingPos(float gap){
 	
 	Point2F ret;
@@ -136,11 +132,22 @@ Point2F Ball::getKickingPos(float gap){
 	float iy = this->getY();
 	float ir = this->getRadius();
 
-	if(gap < 1e-6){
+	Point2F bpos;
+	bpos.x = ix;
+	bpos.y = iy;
+
+	float distLevel = RigidController::getInstance().calculateDistanceLevel(bpos);
+
+	if(distLevel < gap){
+		gap = distLevel;
+	}
+
+	if(gap < 5){
 		ret.x = ix;
 		ret.y = iy;
 		return ret;
 	}
+
 
 	float tx = 110;
 	float ty = 0;
@@ -189,7 +196,7 @@ void Ball::move(double dt){
 	}else{
 
 		float speed = 0.f;
-		if(nextVelo != 0){
+		if(nextVelo >= 0){
 			float ax = collisionForce.x / mass;
 			float ay = collisionForce.y / mass;
 
@@ -197,7 +204,7 @@ void Ball::move(double dt){
 			sy += ay;
 
 			speed = nextVelo;
-			nextVelo = 0.f;
+			nextVelo = -1.f;
 
 			cout<<"Timer : "<<clock() - startTime <<" ms"<<endl;
 

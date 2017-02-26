@@ -96,6 +96,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 
                 }else{
                     graphics->activeModel("RegObs");
+					graphics->resetObject();
                 }
 
 			}break;
@@ -106,6 +107,7 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
                     
                 }else{
                     graphics->activeModel("Block");
+					graphics->resetObject();
                 }
 
 			}break;
@@ -113,14 +115,17 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 		case GLFW_KEY_3:
 			{
                 graphics->activeModel("Wiggle");
+				graphics->resetObject();
             }break;
 		case GLFW_KEY_4:
 			{
                 graphics->activeModel("Trap");
+				graphics->resetObject();
 			}break;
 		case GLFW_KEY_5:
 			{
                 graphics->activeModel("Cross");
+				graphics->resetObject();
             }break;
 		case GLFW_KEY_ESCAPE:
 			{
@@ -1249,7 +1254,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Corners
 	name = "Block";
-	m = new Model(name,Point2F(-50,-50),Point2F(50,50));
+	m = new Model(name,Point2F(-20,0),Point2F(50,50));
 	this->modelList.insert(make_pair(name,m));
 
 	auto pObs = new Obstacle();
@@ -1319,7 +1324,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Trap
 	name = "Trap";
-	m = new Model(name,Point2F(-90,0),Point2F(0,0));
+	m = new Model(name,Point2F(-90,0),Point2F(10,10));
 	this->modelList.insert(make_pair(name,m));
 
 	float gap = 2.f;
@@ -1327,9 +1332,10 @@ bool GraphicsEngine::prepareSprites(void){
 	for(int i=-1;i<2;i++){
 		for(int j=-1;j<2;j++){
 
+			/*
 			if(!i && !j){
 				continue;
-			}
+			}*/
 
 			float y = i*gap;
 			float x = j*gap;

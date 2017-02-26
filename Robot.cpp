@@ -148,7 +148,12 @@ void Robot::move(double dt){
     //ax = (collisionForce.x + virtualForce.x) / mass;
     //ay = (collisionForce.y + virtualForce.y) / mass;
     
+	float baseSpeed = maxSpeed;
+
     if(collisionForce){
+
+		baseSpeed = min(sqrt(sx*sx + sy*sy),maxSpeed);
+
         sx = 0;
         sy = 0;
     }
@@ -180,9 +185,15 @@ void Robot::move(double dt){
 
 	float arc = atan2(sy,sx);
 
-	if(s > maxSpeed){
-		sx = maxSpeed * cos(arc);
-		sy = maxSpeed * sin(arc);
+	//baseSpeed = min(maxSpeed,baseSpeed);
+	if(nextVelo >= 0.f){
+		sx = nextVelo * cos(arc);
+		sy = nextVelo * sin(arc);
+		nextVelo = -1.f;
+	}else if(s > baseSpeed){
+		sx = baseSpeed * cos(arc);
+		sy = baseSpeed * sin(arc);
+		
 	}
 
 
@@ -324,6 +335,10 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		result.y = 0;
 	}
 
+	if(result){
+		float cspeed = sqrt(sx*sx + sy*sy);
+		dest->forceAccel(cspeed);
+	}
 
 	
 	do{
@@ -506,6 +521,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 									if(this->resetPath){
 
 										cout<<"Do Replan"<<endl;
+										clock_t rt = clock();
 
 										auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
 
@@ -595,7 +611,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 											this->pTargetPoint->setPosition(tarp);			
 										}
 										this->resetPath = false;
-										cout<<"Replan done!"<<endl;
+										cout<<"Replan done! time - "<<clock()-rt<<endl;
 
 									}
 									this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
