@@ -131,8 +131,14 @@ protected:
 		- 1: not in kicking pos
 		- 2: try kicking
 	*/
-	int currentStatus;
-	int prevStatus;
+    enum class AttackerStatus{
+        Attacker_Init = 0,
+        Attacker_PersueKickingPos = 1,
+        Attacker_TryKicking = 2
+        
+    };
+	AttackerStatus currentStatus;
+	AttackerStatus prevStatus;
 	
 
 	

@@ -12,8 +12,8 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->inTouch = false;
 	this->touchCount = 0;
 	this->maxSpeed = speedlimit;
-	this->currentStatus = 0;
-	this->prevStatus = 0;
+    this->currentStatus = AttackerStatus::Attacker_Init;
+    this->prevStatus = AttackerStatus::Attacker_Init;
 	this->activeDistance = false;
 	this->resetPath = true;
 }
@@ -427,14 +427,14 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 					this->setMovable(true);
 
 					switch(currentStatus){
-					case 0:
+					case AttackerStatus::Attacker_Init:
 						{
 							dx -= kdx;
 							dy -= kdy;
 							kickingpos = true;
-							currentStatus = 1;
+                            currentStatus = AttackerStatus::Attacker_PersueKickingPos;
 						}break;
-					case 1:	//The condition is incorrect, need to fix
+					case AttackerStatus::Attacker_PersueKickingPos:	//The condition is incorrect, need to fix
 						{
 							dx -= kdx;
 							dy -= kdy;
@@ -446,28 +446,26 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 							ddy = ddy - iy;
 							float vdist = sqrt(ddx*ddx + ddy*ddy);
 
-							if(vdist <= ir){
-								currentStatus = 2;
+							if(this->path->size()==0){
+                                currentStatus = AttackerStatus::Attacker_TryKicking;
 							}else{
-								currentStatus = 1;
+                                currentStatus = AttackerStatus::Attacker_PersueKickingPos;
 							}
 						}break;
-					case 2:
+                        case AttackerStatus::Attacker_TryKicking:
 						{
 							kickingpos = false;
 							if(distance < tr + ir){
-								currentStatus = 0;
+                                currentStatus = AttackerStatus::Attacker_Init;
 							}else{
-								currentStatus = 2;
+                                currentStatus = AttackerStatus::Attacker_TryKicking;
 							}
 						}break;
 
 					}
-
-					if(this->prevStatus == this->currentStatus){
-						this->resetPath = false;
-					}else{
-						this->resetPath = true;
+            this->resetPath = true;
+					if((this->prevStatus == this->currentStatus)&&(this->path->size()>0)){
+                        this->resetPath = false;
 					}
 				//}
 				
@@ -646,8 +644,8 @@ void Robot::clearAIData(const Point2F& defaultTargetPos){
 	this->data.clear();
 	this->resetPath = true;
 	this->setMovable(true);
-	this->currentStatus = 0;
-	this->prevStatus = 0;
+    this->currentStatus = AttackerStatus::Attacker_Init;
+    this->prevStatus = AttackerStatus::Attacker_Init;
 	Point2F dpt = defaultTargetPos;
 	dpt.x *= 0.1f;
 	dpt.y *= 0.1f;

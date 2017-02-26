@@ -1252,7 +1252,7 @@ bool GraphicsEngine::prepareSprites(void){
 	}
 
 
-	//Corners
+	//U-Block
 	name = "Block";
 	m = new Model(name,Point2F(-20,0),Point2F(50,50));
 	this->modelList.insert(make_pair(name,m));
@@ -1324,7 +1324,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Trap
 	name = "Trap";
-	m = new Model(name,Point2F(-90,0),Point2F(10,10));
+	m = new Model(name,Point2F(-90,70),Point2F(2,2));
 	this->modelList.insert(make_pair(name,m));
 
 	float gap = 2.f;
@@ -1332,10 +1332,10 @@ bool GraphicsEngine::prepareSprites(void){
 	for(int i=-1;i<2;i++){
 		for(int j=-1;j<2;j++){
 
-			/*
+			
 			if(!i && !j){
 				continue;
-			}*/
+			}
 
 			float y = i*gap;
 			float x = j*gap;
