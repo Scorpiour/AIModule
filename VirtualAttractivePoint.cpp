@@ -42,7 +42,7 @@ bool VirtualAttractivePoint::calculateVirtualForce(RigidBody* dest,Point2F& resu
 
 bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,double dt) { 
 
-    if(dest->getID() != RigidTypeID::RigidType_Robot){
+	if((dest->getID() != RigidTypeID::RigidType_Robot)&&(dest->getID() != RigidTypeID::RigidType_Keeper)){
 		result.x = 0.f;
 		result.y = 0.f;
 		return true;

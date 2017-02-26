@@ -222,7 +222,7 @@ protected:
         BallPos_Near = 0x2,
         BallPos_Inside = 0x4,
         
-        BallPos_Dangerous = BallPos_Middle | BallPos_Near
+        BallPos_Dangerous =  BallPos_Near | BallPos_Middle
     };
     
     KeeperStatus currentStatus;
