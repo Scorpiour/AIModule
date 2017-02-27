@@ -73,8 +73,8 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		auto heuristicFunc = [=](Point2F& p1, Point2F& p2)->float{
 
 			
-			float distLevel = RigidController::getInstance().calculateDistanceLevel(p1);
-			
+			//float distLevel = RigidController::getInstance().calculateDistanceLevel(p1);
+			/*
 			if(distLevel < 0.f){
 				return -1.f;
 			}
@@ -83,11 +83,11 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			}
 			distLevel = 200.f/(1+exp(distLevel-7));
 			//distLevel = 2.f/(distLevel*distLevel);
-			
+			*/
 			float distance = distanceFunc(p1,p2);
             //distance = 1.f/distance;
 			//float result = 500.f * (distLevel + distance);
-			float result = distance + distLevel;
+            float result = distance;// + distLevel;
 			return result;
 		};
 
@@ -164,17 +164,45 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 					}else{
 						nextG = div_z;
 					}
-					nextNode->gValue = currentNode->gValue + nextG;
-					nextNode->coord = nextCoord;
-					nextNode->position = nextPosition;
+                    
+                    
+                    nextNode->gValue = currentNode->gValue + nextG;
+                    nextNode->coord = nextCoord;
+                    nextNode->position = nextPosition;
+                    
+                    float distLevel;
+                    
+                    auto iter = hMap.find(nextNode->coord);
+                    if(iter != hMap.end()){
+                        distLevel = iter->second;
+                    }else{
+                         distLevel = RigidController::getInstance().calculateDistanceLevel(nextNode->position);
+                        hMap.insert(make_pair(nextNode->coord,distLevel));
+                        
+                    }
+  
+                    
+                    if(distLevel < 0.f){
+                        delete nextNode;
+                        continue;
+                    }else if(distLevel < 1.f){
+                        distLevel = 1.f;
+                    }
+                    
+                    distLevel = 200.f/(1+exp(distLevel-7));
+                    
+                    nextNode->gValue += distLevel;
+                    
 
+                    /*
 					auto iter = hMap.find(nextNode->coord);
 					if(iter != hMap.end()){
 						nextNode->heuristic = iter->second;
 					}else{
 						nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
 						hMap.insert(make_pair(nextNode->coord,nextNode->heuristic));
-					}
+					}*/
+                    nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
                     
                     if(nextNode->heuristic < 0){
                         delete nextNode;
