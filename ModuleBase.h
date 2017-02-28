@@ -203,7 +203,8 @@ typedef class AIAStarSearch : public AIModuleBase{
 protected:
 	pAIData pInternalData;
 	bool hasInit;
-	uint32_t level;
+	uint32_t xlevel;
+	uint32_t ylevel;
 
 	pAStarSearchNode startNode;
 	pAStarSearchNode goalNode;
@@ -219,7 +220,7 @@ public:
 	virtual GlobalFlag releaseAIData(void)override;
 	virtual void setProcessFunction(ProcessFunction func)override;
 
-	virtual void init(pAStarSearchNode _startNode, pAStarSearchNode _goalNode,uint32_t _level);
+	virtual void init(pAStarSearchNode _startNode, pAStarSearchNode _goalNode,uint32_t _xlevel, uint32_t _ylevel);
 }*pAIAStarSearch;
 
 #endif

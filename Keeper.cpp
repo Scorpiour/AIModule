@@ -396,10 +396,16 @@ bool Keeper::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 					this->data.clear();
 
-					int baseLevel = 5;
-					baseLevel += distance / 22;
+					dx = abs(goalNode.position.x - startNode.position.x);
+					dy = abs(goalNode.position.y - startNode.position.y);
 
-					pAStar->init(&startNode, &goalNode, baseLevel);
+					int basexLevel = 5;
+					basexLevel += dx / 11;
+
+					int baseyLevel = 5;
+					baseyLevel += dy / 9;
+
+					pAStar->init(&startNode, &goalNode, basexLevel,baseyLevel);
 					pAStar->loadAIData(&(this->data));
 					pAStar->processAIData(0);
 					pAStar->outputAIData(&(this->data));

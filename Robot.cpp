@@ -463,7 +463,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 						}break;
 
 					}
-            this->resetPath = true;
+            //this->resetPath = true;
 					if((this->prevStatus == this->currentStatus)&&(this->path->size()>0)){
                         this->resetPath = false;
 					}
@@ -542,11 +542,16 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 										//clear old datas
 										this->data.clear();
 
-										int baseLevel = 5;
-										baseLevel += distance / 22;
+										dx = abs(goalNode.position.x - startNode.position.x);
+										dy = abs(goalNode.position.y - startNode.position.y);
 
+										int basexLevel = 5;
+										basexLevel += dx / 22;
 
-										pAStar->init(&startNode, &goalNode, baseLevel);
+										int baseyLevel = 5;
+										baseyLevel += dy / 18;
+
+										pAStar->init(&startNode, &goalNode, basexLevel,baseyLevel);
 										pAStar->loadAIData(&(this->data));
 										pAStar->processAIData(0);
 										pAStar->outputAIData(&(this->data));

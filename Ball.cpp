@@ -139,7 +139,7 @@ Point2F Ball::getKickingPos(float gap){
 	float distLevel = RigidController::getInstance().calculateDistanceLevel(bpos);
 
 	if(distLevel < gap){
-		gap = distLevel;
+		gap = distLevel/2;
 	}
 
 	if(gap < 5){

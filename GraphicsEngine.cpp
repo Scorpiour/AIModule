@@ -1228,13 +1228,13 @@ bool GraphicsEngine::prepareSprites(void){
 
 	srand(time(NULL));
 
-	for(int i=0;i<10;i++){
+	for(int i=0;i<50;i++){
 
-		float x = rand()%17;
-		x += -8;
+		float x = rand()%21;
+		x += -10;
 
-		float y = rand()%13;
-		y += -6;
+		float y = rand()%17;
+		y += -8;
 
 		float p = rand()%12+1;
 

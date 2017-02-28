@@ -1,4 +1,5 @@
 #include <ctime>
+#include <cmath>
 
 #include "ModuleBase.h"
 #include "GMMHeap.h"
@@ -39,8 +40,8 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			return GlobalFlag_GeneralError;
 		}
 
-		float div_x =  ( goalNode->position.x - startNode->position.x ) / (float)(level)  ;
-		float div_y =  ( goalNode->position.y - startNode->position.y ) / (float)(level)  ;
+		float div_x =  ( goalNode->position.x - startNode->position.x ) / (float)(xlevel)  ;
+		float div_y =  ( goalNode->position.y - startNode->position.y ) / (float)(ylevel)  ;
         //float div_x = (goalNode->position.x - startNode->position.x);
         //float div_y = (goalNode->position.y - startNode->position.y);
         //div_x = div_x / fabs(div_x);
@@ -53,7 +54,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		int ymax = 180/abs(div_y);
 
 		startNode->coord = Point2I(0,0);
-		goalNode->coord = Point2I(level,level);
+		goalNode->coord = Point2I(xlevel,ylevel);
 
 
 		std::set<Point2I> expandList;
@@ -516,14 +517,13 @@ void AIAStarSearch::setProcessFunction(ProcessFunction func){
 }
 
 
-void AIAStarSearch::init(pAStarSearchNode _startNode, pAStarSearchNode _goalNode,uint32_t _level){
+void AIAStarSearch::init(pAStarSearchNode _startNode, pAStarSearchNode _goalNode,uint32_t _xlevel,uint32_t _ylevel){
 	this->startNode = _startNode;
 	this->goalNode = _goalNode;
-	this->level = _level;
+	this->xlevel = max(static_cast<uint32_t>(1),_xlevel);
+	this->ylevel = max(static_cast<uint32_t>(1),_ylevel);
 
-	if(this->level == 0){
-		this->level = 1;
-	}
+
 
 	this->hasInit = true;
 }
