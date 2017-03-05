@@ -415,7 +415,7 @@ bool Keeper::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 						Point2F pt;
 
-						float rd = this->getRadius() * 4.f;
+						//float rd = this->getRadius() * 4.f;
 
 						Point2F tarp;
 						pt.x = tarp.x = data.dataList[0];

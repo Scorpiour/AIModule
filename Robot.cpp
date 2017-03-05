@@ -412,7 +412,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			float kdx = tx - ep.x;
 			float kdy = ty - ep.y;
 
-			float alpha = atan2(dy,dx);
+			//float alpha = atan2(dy,dx);
 		
 			//if(fabs(alpha) > M_PI*0.25){
 				//dx -= kdx;
@@ -444,7 +444,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 							float ddy = ty - kdy;
 							ddx = ddx - ix;
 							ddy = ddy - iy;
-							float vdist = sqrt(ddx*ddx + ddy*ddy);
+							//float vdist = sqrt(ddx*ddx + ddy*ddy);
 
 							if(this->path->size()==0){
                                 currentStatus = AttackerStatus::Attacker_TryKicking;
@@ -580,7 +580,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 											//pt.y = data.dataList[data.dataSize-3];
 											*/
 
-											float rd = this->getRadius() * 4.f;
+											//float rd = this->getRadius() * 4.f;
 
 											Point2F tarp;
 											pt.x = tarp.x = data.dataList[0];

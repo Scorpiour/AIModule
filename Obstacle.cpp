@@ -61,19 +61,19 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 		return false;
 	}
 
-	float ix = this->getX();
-	float iy = this->getY();
-	float ir = this->getRadius();
+	//float ix = this->getX();
+	//float iy = this->getY();
+	//float ir = this->getRadius();
 	
-	float tx = dest->getX();
-	float ty = dest->getY();
-	float tr = dest->getRadius();
+	//float tx = dest->getX();
+	//float ty = dest->getY();
+	//float tr = dest->getRadius();
 
-	RigidTypeID id = dest->getID();
+	//RigidTypeID id = dest->getID();
     
     
-    float dx = tx - ix;
-    float dy = ty - iy;
+    //float dx = tx - ix;
+    //float dy = ty - iy;
     
     /*
 	float dx = tx - ix;
@@ -194,13 +194,13 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	float ix = this->getX();
 	float iy = this->getY();
-	float ir = this->getRadius();
+	//float ir = this->getRadius();
 	
 	float tx = dest->getX();
 	float ty = dest->getY();
-	float tr = dest->getRadius();
+	//float tr = dest->getRadius();
     
-	RigidTypeID id = dest->getID();
+	//RigidTypeID id = dest->getID();
     
     float dx = tx - ix;
     float dy = ty - iy;
@@ -411,7 +411,7 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
 	
     float ix = this->getX();
     float iy = this->getY();
-    float ir = this->getRadius();
+    //float ir = this->getRadius();
     
     float tx = point.x;
     float ty = point.y;
@@ -551,7 +551,7 @@ float Obstacle::calculateDistance(RigidBody* dest){
     
     float ix = this->getX();
     float iy = this->getY();
-    float ir = this->getRadius();
+    //float ir = this->getRadius();
     
     float tx = dest->getX();
     float ty = dest->getY();;

@@ -30,7 +30,7 @@ GlobalFlag AIAStarSearch::loadAIData(const pAIData pdata){
 GlobalFlag AIAStarSearch::processAIData(double dt){
 	if(this->hasInit){
 
-		clock_t c = clock();
+		//clock_t c = clock();
 
 		float checkdist = RigidController::getInstance().calculateDistanceLevel(goalNode->position);
 		if(checkdist < 0.f){

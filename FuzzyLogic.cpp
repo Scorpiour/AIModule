@@ -176,7 +176,7 @@ void AIFuzzyLogic::init(const std::string& fuzzyFileName){
 
 //Interface Implementation
 GlobalFlag AIFuzzyLogic::loadAIData(const pAIData pdata){
-	if(has_init = false){
+	if(has_init == false){
 		return GlobalFlag_Uninitialized;
 	}
 	if(pdata->dataSize == 0 || pdata->dataList == nullptr){
