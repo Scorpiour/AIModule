@@ -81,6 +81,28 @@ public:
 	void drawAll(double dt);
 };
 
+
+
+typedef class GridView : public Sprite{
+    friend class SpriteManager;
+protected:
+    virtual ~GridView(void);
+public:
+    explicit GridView(size_t _xlevel,size_t _ylevel,float _xdist,float _ydist);
+    
+    void update(double dt) override;
+    void draw(double dt) override;
+    
+    void updateGrid(size_t _xlevel,size_t _ylevel,float _xdist,float _ydist);
+protected:
+    size_t xlevel;
+    size_t ylevel;
+    float xdist;
+    float ydist;
+}*pGridView;
+
+
+
 typedef class TrailPoints : public Sprite{
 	friend class SpriteManager;
 protected:
