@@ -1304,7 +1304,7 @@ bool GraphicsEngine::prepareSprites(void){
 	this->modelList.insert(make_pair(name,m));
 
 	for(int i=0;i<5;i++){
-		float y = (float(i%2)-0.5)*9;
+		float y = (float(i%2)-0.5)*10;
 		float x = -8 + 4*i;
 
 		pObs = new Obstacle();
@@ -1314,7 +1314,7 @@ bool GraphicsEngine::prepareSprites(void){
 		pObs->setColour(glm::vec3(0.3,0.3,0.3));
 		pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
 		pObs->setPosition(glm::vec3(x,-0.15,y));
-		pObs->setScale(glm::vec3(1.5,0.7,9.0));
+		pObs->setScale(glm::vec3(1.5,0.7,8.0));
 		pObs->setAngle(glm::vec3(0,0,0));
 		pObs->setMovable(false);
 		m->addSprite(pObs);
