@@ -265,3 +265,12 @@ float GlobalVariables::Atan2(float y,float x){
 	}
 	return atan2(y,x);
 }
+
+float GlobalVariables::Acos(float x){
+	if(x > 1){
+		x = 1.f;
+	}else if(x < -1){
+		x = -1.f;
+	}
+	return acos(x);
+}

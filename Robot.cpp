@@ -411,13 +411,8 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 			float kdx = tx - ep.x;
 			float kdy = ty - ep.y;
-
-<<<<<<< HEAD
-			//float alpha = atan2(dy,dx);
-=======
 			float alpha = GlobalVariables::Atan2(dy,dx);
->>>>>>> Add AngularAStar, replace atan2 by self-defined Atan2
-		
+	
 			//if(fabs(alpha) > M_PI*0.25){
 				//dx -= kdx;
 				//dy -= kdy;
@@ -632,6 +627,100 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 							{
 								RigidController::getInstance().calculateVirtualForce(this,this->virtualForce,dt);
 							
+
+							}break;
+						case 3:
+							{
+								if(this->activeModule != nullptr){
+
+
+
+									if(distance < tr){
+										break;
+									}
+								
+									if(this->resetPath){
+
+										cout<<"Do Replan"<<endl;
+										clock_t rt = clock();
+
+										auto pAStar = dynamic_cast<AIAngularAStar*>(this->activeModule);
+
+										Point2F startNode;
+										Point2F goalNode;
+										
+
+										startNode.x = this->getX();
+										startNode.y = this->getY();
+
+										goalNode.x = dest->getX();
+										goalNode.y = dest->getY();
+
+										if(kickingpos){
+											goalNode = ep;
+											dest->activeDistanceCalculate(true);
+										}
+
+										//clear old datas
+										this->data.clear();
+
+										dx = abs(goalNode.x - startNode.x);
+										dy = abs(goalNode.y - startNode.y);
+
+										int basexLevel = 1;
+										basexLevel += dx / 11;
+
+										int baseyLevel = 1;
+										baseyLevel += dy / 9;
+
+										pAStar->init(startNode, goalNode,Point2F(this->getSX(),this->getSY()), basexLevel,baseyLevel);
+										pAStar->loadAIData(&(this->data));
+										pAStar->processAIData(0);
+										pAStar->outputAIData(&(this->data));
+
+								
+
+										if(this->data.idxSize != 0 && this->data.dataSize != 0){
+											this->path->clear();
+
+											Point2F pt;
+		
+
+											Point2F tarp;
+											pt.x = tarp.x = data.dataList[0];
+											pt.y = tarp.y = data.dataList[1];
+
+											pt.x *= 0.1f;
+											pt.y *= 0.1f;
+
+											this->path->addPoint(pt);
+					
+											if(data.dataSize > 2){ 
+
+												for(int i=1;i<data.dataSize/2 - 1;i++){
+													pt.x = data.dataList[i*2];
+													pt.y = data.dataList[i*2+1];
+	
+														tarp = pt;
+														pt.x *= 0.1f;
+														pt.y *= 0.1f;
+														this->path->addPoint(pt);
+												}	
+											}
+
+											this->pTargetPoint->setPosition(tarp);			
+										}
+										this->resetPath = false;
+										cout<<"Replan done! time - "<<clock()-rt<<endl;
+
+									}
+									this->pTargetPoint->calculateForce(this,this->virtualForce,dt);
+
+
+
+
+
+								}
 
 							}break;
 					}

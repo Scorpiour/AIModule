@@ -101,13 +101,24 @@ typedef struct Point2F{
 		x = pt.x;
 		y = pt.y;
 	}
+	Point2F(Point2F && pt){
+		x = pt.x;
+		y = pt.y;
+	}
 
 	Point2F(float a,float b){
 		x = a;
 		y = b;
 	}
-
+	/*
 	operator bool(){
+		if(fabs(x) < 1E-7 && fabs(y) < 1E-7){
+			return false;
+		}
+		return true;
+	}*/
+
+	operator bool()const{
 		if(fabs(x) < 1E-7 && fabs(y) < 1E-7){
 			return false;
 		}
@@ -123,10 +134,18 @@ typedef struct Point2F{
 	}
 
 	bool operator < (const Point2F& pt)const{
-		if(this->y < pt.y){
-			return true;
-		}else if(this->y == pt.y){
+
+		float dy = fabs(this->y - pt.y);
+		float dx = fabs(this->x - pt.x);
+
+		if(dy < 1E-7){
+			if(dx < 1E-7){
+				return false;
+			}
 			return this->x < pt.x;
+
+		}else if(this->y < pt.y){
+			return true;
 		}
 		return false;
 	}
@@ -146,7 +165,11 @@ typedef struct Point2I{
 		this->x = pt.x;
 		this->y = pt.y;
 	}
-
+	
+	Point2I(Point2I && pt){
+		this->x = pt.x;
+		this->y = pt.y;
+	}
 	Point2I(int a,int b){
 		x = a;
 		y = b;

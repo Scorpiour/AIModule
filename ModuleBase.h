@@ -227,39 +227,70 @@ public:
 typedef class AIAngularAStar:public AIModuleBase{
 protected:
 	typedef struct Node{
-		Point2I pos;
+		Point2F pos;
 		Point2F direction;
 		double bendArc;
 		double actualDist;
-		double heuristic;
+		Point2I coord;
+		//double heuristic;
 
-		explicit Node(const Point2I& _p, const Point2F& _d){
+		Node* parent;
+
+		explicit Node(const Point2F& _p, const Point2F& _d,const Point2I _c){
 			pos = _p;
 			direction = _d;
 			bendArc = 0.f;
 			actualDist = 0.f;
-			heuristic = 0.f;
+			coord = _c;
+			parent = nullptr;
+			//heuristic = 0.f;
+		}
+		Node(const Node& N){
+			pos = N.pos;
+			direction = N.direction;
+			bendArc = N.bendArc;
+			actualDist = N.actualDist;
+			coord = N.coord;
+			parent = N.parent;
+			//heuristic = N.heuristic;
 		}
 
-		bool operator < (const Node& n){
-			if(this->pos < n.pos){
+		friend bool operator < (const Node& n1, const Node& n2){
+			if(n1.coord < n2.coord){
 				return true;
-			}else if(this->pos == n.pos){
-				return this->direction < n.direction;
+			}else if(n1.coord == n2.coord){
+				return n1.direction < n2.direction;
 			}return false;
 		}
 
+		friend bool operator == (const Node& n1, const Node& n2){
+			return (!(n1<n2))&&(!(n2<n1)); 
+		}
+
 	}*pNode;
+protected:
+	pAIData pInternalData;
+	bool hasInit;
+	uint32_t xlevel;
+	uint32_t ylevel;
+
+	Point2F startNode;
+	Point2F goalNode;
+	Point2F initD;
 protected:
 	virtual ~AIAngularAStar();
 public:
 	explicit AIAngularAStar(const std::string& name);
 	
-	virtual GlobalFlag loadAIData(const pAIData pdata) = 0;
-	virtual GlobalFlag processAIData(double dt) = 0;
-	virtual GlobalFlag outputAIData(pAIData pdata) = 0;
-	virtual GlobalFlag releaseAIData(void) = 0;
-	virtual void setProcessFunction(ProcessFunction func) = 0;
+	virtual GlobalFlag loadAIData(const pAIData pdata);
+	virtual GlobalFlag processAIData(double dt);
+	virtual GlobalFlag outputAIData(pAIData pdata);
+	virtual GlobalFlag releaseAIData(void);
+	virtual void setProcessFunction(ProcessFunction func);
+
+	virtual void init(const Point2F& _startNode, const Point2F& _goalNode,const Point2F& initDirec,uint32_t _xlevel, uint32_t _ylevel);
+
+
 
 }*pAIAngularAStar;
 

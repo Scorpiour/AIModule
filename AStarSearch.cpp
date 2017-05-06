@@ -94,8 +94,13 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 
 		std::map<Point2I,float> hMap;
 
+		float distLevel;
+		distLevel = RigidController::getInstance().calculateDistanceLevel(startNode->position);
+        hMap.insert(make_pair(startNode->coord,distLevel));
+		distLevel = 200.f/(1+exp(distLevel-7));
+
 		pAStarNode firstNode = new AStarNode(*startNode);
-		firstNode->gValue = 0.f;
+		firstNode->gValue = distLevel;
 		firstNode->heuristic = heuristicFunc(firstNode->position,goalNode->position);
 		hMap.insert(make_pair(firstNode->coord,firstNode->heuristic));
 
@@ -170,30 +175,21 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                     nextNode->gValue = currentNode->gValue + nextG;
                     nextNode->coord = nextCoord;
                     nextNode->position = nextPosition;
+             
                     
-                    float distLevel;
+                    distLevel = RigidController::getInstance().calculateDistanceLevel(nextNode->position); 
                     
-                    auto iter = hMap.find(nextNode->coord);
-                    if(iter != hMap.end()){
-                        distLevel = iter->second;
-                    }else{
-                         distLevel = RigidController::getInstance().calculateDistanceLevel(nextNode->position);
-                        hMap.insert(make_pair(nextNode->coord,distLevel));
-                        
-                    }
-  
-                    
-                    if(distLevel < 0.f){
+                    if(distLevel < 1.f){
                         delete nextNode;
                         continue;
-                    }else if(distLevel < 1.f){
-                        distLevel = 1.f;
                     }
+					/*else if(distLevel < 1.f){
+                        distLevel = 1.f;
+                    }*/
                     
                     distLevel = 200.f/(1+exp(distLevel-7));
                     
                     nextNode->gValue += distLevel;
-                    
 
                     /*
 					auto iter = hMap.find(nextNode->coord);
@@ -203,7 +199,13 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 						nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
 						hMap.insert(make_pair(nextNode->coord,nextNode->heuristic));
 					}*/
-                    nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
+					auto iter = hMap.find(nextNode->coord);
+					if(iter != hMap.end()){
+						nextNode->heuristic = iter->second;
+					}else{
+						nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
+						hMap.insert(make_pair(nextNode->coord,nextNode->heuristic));
+					}
                     
                     if(nextNode->heuristic < 0){
                         delete nextNode;

@@ -158,7 +158,10 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 			{
 				graphics->pr->activeAIModule("Potential Field",2);
 			}break;
-
+		case GLFW_KEY_I:
+			{
+				graphics->pr->activeAIModule("Robot Angular A* Search",3);
+			}break;
 		case GLFW_KEY_W:
 			{
 				graphics->keyWHold = true;
@@ -656,7 +659,13 @@ bool GraphicsEngine::prepareSprites(void){
 	auto pRobotAStar = new AIAStarSearch(robot_module_name);
 	pRobot->addModule(robot_module_name,pRobotAStar);
 	//pRobot->activeAIModule(robot_module_name,1);
+	
+	robot_module_name = "Robot Angular A* Search";//3
+	auto pRobotAngular = new AIAngularAStar(robot_module_name);
+	pRobot->addModule(robot_module_name,pRobotAngular);
+	
 	pRobot->activeAIModule("",2);
+
 	this->pr = pRobot;
 
 
