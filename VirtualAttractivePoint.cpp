@@ -53,7 +53,7 @@ bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,doub
 
 	//float mr = dest->getRadius();
 
-	float arc = atan2(dy,dx);
+	float arc = GlobalVariables::Atan2(dy,dx);
 
 	//float distance = sqrt(dx*dx + dy*dy);
 

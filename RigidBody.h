@@ -12,6 +12,7 @@
 #include <functional>
 #include <algorithm>
 #include "GlobalMacro.h"
+#include "GlobalVariable.h"
 
 enum class RigidTypeID{
     RigidType_Ball          = 0,

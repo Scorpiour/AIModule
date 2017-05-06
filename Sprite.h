@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "RigidBody.h"
 #include "ModuleBase.h"
+#include "GlobalVariable.h"
 
 class SpriteManager;
 

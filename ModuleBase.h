@@ -210,7 +210,7 @@ protected:
 	pAStarSearchNode goalNode;
 
 protected:
-	~AIAStarSearch();
+	virtual ~AIAStarSearch();
 public:
 	explicit AIAStarSearch(const std::string& name);
 
@@ -222,5 +222,45 @@ public:
 
 	virtual void init(pAStarSearchNode _startNode, pAStarSearchNode _goalNode,uint32_t _xlevel, uint32_t _ylevel);
 }*pAIAStarSearch;
+
+
+typedef class AIAngularAStar:public AIModuleBase{
+protected:
+	typedef struct Node{
+		Point2I pos;
+		Point2F direction;
+		double bendArc;
+		double actualDist;
+		double heuristic;
+
+		explicit Node(const Point2I& _p, const Point2F& _d){
+			pos = _p;
+			direction = _d;
+			bendArc = 0.f;
+			actualDist = 0.f;
+			heuristic = 0.f;
+		}
+
+		bool operator < (const Node& n){
+			if(this->pos < n.pos){
+				return true;
+			}else if(this->pos == n.pos){
+				return this->direction < n.direction;
+			}return false;
+		}
+
+	}*pNode;
+protected:
+	virtual ~AIAngularAStar();
+public:
+	explicit AIAngularAStar(const std::string& name);
+	
+	virtual GlobalFlag loadAIData(const pAIData pdata) = 0;
+	virtual GlobalFlag processAIData(double dt) = 0;
+	virtual GlobalFlag outputAIData(pAIData pdata) = 0;
+	virtual GlobalFlag releaseAIData(void) = 0;
+	virtual void setProcessFunction(ProcessFunction func) = 0;
+
+}*pAIAngularAStar;
 
 #endif

@@ -66,7 +66,7 @@ void Keeper::move(double dt){
 
 	float s = sqrt(sx*sx + sy*sy);
 
-	float arc = atan2(sy,sx);
+	float arc = GlobalVariables::Atan2(sy,sx);
 
 	if(nextVelo >= 0.f){
 		sx = nextVelo * cos(arc);
@@ -116,7 +116,7 @@ bool Keeper::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	float distance = sqrt(dy*dy + dx*dx);
 
-	float phi = atan2(dy,dx);
+	float phi = GlobalVariables::Atan2(dy,dx);
 	float theta = this->angles.y;
 
 	while(phi < 0){
@@ -130,7 +130,7 @@ bool Keeper::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	}
 
 	float delta = phi - theta;
-	float denom = atan2(length,width);
+	float denom = GlobalVariables::Atan2(length,width);
 	
 	Point2F forceDirection;
 	forceDirection.x = 0;
@@ -191,7 +191,7 @@ bool Keeper::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	distance = abs(distance);
 	float value = 100.f;
-	float arc = atan2(forceDirection.y, forceDirection.x);
+	float arc = GlobalVariables::Atan2(forceDirection.y, forceDirection.x);
 
 	result.x = value*cos(arc);
 	result.y = value*sin(arc);

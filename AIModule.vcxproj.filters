@@ -133,6 +133,9 @@
     <ClCompile Include="Keeper.cpp">
       <Filter>Main\Graphics\Sprites</Filter>
     </ClCompile>
+    <ClCompile Include="AngularAStar.cpp">
+      <Filter>Main\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sphere.fsd">

@@ -183,7 +183,7 @@ void Robot::move(double dt){
 
 	float s = sqrt(sx*sx + sy*sy);
 
-	float arc = atan2(sy,sx);
+	float arc = GlobalVariables::Atan2(sy,sx);
 
 	//baseSpeed = min(maxSpeed,baseSpeed);
 	if(nextVelo >= 0.f){
@@ -249,7 +249,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	float distance = sqrt(dy*dy + dx*dx);
 
-	float phi = atan2(dy,dx);
+	float phi = GlobalVariables::Atan2(dy,dx);
 	float theta = this->angles.y;
 
 	while(phi < 0){
@@ -263,7 +263,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	}
 
 	float delta = phi - theta;
-	float denom = atan2(length,width);
+	float denom = GlobalVariables::Atan2(length,width);
 	
 	Point2F forceDirection;
 	forceDirection.x = 0;
@@ -324,7 +324,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	distance = abs(distance);
 	float value = 100.f;
-	float arc = atan2(forceDirection.y, forceDirection.x);
+	float arc = GlobalVariables::Atan2(forceDirection.y, forceDirection.x);
 
 	result.x = value*cos(arc);
 	result.y = value*sin(arc);
@@ -412,7 +412,11 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			float kdx = tx - ep.x;
 			float kdy = ty - ep.y;
 
+<<<<<<< HEAD
 			//float alpha = atan2(dy,dx);
+=======
+			float alpha = GlobalVariables::Atan2(dy,dx);
+>>>>>>> Add AngularAStar, replace atan2 by self-defined Atan2
 		
 			//if(fabs(alpha) > M_PI*0.25){
 				//dx -= kdx;
@@ -545,11 +549,11 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 										dx = abs(goalNode.position.x - startNode.position.x);
 										dy = abs(goalNode.position.y - startNode.position.y);
 
-										int basexLevel = 5;
-										basexLevel += dx / 22;
+										int basexLevel = 1;
+										basexLevel += dx / 11;
 
-										int baseyLevel = 5;
-										baseyLevel += dy / 18;
+										int baseyLevel = 1;
+										baseyLevel += dy / 9;
 
 										pAStar->init(&startNode, &goalNode, basexLevel,baseyLevel);
 										pAStar->loadAIData(&(this->data));
@@ -682,7 +686,7 @@ float Robot::calculateDistance(const Point2F& point,float rad){
 
 	float distance = sqrt(dy*dy + dx*dx);
 
-	float phi = atan2(dy,dx);
+	float phi = GlobalVariables::Atan2(dy,dx);
 	float theta = this->angles.y;
 
 	while(phi < 0){
@@ -696,7 +700,7 @@ float Robot::calculateDistance(const Point2F& point,float rad){
 	}
 
 	float delta = phi - theta;
-	float denom = atan2(length,width);
+	float denom = GlobalVariables::Atan2(length,width);
 	
 	Point2F forceDirection;
 	forceDirection.x = 0;

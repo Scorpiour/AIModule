@@ -34,6 +34,7 @@ public:
 
 	static void calculateLookat(glm::vec3 & pos, glm::vec3 & target, glm::vec3 & up, GLfloat lookatMat4[]);
 	static void calculateProjection(GLfloat fovy, GLfloat aspect, GLfloat near, GLfloat far,GLfloat projectMat4[]);
+	static float Atan2(float y,float x);
 };
 
 

@@ -40,7 +40,7 @@ void Obstacle::move(double dt){
 	this->position.x += dx;
 	this->position.z += dy;
 
-	//float arc = atan2(ay,ax);
+	//float arc = GlobalVariables::Atan2(ay,ax);
 	//this->setAngle(glm::vec3(0,arc,0));
 }
 
@@ -87,7 +87,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 		return true;
 	}
 
-	float phi = atan2(dy,dx);
+	float phi = GlobalVariables::Atan2(dy,dx);
 	float theta = this->angles.y;
 
 	while(phi < 0){
@@ -101,7 +101,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 	}
 
 	float delta = phi - theta;
-	float denom = atan2(length,width);
+	float denom = GlobalVariables::Atan2(length,width);
 	
 	Point2F forceDirection;
 	forceDirection.x = 0;
@@ -170,7 +170,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 
 	float value = 1500.f/(1+exp(distance-20));//1000.f/distance;
 
-	float arc = atan2(forceDirection.y, forceDirection.x);
+	float arc = GlobalVariables::Atan2(forceDirection.y, forceDirection.x);
 
 	result.x = value*cos(arc);
 	result.y = value*sin(arc);
@@ -205,8 +205,8 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
     float dx = tx - ix;
     float dy = ty - iy;
     
-    float phi = atan2(dy,dx);
-    float theta = this->angles.y;//atan2(this->getSY(),this->getSX());
+    float phi = GlobalVariables::Atan2(dy,dx);
+    float theta = this->angles.y;//GlobalVariables::Atan2(this->getSY(),this->getSX());
     
     while(theta < 0){
         theta += 2*M_PI;
@@ -255,7 +255,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
     
     //inside
     
-    float eta = atan2(width,length);
+    float eta = GlobalVariables::Atan2(width,length);
     while(eta < 0){
         eta += 2*M_PI;
     }
@@ -298,7 +298,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 		return true;
 	}
 
-	float phi = atan2(dy,dx);
+	float phi = GlobalVariables::Atan2(dy,dx);
 	float theta = this->angles.y;
 
 	while(phi < 0){
@@ -312,7 +312,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	}
 
 	float delta = phi - theta;
-	float denom = atan2(length,width);
+	float denom = GlobalVariables::Atan2(length,width);
 	
 	Point2F forceDirection;
 	forceDirection.x = 0;
@@ -373,7 +373,7 @@ bool Obstacle::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	distance = abs(distance);
 	float value = 1000.f;
-	float arc = atan2(forceDirection.y, forceDirection.x);
+	float arc = GlobalVariables::Atan2(forceDirection.y, forceDirection.x);
 
 	result.x = value*cos(arc);
 	result.y = value*sin(arc);
@@ -422,8 +422,8 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
     float dx = tx - ix;
     float dy = ty - iy;
     
-    float phi = atan2(dy,dx);
-    float theta = this->angles.y;//atan2(this->getSY(),this->getSX());
+    float phi = GlobalVariables::Atan2(dy,dx);
+    float theta = this->angles.y;//GlobalVariables::Atan2(this->getSY(),this->getSX());
     
     while(theta < 0){
         theta += 2*M_PI;
@@ -469,7 +469,7 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
     return dist - tr;
     
     /*
-     float phi = atan2(dy,dx);
+     float phi = GlobalVariables::Atan2(dy,dx);
      float theta = this->angles.y;
 
 	while(phi < 0){
@@ -483,7 +483,7 @@ float Obstacle::calculateDistance(const Point2F& point,float rad){
 	}
 
 	float delta = phi - theta;
-	float denom = atan2(length,width);
+	float denom = GlobalVariables::Atan2(length,width);
 	
 	Point2F forceDirection;
 	forceDirection.x = 0;
@@ -562,8 +562,8 @@ float Obstacle::calculateDistance(RigidBody* dest){
     float dx = tx - ix;
     float dy = ty - iy;
     
-    float phi = atan2(dy,dx);
-    float theta = this->angles.y;//atan2(this->getSY(),this->getSX());
+    float phi = GlobalVariables::Atan2(dy,dx);
+    float theta = this->angles.y;//GlobalVariables::Atan2(this->getSY(),this->getSX());
     
     while(theta < 0){
         theta += 2*M_PI;

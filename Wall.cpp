@@ -150,7 +150,7 @@ bool Wall::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 
 		float dx = tx - foot.x;
 		float dy = ty - foot.y;
-		float arc = atan2(dy,dx);
+		float arc = GlobalVariables::Atan2(dy,dx);
 
 		float value =  1500.f/(1+exp(distance-7));//1000.f/distance;
 		result.x = value * cos(arc);

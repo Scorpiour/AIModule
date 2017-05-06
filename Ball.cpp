@@ -34,7 +34,7 @@ Ball::Ball():Sprite(),RigidBody(){
 			float dx = srcx - dstx;
 			float dy = srcy - dsty;
 
-			float arc = atan2(dy,dx);
+			float arc = GlobalVariables::Atan2(dy,dx);
 
 			float distance = sqrt(dx*dx + dy*dy);
 			float value = 0.f;
@@ -180,7 +180,7 @@ void Ball::move(double dt){
 
 	float reduce = friction * dt / 1000 / mass;
 
-	float varc = atan2(sy,sx);
+	float varc = GlobalVariables::Atan2(sy,sx);
 	if(speed > reduce){
 		speed -= reduce;
 	}else{
@@ -212,19 +212,19 @@ void Ball::move(double dt){
 			speed = sqrt(sy*sy + sx*sx);	
 		}
 
-		float arc = atan2(sy,sx);
+		float arc = GlobalVariables::Atan2(sy,sx);//GlobalVariable::Atan2(sy,sx);
 		
 		sx = speed*cos(arc);
 		sy = speed*sin(arc);
 
 
 
-		float phi = atan2(collisionForce.y, collisionForce.x);
+		float phi = GlobalVariables::Atan2(collisionForce.y, collisionForce.x);
 		while(phi < 0){
 			phi += M_PI * 2.f;
 		}
 
-		float theta = atan2(sy,sx);
+		float theta = GlobalVariables::Atan2(sy,sx);
 		while(theta < 0){
 			theta += M_PI * 2.f;
 		}
@@ -263,7 +263,7 @@ bool Ball::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 	float dx = ix - tx;
 	float dy = iy - ty;
 
-	float arc = atan2(dy,dx);
+	float arc = GlobalVariables::Atan2(dy,dx);
 
 	float distance = sqrt(dx*dx + dy*dy);
 

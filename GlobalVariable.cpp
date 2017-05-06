@@ -258,3 +258,10 @@ void GlobalVariables::calculateProjection(GLfloat fovy, GLfloat aspect, GLfloat 
 	projectMat4[14] = -(2 * near * far)/(far - near);
 
 }
+
+float GlobalVariables::Atan2(float y,float x){
+	if(x==0&&y==0){
+		return 0;
+	}
+	return atan2(y,x);
+}
