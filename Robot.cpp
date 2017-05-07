@@ -16,6 +16,7 @@ Robot::Robot():Sprite(),RigidBody(){
     this->prevStatus = AttackerStatus::Attacker_Init;
 	this->activeDistance = false;
 	this->resetPath = true;
+	this->thetaStarHint = false;
 }
 
 Robot::~Robot(){
@@ -555,7 +556,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 										pAStar->init(&startNode, &goalNode, basexLevel,baseyLevel);
 										pAStar->loadAIData(&(this->data));
-										pAStar->processAIData(0);
+										pAStar->processAIData(thetaStarHint?2:0);
 										pAStar->outputAIData(&(this->data));
 
 								
@@ -849,4 +850,8 @@ float Robot::calculateDistance(const Point2F& point,float rad){
 
 void Robot::setTargetPoint(pVirtualAttractivePoint pTP){
 	this->pTargetPoint = pTP;
+}
+
+void Robot::switchThetaStar(){
+	this->thetaStarHint = !(this->thetaStarHint);
 }

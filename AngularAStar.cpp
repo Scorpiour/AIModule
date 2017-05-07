@@ -201,6 +201,9 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
 	cout<<"Time spend of Angular A* with LOS :"<<clock() - stime<<"ms"<<endl;
 
 	if(nullptr != result){
+		cout<<"\t- Visited Node :\t"<<nodeBuffer.size()<<endl;
+		cout<<"\t- Expand Node :\t"<<expandList.size()<<endl;
+
 		size_t size = 0;
 
 		auto ptr = result;
@@ -208,6 +211,7 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
 			ptr = ptr->parent;
 			size++;
 		}
+		cout<<"\t- Path length :\t"<<size<<endl;
 
 		pInternalData->idxSize = size;
 		pInternalData->dataSize = size*2;

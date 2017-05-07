@@ -162,6 +162,10 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
 			{
 				graphics->pr->activeAIModule("Robot Angular A* Search",3);
 			}break;
+		case GLFW_KEY_T:
+			{
+				graphics->pr->switchThetaStar();
+			}break;
 		case GLFW_KEY_W:
 			{
 				graphics->keyWHold = true;

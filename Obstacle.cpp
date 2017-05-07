@@ -56,7 +56,7 @@ bool Obstacle::checkLOS(const Point2F& p1, const Point2F& p2){
 	float x = this->getX();
 	float y = this->getY();
 	Point2F pivot(x,y);
-	float r = sqrt(length*length + height*height)/4;
+	float r = sqrt(length*length + height*height)/2;
 
 	if( GlobalVariables::distancePointToLine(pivot,p1,p2) > r){
 		return true;

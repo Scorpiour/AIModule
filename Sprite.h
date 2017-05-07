@@ -136,6 +136,8 @@ protected:
 	float width;
 	float length;
 
+	bool thetaStarHint;
+
 	AIData data;
     
     pTrailPoints pts;
@@ -198,7 +200,7 @@ public:
 	void setTargetPoint(pVirtualAttractivePoint pTP);
 
 	void clearAIData(const Point2F& defaultTargetPos);
-
+	void switchThetaStar();
 	void resetTouchCount();
 };
 

@@ -30,6 +30,8 @@ GlobalFlag AIAStarSearch::loadAIData(const pAIData pdata){
 GlobalFlag AIAStarSearch::processAIData(double dt){
 	if(this->hasInit){
 
+		bool useLOS = dt>1?true:false;
+		string losStr = useLOS?" Theta* ":" A* ";
 		//clock_t c = clock();
 
 		float checkdist = RigidController::getInstance().calculateDistanceLevel(goalNode->position);
@@ -100,6 +102,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		distLevel = 200.f/(1+exp(distLevel-7));
 
 		pAStarNode firstNode = new AStarNode(*startNode);
+		firstNode->next = nullptr;
 		firstNode->gValue = distLevel;
 		firstNode->heuristic = heuristicFunc(firstNode->position,goalNode->position);
 		hMap.insert(make_pair(firstNode->coord,firstNode->heuristic));
@@ -110,6 +113,8 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 		searchQueue.join(key,firstNode);
 
 		pAStarNode result = nullptr;
+
+		clock_t stime = clock();
 
 		while(!searchQueue.empty()){
 			auto currentNode = searchQueue.front();
@@ -161,18 +166,34 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                         continue;
                     }
 
+					pAStarNode P = currentNode;
+					if(useLOS){
+						if(currentNode->next != nullptr){
+							pAStarNode tmpP = currentNode->next;
+							if(RigidController::getInstance().checkLineOfSight(tmpP->position,nextPosition)){
+								P = tmpP;
+							}
+						}
+					}
+
 					auto nextNode = new AStarNode;
 					float nextG = 0.f;
-					if(!i){
-						nextG = abs(div_y);
-					}else if(!j){
-						nextG = abs(div_x);
+					if(useLOS){
+						float dx = P->position.x - nextPosition.x;
+						float dy = P->position.y - nextPosition.y;
+						nextG = sqrt(dy*dy + dx*dx);
 					}else{
-						nextG = div_z;
+						if(!i){
+							nextG = abs(div_y);
+						}else if(!j){
+							nextG = abs(div_x);
+						}else{
+							nextG = div_z;
+						}
 					}
                     
                     
-                    nextNode->gValue = currentNode->gValue + nextG;
+                    nextNode->gValue = P->gValue + nextG;
                     nextNode->coord = nextCoord;
                     nextNode->position = nextPosition;
              
@@ -212,7 +233,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                         continue;
                     }
                     
-					nextNode->next = currentNode;
+					nextNode->next = P;
 					nodeBuffer.insert(nextNode);
 
 					float key;
@@ -227,7 +248,12 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			}
 		}
 
+		cout<<"Time spend of "<<losStr<<clock() - stime<<"ms"<<endl;
 		if(nullptr != result){
+
+			cout<<"\t- Visited Node :\t"<<nodeBuffer.size()<<endl;
+			cout<<"\t- Expand Node :\t"<<expandList.size()<<endl;
+
 			size_t size = 0;
 
 			auto ptr = result;
@@ -235,7 +261,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 				ptr = ptr->next;
 				size++;
 			}
-
+			cout<<"\t- Path length :\t"<<size<<endl;
 			pInternalData->idxSize = size;
 			pInternalData->dataSize = size*2;
 			pInternalData->dataList = new double[size*2];
