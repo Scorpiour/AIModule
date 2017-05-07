@@ -102,14 +102,18 @@ protected:
     float ydist;
 }*pGridView;
 
-
+enum TrailType{
+	TrailType_Line,
+	TrailType_Dot
+};
 
 typedef class TrailPoints : public Sprite{
 	friend class SpriteManager;
 protected:
+	TrailType type;
 	~TrailPoints(void);
 public:
-    TrailPoints(size_t max_count);
+    TrailPoints(TrailType _t,size_t max_count);
     
     void update(double dt) override;
     void draw(double dt) override;

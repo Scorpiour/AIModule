@@ -618,7 +618,7 @@ bool GraphicsEngine::prepareSprites(void){
 	this->pb = pball;
 
     
-    auto pTrailer = new TrailPoints(30);
+    auto pTrailer = new TrailPoints(TrailType_Dot,30);
     pTrailer->setProgram(this->sphere_program);
     pTrailer->setVAO(this->sphere_vao);
     pTrailer->setCamera(this->main_camera);
@@ -627,9 +627,9 @@ bool GraphicsEngine::prepareSprites(void){
     pTrailer->setRadius(0.1);
     pTrailer->setPosition(glm::vec3(0,-0.4,0));
 
-	auto pPath = new TrailPoints(100);
-	pPath->setProgram(this->sphere_program);
-    pPath->setVAO(this->sphere_vao);
+	auto pPath = new TrailPoints(TrailType_Line,100);
+	pPath->setProgram(this->box_program);
+    pPath->setVAO(this->box_vao);
     pPath->setCamera(this->main_camera);
     pPath->setColour(glm::vec3(1,1,0));
     pPath->setColourIntensity(glm::vec3(0.3,0.6,0.9));
@@ -672,7 +672,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Keeper
 
-	pTrailer = new TrailPoints(30);
+	pTrailer = new TrailPoints(TrailType_Dot,30);
     pTrailer->setProgram(this->sphere_program);
     pTrailer->setVAO(this->sphere_vao);
     pTrailer->setCamera(this->main_camera);
@@ -681,9 +681,9 @@ bool GraphicsEngine::prepareSprites(void){
     pTrailer->setRadius(0.1);
     pTrailer->setPosition(glm::vec3(0,-0.4,0));
 
-	pPath = new TrailPoints(100);
-	pPath->setProgram(this->sphere_program);
-    pPath->setVAO(this->sphere_vao);
+	pPath = new TrailPoints(TrailType_Line,100);
+	pPath->setProgram(this->box_program);
+    pPath->setVAO(this->box_vao);
     pPath->setCamera(this->main_camera);
     pPath->setColour(glm::vec3(1,0,1));
     pPath->setColourIntensity(glm::vec3(0.3,0.6,0.9));
