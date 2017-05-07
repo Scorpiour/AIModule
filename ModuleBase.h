@@ -229,6 +229,7 @@ protected:
 	typedef struct Node{
 		Point2F pos;
 		Point2F direction;
+        Point2I intDirection;
 		double bendArc;
 		double actualDist;
 		Point2I coord;
@@ -236,9 +237,10 @@ protected:
 
 		Node* parent;
 
-		explicit Node(const Point2F& _p, const Point2F& _d,const Point2I _c){
+		explicit Node(const Point2F& _p, const Point2F& _d,const Point2I& _c,const Point2I& _idr){
 			pos = _p;
 			direction = _d;
+            intDirection = _idr;
 			bendArc = 0.f;
 			actualDist = 0.f;
 			coord = _c;
@@ -248,6 +250,7 @@ protected:
 		Node(const Node& N){
 			pos = N.pos;
 			direction = N.direction;
+            intDirection = N.intDirection;
 			bendArc = N.bendArc;
 			actualDist = N.actualDist;
 			coord = N.coord;
@@ -259,7 +262,7 @@ protected:
 			if(n1.coord < n2.coord){
 				return true;
 			}else if(n1.coord == n2.coord){
-				return n1.direction < n2.direction;
+				return n1.intDirection < n2.intDirection;
 			}return false;
 		}
 

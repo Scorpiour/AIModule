@@ -96,9 +96,17 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
 
 		return n.actualDist + n.bendArc + heuristicFunc(n,goal);
 	};
-
-
-	pNode firstNode = new Node(startNode,initD,Point2I(0,0));
+    
+    Point2I initIntDir;
+    if(initD.x > initD.y){
+        initIntDir.y = 1;
+        initIntDir.x = (int)(round(initD.x));
+    }else{
+        initIntDir.x = 1;
+        initIntDir.y = (int)(round(initD.y));
+    }
+    
+	pNode firstNode = new Node(startNode,initD,Point2I(0,0),initIntDir);
 	firstNode->bendArc = 0;
 	//firstNode->actualDist = 0;
 	
@@ -163,13 +171,14 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
 				if(distLevel < 0.f){
 					continue;
 				}
-
-
+                
+                initIntDir.x = nextCoord.x - P->coord.x;
+                initIntDir.y = nextCoord.y - P->coord.y;
 				float dy = nextPosition.y - P->pos.y;
 				float dx = nextPosition.x - P->pos.x;	
 				Point2F v(dx,dy);
 
-				Node tmpNode(nextPosition,v,nextCoord);
+				Node tmpNode(nextPosition,v,nextCoord,initIntDir);
 				tmpNode.bendArc = arcBetweenVector(P->direction,v);
 				
 				dx = map_x*(P->coord.x - tmpNode.coord.x);
