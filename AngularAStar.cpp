@@ -114,6 +114,8 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
 
 	pNode result = nullptr;
 
+	clock_t stime = clock();
+
 	while(!searchQueue.empty()){
 		
 		auto M = searchQueue.front();
@@ -148,6 +150,14 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
                     continue;
                 }
 				//Line_Of_Sight
+				pNode P = M;
+				if(M->parent !=nullptr){
+					pNode tmpP = M->parent;
+					if(RigidController::getInstance().checkLineOfSight(tmpP->pos,nextPosition)){
+						P = tmpP;
+					}
+				}
+
 
 				distLevel = RigidController::getInstance().calculateDistanceLevel(nextPosition);
 				if(distLevel < 0.f){
@@ -155,15 +165,19 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
 				}
 
 
-				float dy = nextPosition.y - M->pos.y;
-				float dx = nextPosition.x - M->pos.x;	
+				float dy = nextPosition.y - P->pos.y;
+				float dx = nextPosition.x - P->pos.x;	
 				Point2F v(dx,dy);
 
 				Node tmpNode(nextPosition,v,nextCoord);
-				tmpNode.bendArc = arcBetweenVector(M->direction,v);
-				float dist = sqrt(map_x*map_x + map_y*map_y); //with LOS, use parent coord diff & map_x/map_y
-				tmpNode.actualDist = M->actualDist + dist;
-				tmpNode.parent = M;
+				tmpNode.bendArc = arcBetweenVector(P->direction,v);
+				
+				dx = map_x*(P->coord.x - tmpNode.coord.x);
+				dy = map_y*(P->coord.y - tmpNode.coord.y);
+				float dist = sqrt(dx*dx + dy*dy); //with LOS, use parent coord diff & map_x/map_y
+				
+				tmpNode.actualDist = P->actualDist + dist;
+				tmpNode.parent = P;
 
 				if(expandList.end() != expandList.find(tmpNode)){
 					continue;
@@ -183,6 +197,8 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
 		}
 
 	}
+
+	cout<<"Time spend of Angular A* with LOS :"<<clock() - stime<<"ms"<<endl;
 
 	if(nullptr != result){
 		size_t size = 0;

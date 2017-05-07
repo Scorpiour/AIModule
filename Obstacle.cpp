@@ -44,6 +44,59 @@ void Obstacle::move(double dt){
 	//this->setAngle(glm::vec3(0,arc,0));
 }
 
+bool Obstacle::checkLOS(const Point2F& p1, const Point2F& p2){
+	if(!this->isEnable){
+		return true;
+	}
+
+
+	float angle = this->angles.y;
+	float length = this->scaleMatrix[0] * 10;
+	float height = this->scaleMatrix[10] * 10;
+	float x = this->getX();
+	float y = this->getY();
+	Point2F pivot(x,y);
+	float r = sqrt(length*length + height*height)/4;
+
+	if( GlobalVariables::distancePointToLine(pivot,p1,p2) > r){
+		return true;
+	}
+
+	float arc = -angle; //rotate them back;
+
+	Point2F np1(GlobalVariables::rotatePointByArcPivot(p1,pivot,arc));
+	Point2F np2(GlobalVariables::rotatePointByArcPivot(p2,pivot,arc));
+
+	Point2F rpmin;
+	Point2F rpmax;
+
+	float rl = length / 2;
+	float rh = height / 2;
+
+	float ca = cos(angle);
+	float sa = sin(angle);
+
+	rpmin.x = x-rl*ca;
+	rpmin.y = y-rl*sa;
+	rpmax.x = x+rl*ca;
+	rpmax.y = y+rl*sa;
+
+	rpmin = GlobalVariables::rotatePointByArcPivot(rpmin,pivot,arc);
+	rpmax = GlobalVariables::rotatePointByArcPivot(rpmax,pivot,arc);
+
+	if(rpmin.x > rpmax.x){
+		Point2F tmp(rpmax);
+		rpmax = rpmin;
+		rpmin = tmp;
+	}
+
+	rpmin.y -= rh;
+	rpmax.y += rh;
+
+	return !GlobalVariables::Cohen_Sutherland(np1,np2,rpmin,rpmax);
+
+}
+
 bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 	if(!this->isEnable){
 		result.x = 0.f;

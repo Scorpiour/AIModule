@@ -49,6 +49,7 @@ void RigidController::calculateVirtualForce(RigidBody* dest, Point2F& result, do
 	result.y = netForce.y;
 }
 
+
 void RigidController::calculateCollisionForce(double dt){
 
 	for(auto& agent : this->rigids){
@@ -82,6 +83,22 @@ void RigidController::calculateCollisionForce(double dt){
 		agent->move(dt);
 	}
 }
+
+bool RigidController::checkLineOfSight(const Point2F& p1, const Point2F& p2){
+	for(auto& agent : this->rigids){
+		RigidTypeID id = agent->getID();
+		
+		if(id == RigidTypeID::RigidType_Obstacle){
+			if(!agent->checkLOS(p1,p2)){
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+
 
 float RigidController::calculateDistanceLevel(const Point2F& pt){
 	float dv = 50000;

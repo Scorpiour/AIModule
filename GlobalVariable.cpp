@@ -274,3 +274,173 @@ float GlobalVariables::Acos(float x){
 	}
 	return acos(x);
 }
+
+float GlobalVariables::distancePointToLine(const Point2F& pt, const Point2F& p1, const Point2F& p2){
+	float a = (p2.y - p1.y);
+	float b = (p1.x - p2.x);
+	float c = p1.y*(p2.x-p1.x) + p1.x*(p1.y-p2.y);
+
+	if(fabs(a)<1E-7&&fabs(b)<1E-7){
+		return 0;
+	}
+
+	float denom = 1/sqrt(a*a+b*b);
+		
+	Point2F foot;
+	foot.x = (b*b*pt.x - a*b*pt.y - a*c)*denom*denom;
+	foot.y = (a*a*pt.y - a*b*pt.x - b*c)*denom*denom;
+
+	if(foot.x < p1.x){
+		float dx = p1.x - pt.x;
+		float dy = p1.y - pt.y;
+		return sqrt(dx*dx + dy*dy);
+	}else if(foot.x > p2.x){
+		float dx = p2.x - pt.x;
+		float dy = p2.y - pt.y;
+		return sqrt(dx*dx + dy*dy);
+	}
+	return abs(a*pt.x + b*pt.y + c)*denom;
+
+}
+
+Point2F GlobalVariables::rotatePointByArcPivot(const Point2F& pt, const Point2F& pivot, float arc){
+	Point2F result(pt);
+
+	if (arc == 0){
+        return result;
+	}
+        
+	float s = sin(arc);
+    float c = cos(arc);
+
+	result.x -= pivot.x;
+    result.y -= pivot.y;
+
+
+	float nx = (result.x * c) - (result.y * s);
+	float ny = (result.x * s) + (result.y * c);
+
+    result.x = nx + pivot.x;
+	result.y = ny + pivot.y;
+
+	return result;
+}
+
+
+bool GlobalVariables::linesIntersect(const Point2F& p1, const Point2F& p2,
+						const Point2F& p3, const Point2F& p4)
+{
+    float a1, a2, b1, b2, c1, c2; 
+    float r1, r2, r3, r4;    
+    float denom, offset, num;   
+
+    a1 = p2.y - p1.y;
+    b1 = p1.x - p2.x;
+    c1 = p2.x * p1.y - p1.x * p2.y;
+
+    r3 = a1 * p3.x + b1 * p3.y + c1;
+    r4 = a1 * p4.x + b1 * p4.y + c1;
+
+    if ( fabs(r3) > 1E-7 &&  fabs(r4)>1E-7 &&  r3*r4> 0){
+        return false;
+	}
+
+    a2 = p4.y - p3.y;
+    b2 = p3.x - p4.x;
+    c2 = p4.x * p3.y - p3.x * p4.y;
+
+    r1 = a2 * p1.x + b2 * p1.y + c2;
+    r2 = a2 * p2.x + b2 * p2.y + c2;
+
+    if ( fabs(r1)>1E-7 &&  fabs(r2)>1E-7 &&  r1*r2 > 0){
+        return false;
+	}
+	return true;
+
+	/*
+    denom = a1 * b2 - a2 * b1;
+    if ( abs(denom) <1E-7 ){
+        return true;  //Cointerlinear
+	}
+    offset = denom < 0 ? - denom / 2 : denom / 2;
+
+    num = b1 * c2 - b2 * c1;
+    *x = ( num < 0 ? num - offset : num + offset ) / denom;
+
+    num = a2 * c1 - a1 * c2;
+    *y = ( num < 0 ? num - offset : num + offset ) / denom;
+
+    return true; //intersection*/
+}
+
+int GlobalVariables::outcode(const Point2F& pt,const Point2F& rpmin, const Point2F& rpmax){
+	int code = CS_INSIDE;          // initialised as being inside of [[clip window]]
+
+	if (pt.x < rpmin.x){           // to the left of clip window
+		code |= CS_LEFT;
+	}else if (pt.x > rpmax.x){      // to the right of clip window
+		code |= CS_RIGHT;
+	}if (pt.y < rpmin.y){           // below the clip window
+		code |= CS_BOTTOM;
+	}else if (pt.y > rpmax.y){      // above the clip window
+		code |= CS_TOP;
+	}
+	return code;
+
+}
+
+bool GlobalVariables::Cohen_Sutherland(Point2F p1, Point2F p2,const Point2F& rpmin, const Point2F& rpmax){
+	int outcode0 = GlobalVariables::outcode(p1,rpmin,rpmax);//ComputeOutCode(p1.x, p1.y);
+	int outcode1 = GlobalVariables::outcode(p2,rpmin,rpmax);//ComputeOutCode(p2.x, p2.y);
+	bool accept = false;
+
+	while (true) {
+		if (!(outcode0 | outcode1)) { // Bitwise OR is 0. Trivially accept and get out of loop
+			accept = true;
+			break;
+		} else if (outcode0 & outcode1) { // Bitwise AND is not 0. (implies both end points are in the same region outside the window). Reject and get out of loop
+			break;
+		} else {
+			// failed both tests, so calculate the line segment to clip
+			// from an outside point to an intersection with clip edge
+			float x, y;
+
+			// At least one endpoint is outside the clip rectangle; pick it.
+			int outcodeOut = outcode0 ? outcode0 : outcode1;
+
+			// Now find the intersection point;
+			// use formulas:
+			//   slope = (p2.y - p1.y) / (p2.x - p1.x)
+			//   x = p1.x + (1 / slope) * (ym - p1.y), where ym is rpmin.y or rpmax.y
+			//   y = p1.y + slope * (xm - p1.x), where xm is rpmin.x or rpmax.x
+			if (outcodeOut & CS_TOP) {           // point is above the clip rectangle
+				x = p1.x + (p2.x - p1.x) * (rpmax.y - p1.y) / (p2.y - p1.y);
+				y = rpmax.y;
+			} else if (outcodeOut & CS_BOTTOM) { // point is below the clip rectangle
+				x = p1.x + (p2.x - p1.x) * (rpmin.y - p1.y) / (p2.y - p1.y);
+				y = rpmin.y;
+			} else if (outcodeOut & CS_RIGHT) {  // point is to the right of clip rectangle
+				y = p1.y + (p2.y - p1.y) * (rpmax.x - p1.x) / (p2.x - p1.x);
+				x = rpmax.x;
+			} else if (outcodeOut & CS_LEFT) {   // point is to the left of clip rectangle
+				y = p1.y + (p2.y - p1.y) * (rpmin.x - p1.x) / (p2.x - p1.x);
+				x = rpmin.x;
+			}
+
+
+			// Now we move outside point to intersection point to clip
+			// and get ready for next pass.
+			if (outcodeOut == outcode0) {
+				p1.x = x;
+				p1.y = y;
+				outcode0 = GlobalVariables::outcode(p1,rpmin,rpmax);
+			} else {
+				p2.x = x;
+				p2.y = y;
+				outcode1 = GlobalVariables::outcode(p2,rpmin,rpmax);
+			}
+		}
+	}
+
+	return accept;
+}

@@ -117,7 +117,7 @@ void TrailPoints::draw(double dt){
 			}
 
 			int i = 0;
-			Point2F& prevPt = this->points.front();
+			Point2F prevPt = this->points.front();
 			for(auto & pt : this->points){
 				if(i == 0){
 					i++;
@@ -133,7 +133,7 @@ void TrailPoints::draw(double dt){
 				dy = (currentPt.y + prevPt.y)/2;
 
 				this->setPosition(glm::vec3(dx,-0.15,dy));
-				this->setScale(glm::vec3(r,0.1,0.1));
+				this->setScale(glm::vec3(0.8*r,0.1,0.1));
 				this->setAngle(glm::vec3(0,arc,0));
 				
 				this->update(dt);

@@ -189,9 +189,9 @@ public:
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
-
 	virtual void setScale(glm::vec3 _scale) override;
-    
+    virtual bool checkLOS(const Point2F& p1, const Point2F& p2)override;
+
     void resetTargetpoint(const Point2F& pt);
     void addTrailer(pTrailPoints _pts);
 	void addPathview(pTrailPoints _path);
@@ -230,7 +230,7 @@ public:
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
-
+	virtual bool checkLOS(const Point2F& p1, const Point2F& p2)override;
 	//virtual void forceAccel(float velo);
 
 	virtual Point2F getKickingPos(float gap);
@@ -284,7 +284,7 @@ public:
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(RigidBody* dest);
 	virtual float calculateDistance(const Point2F& point,float rad) override;
-
+	virtual bool checkLOS(const Point2F& p1, const Point2F& p2)override;
 };
 
 class Wall : public Sprite,public RigidBody{
@@ -309,6 +309,7 @@ public:
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
+	virtual bool checkLOS(const Point2F& p1, const Point2F& p2)override;
 };
 
 #endif

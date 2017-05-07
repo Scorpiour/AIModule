@@ -34,8 +34,25 @@ public:
 
 	static void calculateLookat(glm::vec3 & pos, glm::vec3 & target, glm::vec3 & up, GLfloat lookatMat4[]);
 	static void calculateProjection(GLfloat fovy, GLfloat aspect, GLfloat near, GLfloat far,GLfloat projectMat4[]);
+	static bool linesIntersect(const Point2F& p1, const Point2F& p2,const Point2F& p3, const Point2F& p4);
+	static float distancePointToLine(const Point2F& pt, const Point2F& p1, const Point2F& p2);
 	static float Atan2(float y,float x);
 	static float Acos(float x);
+	
+	static Point2F rotatePointByArcPivot(const Point2F& pt, const Point2F& pivot, float arc);
+
+
+	//This algirthm is come from Wikipedia, with slight modification for any-angle rectangle
+	enum CSCode{
+		CS_INSIDE = 0x0,
+		CS_LEFT = 0x1,
+		CS_RIGHT = 0x2,
+		CS_BOTTOM = 0x4,
+		CS_TOP = 0x8
+	};
+	static bool Cohen_Sutherland(Point2F p1, Point2F p2,const Point2F& rpmin, const Point2F& rpmax);
+private:
+	static int outcode(const Point2F& pt,const Point2F& rpmin, const Point2F& rpmax);
 };
 
 

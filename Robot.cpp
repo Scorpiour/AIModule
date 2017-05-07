@@ -226,6 +226,9 @@ void Robot::move(double dt){
 
 }
 
+bool Robot::checkLOS(const Point2F& p1, const Point2F& p2){
+	return true;
+}
 bool Robot::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 
 	return false;

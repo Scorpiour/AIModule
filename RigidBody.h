@@ -57,7 +57,8 @@ public:
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) = 0;
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)=0;
 	virtual float calculateDistance(const Point2F& point, float rad) = 0;
-	
+	virtual bool checkLOS(const Point2F& p1, const Point2F& p2) = 0;
+
 	virtual void setForceFunc(std::function<bool(RigidBody*,Point2F&)> _forceFunc);
 	virtual bool processForceFunc(RigidBody*,Point2F&);
 	virtual void removeForceFunc();
@@ -92,6 +93,7 @@ public:
 	void calculateCollisionForce(double dt);
 	void calculateVirtualForce(RigidBody* dest, Point2F& result, double dt);
 	float calculateDistanceLevel(const Point2F& pt);
+	bool checkLineOfSight(const Point2F& p1, const Point2F& p2);
 
 }*pRigidController;
 
@@ -115,6 +117,7 @@ public:
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual bool calculateVirtualForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;
+	virtual bool checkLOS(const Point2F& p1, const Point2F& p2)override;
 
 	virtual void setPosition(const Point2F& pos);
 	virtual const Point2F& getPosition()const;

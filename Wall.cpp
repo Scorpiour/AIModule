@@ -81,6 +81,23 @@ bool Wall::calculateForce(RigidBody* dest,Point2F& result,double dt){
 	return false;
 }
 
+bool Wall::checkLOS(const Point2F& p1, const Point2F& p2){
+
+	float angle = this->angles.y;
+	float length = this->scaleMatrix[0] * 10;
+	float x = this->getX();
+	float y = this->getY();
+
+	float r = length /  2;
+	float cosr = r*cos(angle);
+	float sinr = r*sin(angle);
+
+	Point2F p3(x-cosr,y-sinr);
+	Point2F p4(x+cosr,y+sinr);
+
+	return !GlobalVariables::linesIntersect(p1,p2,p3,p4);
+}
+
 bool Wall::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 
 	if(this->forceFunc != nullptr){

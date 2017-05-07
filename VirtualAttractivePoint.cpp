@@ -65,6 +65,10 @@ bool VirtualAttractivePoint::calculateForce(RigidBody* dest,Point2F& result,doub
 	return true;
 }
 
+bool VirtualAttractivePoint::checkLOS(const Point2F& p1, const Point2F& p2){
+	return true;
+}
+
 float VirtualAttractivePoint::calculateDistance(const Point2F& point, float rad) {
 
 	if(!activeDistance){

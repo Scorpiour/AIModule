@@ -276,6 +276,10 @@ bool Ball::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 	return true;
 }
 
+bool Ball::checkLOS(const Point2F& p1, const Point2F& p2){
+	return true;
+}
+
 bool Ball::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	result.x = 0.f;
