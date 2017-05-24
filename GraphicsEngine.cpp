@@ -127,6 +127,11 @@ void GraphicsEngine::keyCallback(GLFWwindow* window,int key,int scancode,int act
                 graphics->activeModel("Cross");
 				graphics->resetObject();
             }break;
+        case GLFW_KEY_6:
+            {
+                graphics->activeModel("Maze");
+                graphics->resetObject();
+            }break;
 		case GLFW_KEY_ESCAPE:
 			{
 				glfwSetWindowShouldClose(window,GL_TRUE);
@@ -1398,6 +1403,174 @@ bool GraphicsEngine::prepareSprites(void){
 	m->addSprite(pObs);
 
 	m->setActive(false);
+    
+    //Maze
+    name = "Maze";
+    m = new Model(name, Point2F(-90,-70),Point2F(90,75));
+    this->modelList.insert(make_pair(name,m));
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(-8,-0.15,2));
+    pObs->setScale(glm::vec3(14.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,M_PI/2,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(8,-0.15,-2));
+    pObs->setScale(glm::vec3(14.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,M_PI/2,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(1,-0.15,-7));
+    pObs->setScale(glm::vec3(15.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,0,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(-1,-0.15,7));
+    pObs->setScale(glm::vec3(15.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,0,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(-6,-0.15,-1));
+    pObs->setScale(glm::vec3(12.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,M_PI/2,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(-1,-0.15,5));
+    pObs->setScale(glm::vec3(10.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,0,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(6,-0.15,1));
+    pObs->setScale(glm::vec3(12.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,M_PI/2,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(1,-0.15,0));
+    pObs->setScale(glm::vec3(10.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,0,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(4,-0.15,3.5));
+    pObs->setScale(glm::vec3(3.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,M_PI/2,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(-2,-0.15,1.5));
+    pObs->setScale(glm::vec3(3.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,M_PI/2,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(-4,-0.15,-2.5));
+    pObs->setScale(glm::vec3(5.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,M_PI/2,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(3,-0.15,-4.5));
+    pObs->setScale(glm::vec3(5.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,M_PI/2,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    pObs = new Obstacle();
+    pObs->setProgram(this->box_program);
+    pObs->setVAO(this->box_vao);
+    pObs->setCamera(this->main_camera);
+    pObs->setColour(glm::vec3(0.3,0.3,0.3));
+    pObs->setColourIntensity(glm::vec3(0.5,0.6,0.9));
+    pObs->setPosition(glm::vec3(0.5,-0.15,-2.25));
+    pObs->setScale(glm::vec3(5.0,0.7,0.5));
+    pObs->setAngle(glm::vec3(0,0,0));
+    pObs->setMovable(false);
+    m->addSprite(pObs);
+    
+    
+    m->setActive(false);
+    
 	return true;
 }
 

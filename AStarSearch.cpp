@@ -171,7 +171,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                     
                     rawDistLevel = RigidController::getInstance().calculateDistanceLevel(nextPosition);
                     
-                    if(rawDistLevel < 1.f){
+                    if(rawDistLevel < 3.f){
                         //delete nextNode;
                         continue;
                     }
