@@ -30,6 +30,8 @@ GlobalFlag AIAStarSearch::loadAIData(const pAIData pdata){
 GlobalFlag AIAStarSearch::processAIData(double dt){
 	if(this->hasInit){
 
+        bool magFlag = true;
+        
 		bool useLOS = dt>1?true:false;
 		string losStr = useLOS?" Theta* ":" A* ";
 		//clock_t c = clock();
@@ -71,40 +73,45 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 
 			return sqrt(dx*dx + dy*dy);
 		};
-
+        auto magnitudeFunc = [=](float distLevel)->float{
+            //float distLevel = RigidController::getInstance().calculateDistanceLevel(pt);
+            if(distLevel < 1.f){
+                distLevel = 1.f;
+            }
+            distLevel = 200.f/(1+exp(distLevel-7));
+            return distLevel;
+        };
 		//Calculate the Heuristic Function : the distance between two points plus the potential value
-		auto heuristicFunc = [=](Point2F& p1, Point2F& p2)->float{
+		auto heuristicFunc = [=](Point2F& p1, Point2F& p2,float magLevel)->float{
 
-			
-			//float distLevel = RigidController::getInstance().calculateDistanceLevel(p1);
-			/*
-			if(distLevel < 0.f){
-				return -1.f;
-			}
-			if(distLevel < 1.f){
-				distLevel = 1.f;
-			}
-			distLevel = 200.f/(1+exp(distLevel-7));
-			//distLevel = 2.f/(distLevel*distLevel);
-			*/
 			float distance = distanceFunc(p1,p2);
-            //distance = 1.f/distance;
-			//float result = 500.f * (distLevel + distance);
-            float result = distance;// + distLevel;
-			return result;
-		};
+            if(magFlag){
+                //float distLevel = magnitudeFunc(p1);
+                float result = sqrt(distance*distance + magLevel*magLevel);
+                return result;
+            }else{
+                float result = distance;// + distLevel;
+                return result;
+            }
+        };
 
 		std::map<Point2I,float> hMap;
 
-		float distLevel;
-		distLevel = RigidController::getInstance().calculateDistanceLevel(startNode->position);
-        hMap.insert(make_pair(startNode->coord,distLevel));
-		distLevel = 200.f/(1+exp(distLevel-7));
+        float rawDistLevel = RigidController::getInstance().calculateDistanceLevel(startNode->position);
+		float magLevel = magnitudeFunc(rawDistLevel);
+        //RigidController::getInstance().calculateDistanceLevel(startNode->position);
+        //hMap.insert(make_pair(startNode->coord,distLevel));
+		//distLevel = 200.f/(1+exp(distLevel-7));
 
 		pAStarNode firstNode = new AStarNode(*startNode);
 		firstNode->next = nullptr;
-		firstNode->gValue = distLevel;
-		firstNode->heuristic = heuristicFunc(firstNode->position,goalNode->position);
+        if(magFlag){
+            firstNode->gValue = magLevel;
+        }else{
+            firstNode->gValue = 0;
+        }
+        firstNode->magnitude = magLevel;
+		firstNode->heuristic = heuristicFunc(firstNode->position,goalNode->position,magLevel);
 		hMap.insert(make_pair(firstNode->coord,firstNode->heuristic));
 
 		nodeBuffer.insert(firstNode);
@@ -132,7 +139,10 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			
 			expandList.insert(currentNode->coord);
 			
-
+            float curMag = 0;
+            if(magFlag){
+                curMag = currentNode->magnitude;
+            }
 			for(int i=-1;i<2;i++){
 				for(int j=-1;j<2;j++){
 
@@ -158,6 +168,15 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 					nextPosition.x = startNode->position.x + nextCoord.x*div_x;
 					nextPosition.y = startNode->position.y + nextCoord.y*div_y;
 
+                    
+                    rawDistLevel = RigidController::getInstance().calculateDistanceLevel(nextPosition);
+                    
+                    if(rawDistLevel < 1.f){
+                        //delete nextNode;
+                        continue;
+                    }
+                    
+                    
                     if(abs(nextPosition.x) > 125){
 						continue;
                     }else if(abs(nextPosition.y)>90){
@@ -192,25 +211,25 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 						}
 					}
                     
+                    if(magFlag){
+                        float nextMag = magnitudeFunc(nextPosition);
+                        float difMag = nextMag - curMag;
+                        nextG = sqrt(nextG*nextG + difMag*difMag);
+                        nextNode->magnitude = nextMag;
+                    }
                     
                     nextNode->gValue = P->gValue + nextG;
                     nextNode->coord = nextCoord;
                     nextNode->position = nextPosition;
              
-                    
-                    distLevel = RigidController::getInstance().calculateDistanceLevel(nextNode->position); 
-                    
-                    if(distLevel < 1.f){
-                        delete nextNode;
-                        continue;
-                    }
+
 					/*else if(distLevel < 1.f){
                         distLevel = 1.f;
                     }*/
                     
-                    distLevel = 200.f/(1+exp(distLevel-7));
+                    //distLevel = 200.f/(1+exp(distLevel-7));
                     
-                    nextNode->gValue += distLevel;
+                    //nextNode->gValue += distLevel;
 
                     /*
 					auto iter = hMap.find(nextNode->coord);
@@ -224,7 +243,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 					if(iter != hMap.end()){
 						nextNode->heuristic = iter->second;
 					}else{
-						nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position);
+						nextNode->heuristic = heuristicFunc(nextNode->position,goalNode->position,nextNode->magnitude);
 						hMap.insert(make_pair(nextNode->coord,nextNode->heuristic));
 					}
                     

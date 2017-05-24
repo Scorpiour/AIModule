@@ -172,12 +172,14 @@ typedef struct AStarSearchNode{
 	float heuristic;
 	Point2F position;
 	Point2I coord;
-
+    float magnitude;
+    
 	AStarSearchNode* next;
 
 	AStarSearchNode(){
 		gValue = -1.f;
 		heuristic = -1.f;
+        magnitude = 0.f;
 		next = nullptr;
 	}
 	AStarSearchNode(const AStarSearchNode& node){
