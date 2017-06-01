@@ -215,6 +215,9 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                         float nextMag = magnitudeFunc(nextPosition);
                         float difMag = nextMag - curMag;
                         nextG = sqrt(nextG*nextG + difMag*difMag);
+                        if(nextMag < curMag){
+                            nextG = -nextG;
+                        }
                         nextNode->magnitude = nextMag;
                     }
                     
