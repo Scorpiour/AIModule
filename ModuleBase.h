@@ -210,11 +210,13 @@ protected:
 
 	pAStarSearchNode startNode;
 	pAStarSearchNode goalNode;
+    
+    double margin;
 
 protected:
 	virtual ~AIAStarSearch();
 public:
-	explicit AIAStarSearch(const std::string& name);
+	explicit AIAStarSearch(const std::string& name,double marg);
 
 	virtual GlobalFlag loadAIData(const pAIData pdata)override;
 	virtual GlobalFlag processAIData(double dt)override;

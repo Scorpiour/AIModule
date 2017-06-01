@@ -665,7 +665,7 @@ bool GraphicsEngine::prepareSprites(void){
 	pRobot->setTargetPoint(pTargetPoint);
 
 	std::string robot_module_name = "Robot AStar Search";
-	auto pRobotAStar = new AIAStarSearch(robot_module_name);
+	auto pRobotAStar = new AIAStarSearch(robot_module_name,3.0);
 	pRobot->addModule(robot_module_name,pRobotAStar);
 	//pRobot->activeAIModule(robot_module_name,1);
 	
@@ -723,7 +723,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	
 	std::string keeper_module_name = "Keeper AStar Search";
-	auto pKeeperAStar = new AIAStarSearch(keeper_module_name);
+	auto pKeeperAStar = new AIAStarSearch(keeper_module_name,1.0);
 	pkeeper->addModule(keeper_module_name,pKeeperAStar);
 	pkeeper->activeAIModule(keeper_module_name,1);
 

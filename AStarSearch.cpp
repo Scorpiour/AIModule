@@ -7,11 +7,12 @@
 
 using namespace std;
 
-AIAStarSearch::AIAStarSearch(const std::string& name):AIModuleBase(name){
+AIAStarSearch::AIAStarSearch(const std::string& name,double marg):AIModuleBase(name){
 	pInternalData = nullptr;
 	hasInit = false;
 	goalNode = nullptr;
 	startNode = nullptr;
+    margin = marg;
 }
 
 AIAStarSearch::~AIAStarSearch(){
@@ -171,7 +172,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                     
                     rawDistLevel = RigidController::getInstance().calculateDistanceLevel(nextPosition);
                     
-                    if(rawDistLevel < 3.f){
+                    if(rawDistLevel < margin){
                         //delete nextNode;
                         continue;
                     }
