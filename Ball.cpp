@@ -277,7 +277,20 @@ bool Ball::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 }
 
 bool Ball::checkLOS(const Point2F& p1, const Point2F& p2){
-	return true;
+
+	float x = this->getX();
+	float y = this->getY();
+	float r = this->getRadius();
+
+	float margin = 3.5;
+
+	Point2F pivot(x,y);
+
+	if( GlobalVariables::distancePointToLine(pivot,p1,p2) > r+margin){
+		return true;
+	}
+
+	return false;
 }
 
 bool Ball::calculateForce(RigidBody* dest,Point2F& result,double dt){

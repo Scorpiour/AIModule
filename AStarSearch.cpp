@@ -187,6 +187,9 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                     }
 
 					pAStarNode P = currentNode;
+					auto nextNode = new AStarNode;
+					float nextG = 0.f;
+					
 					if(useLOS){
 						if(currentNode->next != nullptr){
 							pAStarNode tmpP = currentNode->next;
@@ -194,11 +197,7 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 								P = tmpP;
 							}
 						}
-					}
-
-					auto nextNode = new AStarNode;
-					float nextG = 0.f;
-					if(useLOS){
+					
 						float dx = P->position.x - nextPosition.x;
 						float dy = P->position.y - nextPosition.y;
 						nextG = sqrt(dy*dy + dx*dx);

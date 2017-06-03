@@ -49,6 +49,7 @@ bool Obstacle::checkLOS(const Point2F& p1, const Point2F& p2){
 		return true;
 	}
 
+	float margin = 3.5;
 
 	float angle = this->angles.y;
 	float length = this->scaleMatrix[0] * 10;
@@ -58,7 +59,7 @@ bool Obstacle::checkLOS(const Point2F& p1, const Point2F& p2){
 	Point2F pivot(x,y);
 	float r = sqrt(length*length + height*height)/2;
 
-	if( GlobalVariables::distancePointToLine(pivot,p1,p2) > r){
+	if( GlobalVariables::distancePointToLine(pivot,p1,p2) > r+margin){
 		return true;
 	}
 
@@ -76,10 +77,10 @@ bool Obstacle::checkLOS(const Point2F& p1, const Point2F& p2){
 	float ca = cos(angle);
 	float sa = sin(angle);
 
-	rpmin.x = x-rl*ca;
-	rpmin.y = y-rl*sa;
-	rpmax.x = x+rl*ca;
-	rpmax.y = y+rl*sa;
+	rpmin.x = x-rl*ca - margin;
+	rpmin.y = y-rl*sa - margin;
+	rpmax.x = x+rl*ca + margin;
+	rpmax.y = y+rl*sa + margin;
 
 	rpmin = GlobalVariables::rotatePointByArcPivot(rpmin,pivot,arc);
 	rpmax = GlobalVariables::rotatePointByArcPivot(rpmax,pivot,arc);

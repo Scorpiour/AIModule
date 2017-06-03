@@ -112,7 +112,7 @@ void TrailPoints::draw(double dt){
 		}break;
 	case TrailType_Line:{
 			
-			if(this->points.size() < 2){
+			if(this->points.size() < 1){
 				break;
 			}
 
@@ -151,7 +151,6 @@ void TrailPoints::draw(double dt){
 				prevPt = pt;
 				i++;
 			}
-
 
 		}break;
 	}

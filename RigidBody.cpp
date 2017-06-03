@@ -88,7 +88,7 @@ bool RigidController::checkLineOfSight(const Point2F& p1, const Point2F& p2){
 	for(auto& agent : this->rigids){
 		RigidTypeID id = agent->getID();
 		
-		if(id == RigidTypeID::RigidType_Obstacle){
+		if(id == RigidTypeID::RigidType_Obstacle ||id == RigidTypeID::RigidType_Ball){
 			if(!agent->checkLOS(p1,p2)){
 				return false;
 			}
