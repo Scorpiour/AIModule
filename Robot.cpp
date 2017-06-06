@@ -3,7 +3,7 @@
 using namespace std;
 
 Robot::Robot():Sprite(),RigidBody(){
-	mass = 50.f;
+	mass = 10.f;
     this->pts = nullptr;
 	this->path = nullptr;
 	this->pTargetPoint = nullptr;
@@ -11,7 +11,7 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->virtualForce = Point2F(0,0);
 	this->inTouch = false;
 	this->touchCount = 0;
-	this->maxSpeed = speedlimit;
+	this->maxSpeed = 0.5*speedlimit;
     this->currentStatus = AttackerStatus::Attacker_Init;
     this->prevStatus = AttackerStatus::Attacker_Init;
 	this->activeDistance = false;
@@ -137,27 +137,29 @@ void Robot::move(double dt){
 	float ay = (virtualForce.y + collisionForce.y )/ mass;
     */
 	float ax,ay;
-	
+    ax = (collisionForce.x + virtualForce.x )/mass;
+    ay = (collisionForce.y + virtualForce.y )/mass;
+    /*
     if(collisionForce){
 		ax = collisionForce.x / mass;
 		ay = collisionForce.y / mass;
 	}else{
 		ax = virtualForce.x / mass;
 		ay = virtualForce.y / mass;
-	}
+	}*/
 
     //ax = (collisionForce.x + virtualForce.x) / mass;
     //ay = (collisionForce.y + virtualForce.y) / mass;
     
 	float baseSpeed = maxSpeed;
-
+    /*
     if(collisionForce){
 
 		baseSpeed = min(sqrt(sx*sx + sy*sy),maxSpeed);
 
         sx = 0;
         sy = 0;
-    }
+    }*/
     
     /*
     if(collisionForce.x * sx < 0){
@@ -178,7 +180,10 @@ void Robot::move(double dt){
 		//ax = 0.f;//collisionForce.x / mass;
 		sx = 0.f;
 	}*/
-
+    
+    float osx = sx;
+    float osy = sy;
+    
 	sx += ax * dt;
 	sy += ay * dt;
 
@@ -198,8 +203,8 @@ void Robot::move(double dt){
 	}
 
 
-	float dx = sx + 0.5*dt*ax;
-	float dy = sy + 0.5*dt*ay;
+	float dx = osx*dt + 0.5*dt*ax;
+	float dy = osy*dt + 0.5*dt*ay;
 
 
 	this->position.x += dx;
