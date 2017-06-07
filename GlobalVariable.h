@@ -35,7 +35,7 @@ public:
 	static void calculateLookat(glm::vec3 & pos, glm::vec3 & target, glm::vec3 & up, GLfloat lookatMat4[]);
 	static void calculateProjection(GLfloat fovy, GLfloat aspect, GLfloat near, GLfloat far,GLfloat projectMat4[]);
 	static bool linesIntersect(const Point2F& p1, const Point2F& p2,const Point2F& p3, const Point2F& p4);
-	static float distancePointToLine(const Point2F& pt, const Point2F& p1, const Point2F& p2);
+	static float distancePointToLine(const Point2F& pt, const Point2F& _p1, const Point2F& _p2);
 	static float Atan2(float y,float x);
 	static float Acos(float x);
 	

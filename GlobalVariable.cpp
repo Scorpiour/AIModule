@@ -275,8 +275,15 @@ float GlobalVariables::Acos(float x){
 	return acos(x);
 }
 
-float GlobalVariables::distancePointToLine(const Point2F& pt, const Point2F& p1, const Point2F& p2){
-	float a = (p2.y - p1.y);
+float GlobalVariables::distancePointToLine(const Point2F& pt, const Point2F& _p1, const Point2F& _p2){
+    Point2F p1(_p1);
+    Point2F p2(_p2);
+    if(p1.x > p2.x){
+        p1 = _p2;
+        p2 = _p1;
+    }
+    
+    float a = (p2.y - p1.y);
 	float b = (p1.x - p2.x);
 	float c = p1.y*(p2.x-p1.x) + p1.x*(p1.y-p2.y);
 
