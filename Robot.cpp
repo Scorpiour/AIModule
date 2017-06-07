@@ -11,7 +11,7 @@ Robot::Robot():Sprite(),RigidBody(){
 	this->virtualForce = Point2F(0,0);
 	this->inTouch = false;
 	this->touchCount = 0;
-	this->maxSpeed = 0.5*speedlimit;
+	this->maxSpeed = 1.f*speedlimit;
     this->currentStatus = AttackerStatus::Attacker_Init;
     this->prevStatus = AttackerStatus::Attacker_Init;
 	this->activeDistance = false;
@@ -204,8 +204,8 @@ void Robot::move(double dt){
 	}
 
 
-	float dx = osx*dt + 0.5*dt*ax;
-	float dy = osy*dt + 0.5*dt*ay;
+    float dx = osx*dt + 0.5*dt*ax;//0.5*(osx+sx)*dt;// + 0.5*dt*ax;
+    float dy = osy*dt + 0.5*dt*ay;//0.5*(osy+sy)*dt;// + 0.5*dt*ay;
 
 
 	this->position.x += dx;

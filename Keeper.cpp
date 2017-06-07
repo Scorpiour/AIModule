@@ -5,7 +5,7 @@ using namespace std;
 Keeper::Keeper():Robot(){
     this->id = RigidTypeID::RigidType_Keeper;
     this->activeDistance = true;
-    
+    //this->maxSpeed = speedlimit;
     this->currentStatus = KeeperStatus::Keeper_Parking;
 }
 

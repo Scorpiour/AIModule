@@ -111,25 +111,25 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
     return true;
     */
     
-    if(dest->getID() == RigidTypeID::RigidType_Obstacle){
+    if(dest->getID() != RigidTypeID::RigidType_Robot){
 		return false;
 	}
 
-	//float ix = this->getX();
-	//float iy = this->getY();
-	//float ir = this->getRadius();
+	float ix = this->getX();
+	float iy = this->getY();
+	float ir = this->getRadius();
 	
-	//float tx = dest->getX();
-	//float ty = dest->getY();
-	//float tr = dest->getRadius();
+	float tx = dest->getX();
+	float ty = dest->getY();
+	float tr = dest->getRadius();
 
-	//RigidTypeID id = dest->getID();
+	RigidTypeID id = dest->getID();
     
     
     //float dx = tx - ix;
     //float dy = ty - iy;
     
-    /*
+    
 	float dx = tx - ix;
 	float dy = ty - iy;
 
@@ -221,14 +221,18 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 		result.y = 0;
 		return false;
 	}
-
-	float value = 1500.f/(1+exp(distance-20));//1000.f/distance;
-
+    else if (distance < r + tr){
+        distance = 0;
+    }else{
+        distance -= (r+tr);
+    }
+	//float value = 50.f/(1+exp(distance-20));//1000.f/distance;
+    float value = 40-distance;
 	float arc = GlobalVariables::Atan2(forceDirection.y, forceDirection.x);
 
 	result.x = value*cos(arc);
 	result.y = value*sin(arc);
-	*/
+	
 	return true;
 
 }
