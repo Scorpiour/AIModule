@@ -100,10 +100,10 @@ GlobalFlag AIAngularAStar::processAIData(double dt){
     Point2I initIntDir;
     if(initD.x > initD.y){
         initIntDir.y = 1;
-        initIntDir.x = (int)(round(initD.x));
+        initIntDir.x = (int)(glm::round(initD.x));
     }else{
         initIntDir.x = 1;
-        initIntDir.y = (int)(round(initD.y));
+        initIntDir.y = (int)(glm::round(initD.y));
     }
     
 	pNode firstNode = new Node(startNode,initD,Point2I(0,0),initIntDir);
