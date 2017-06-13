@@ -45,6 +45,53 @@ const Point2F& TrailPoints::getBackPoint()const{
 	return this->points.back();
 }
 
+bool TrailPoints::isNearGoal(double px, double py,double r){
+	if(this->points.size() == 0 || r<= 0){
+		return false;
+	}
+	const Point2F& goal = this->points.front();
+
+	double dx = px - goal.x;
+	double dy = py - goal.y;
+
+	return r>= sqrt(dx*dx + dy*dy);
+	
+}
+
+Point2F TrailPoints::getNearestWaypointandCut(double px, double py){
+	Point2F ret(0,0);
+	if(this->points.size()==0){
+		return ret;
+	}
+
+	double dx = points.front().x - px;
+	double dy = points.front().y - py;
+
+	double r = dx*dx + dy*dy;
+
+
+	for(const auto& p : this->points){
+
+		dx = p.x - px;
+		dy = p.y - py;
+		double dr = dx*dx + dy*dy;
+
+		if(dr < r){
+			r = dr;
+			ret = p;
+		}
+	}
+
+	while( this->points.size() > 0 && this->points.front() != ret ){
+		this->points.pop_front();
+	}
+	if(this->points.size() > 0){
+		this->points.pop_front();
+	}
+
+	return ret;
+}
+
 size_t TrailPoints::size()const{
 	return this->points.size();
 }

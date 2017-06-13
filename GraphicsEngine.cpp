@@ -325,6 +325,10 @@ bool GraphicsEngine::init(void){
 		return false;
 	}
 
+	glfwSetErrorCallback([](int code,const char* msg)->void{
+		cerr<<"GFLW found an error : "<<msg<<" with code "<<code<<endl;
+	});
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
 	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);

@@ -16,6 +16,7 @@ Robot::Robot():Sprite(),RigidBody(){
     this->prevStatus = AttackerStatus::Attacker_Init;
 	this->activeDistance = false;
 	this->resetPath = true;
+	this->appendPath = false;
 	this->thetaStarHint = false;
 }
 
@@ -396,7 +397,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			Ball* pb = dynamic_cast<Ball*>(dest);
 			if(result){
 	
-				pb->forceAccel(speedlimit*1.25);
+				pb->forceAccel(maxSpeed*2);
 
 			}
 
@@ -410,6 +411,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 			Point2F ep;
 
+			Point2F replanStart(0,0);
 
 			bool kickingpos = true;
 
@@ -475,6 +477,17 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 					if((this->prevStatus == this->currentStatus)&&(this->path->size()>0)){
                         this->resetPath = false;
 					}
+
+					this->appendPath = false;
+					if(this->path->size() > 0 && !this->resetPath){
+						bool isnear = path->isNearGoal(tx/10,ty/10,5);
+						if(!isnear){
+							this->appendPath = true;							
+							replanStart = path->getNearestWaypointandCut(tx/10,ty/10);
+
+						}
+					}
+
 				//}
 				
 			
@@ -623,6 +636,81 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 										}
 										this->resetPath = false;
 										cout<<"Replan done! time - "<<clock()-rt<<endl;
+
+									}else if(this->appendPath){
+
+
+										cout<<"Do Append"<<endl;
+										clock_t rt = clock();
+
+										auto pAStar = dynamic_cast<AIAStarSearch*>(this->activeModule);
+
+										AStarSearchNode startNode;
+										AStarSearchNode goalNode;
+
+										startNode.position = replanStart;
+
+										goalNode.position.x = dest->getX();
+										goalNode.position.y = dest->getY();
+
+										if(kickingpos){
+											//goalNode.position.x -= kdx;
+											//goalNode.position.y -= kdy;
+											goalNode.position = ep;
+											dest->activeDistanceCalculate(true);
+										}
+
+										//clear old datas
+										this->data.clear();
+
+										dx = abs(goalNode.position.x - startNode.position.x);
+										dy = abs(goalNode.position.y - startNode.position.y);
+
+										int basexLevel = 1;
+										basexLevel += dx / 11;
+
+										int baseyLevel = 1;
+										baseyLevel += dy / 9;
+
+										pAStar->init(&startNode, &goalNode, basexLevel,baseyLevel);
+										pAStar->loadAIData(&(this->data));
+										pAStar->processAIData(thetaStarHint?2:0);
+										pAStar->outputAIData(&(this->data));
+
+								
+
+										if(this->data.idxSize != 0 && this->data.dataSize != 0){
+										//this->path->clear();
+											Point2F pt;
+
+
+											Point2F tarp;
+											pt.x = tarp.x = data.dataList[0];
+											pt.y = tarp.y = data.dataList[1];
+
+											pt.x *= 0.1f;
+											pt.y *= 0.1f;
+
+											this->path->addPoint(pt);
+					
+											if(data.dataSize > 2){ 
+
+												for(int i=1;i<data.dataSize/2 - 1;i++){
+													pt.x = data.dataList[i*2];
+													pt.y = data.dataList[i*2+1];
+
+													tarp = pt;
+													pt.x *= 0.1f;
+													pt.y *= 0.1f;
+													this->path->addPoint(pt);
+												}	
+											}
+
+											this->pTargetPoint->setPosition(tarp);			
+										}
+										this->resetPath = false;
+										cout<<"Replan done! time - "<<clock()-rt<<endl;
+
 
 									}
 									this->pTargetPoint->calculateForce(this,this->virtualForce,dt);

@@ -150,6 +150,17 @@ typedef struct Point2F{
 		return false;
 	}
 
+	bool operator == (const Point2F& pt)const{
+		float dy = fabs(this->y - pt.y);
+		float dx = fabs(this->x - pt.x);
+
+		return (dx < 1E-7) && (dy < 1E-7);
+	}
+
+	bool operator != (const Point2F& pt)const{
+		return !(*this == pt);
+	}
+
 }*pPoint2F;
 
 typedef struct Point2I{

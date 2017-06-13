@@ -53,6 +53,7 @@ GLuint ShaderProgram::loadShader(const std::string& path,GLenum shader_type,GLui
 
 	if(infosize > 0){
 		char* errorbuffer = new char[infosize+1];
+		errorbuffer[infosize]=0;
 		glGetShaderInfoLog(shaderID,infosize,nullptr,errorbuffer);
 		cerr<<errorbuffer<<endl;
 		delete[] errorbuffer;

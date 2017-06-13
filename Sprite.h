@@ -123,6 +123,10 @@ public:
 	void removeBackPoint();
 	const Point2F& getFrontPoint()const;
 	const Point2F& getBackPoint()const;
+
+	bool isNearGoal(double px, double py, double r);
+	Point2F getNearestWaypointandCut(double px, double py);
+
 	size_t size()const;
     void clear();
 protected:
@@ -153,6 +157,7 @@ protected:
 	int touchCount;
 
 	bool resetPath;
+	bool appendPath;
 	//for FSM
 	//status list:
 	/*
