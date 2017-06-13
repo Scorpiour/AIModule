@@ -67,7 +67,8 @@ Sprite::Sprite(){
 	vao = 0;
 
 	angles = glm::vec3(0,0,0);
-	radius = 1.f;
+	innerRadius = 1.f;
+    outerRadius = 1.f;
 	isVisible = true;
 	isEnable = true;
 	activeModule = nullptr;
@@ -173,7 +174,8 @@ void Sprite::setAngle(glm::vec3 _angle){
 }
 
 void Sprite::setRadius(double r){
-	this->radius = r;
+	this->innerRadius = r;
+    this->outerRadius = r;
 }
 
 void Sprite::addModule(const std::string& name, AIModuleBase* pModule){

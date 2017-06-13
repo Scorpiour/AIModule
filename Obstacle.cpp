@@ -23,7 +23,8 @@ void Obstacle::setScale(glm::vec3 _scale){
 	this->width = scalez;
 	this->length = scalex;
 
-	this->radius = sqrt(scalex*scalex + scalez*scalez)/2;
+    this->innerRadius = max(this->width/2,this->length/2);
+	this->outerRadius = 0.5 * sqrt(scalex*scalex + scalez*scalez);
 }
 
 void Obstacle::move(double dt){
@@ -117,11 +118,11 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 
 	float ix = this->getX();
 	float iy = this->getY();
-	float ir = this->getRadius();
+	float ir = this->getInnerRadius();
 	
 	float tx = dest->getX();
 	float ty = dest->getY();
-	float tr = dest->getRadius();
+	float tr = dest->getOuterRadius();
 
 	RigidTypeID id = dest->getID();
     
@@ -135,7 +136,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 
 	float distance = sqrt(dy*dy + dx*dx);
 	
-	if(distance > ir + tr){
+	if(distance > this->getOuterRadius() + tr){
 		result.x = 0;
 		result.y = 0;
 		return true;
@@ -226,8 +227,9 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
     }else{
         distance -= (r+tr);
     }
-	//float value = 50.f/(1+exp(distance-20));//1000.f/distance;
-    float value = 40-distance;
+    //float value = 100.f/(distance);
+	float value = 500.f/(1+exp(distance-50));//1000.f/distance;
+    //float value = 50-distance;
 	float arc = GlobalVariables::Atan2(forceDirection.y, forceDirection.x);
 
 	result.x = value*cos(arc);
@@ -613,7 +615,7 @@ float Obstacle::calculateDistance(RigidBody* dest){
     
     float tx = dest->getX();
     float ty = dest->getY();;
-    float tr = dest->getRadius();
+    float tr = dest->getOuterRadius();
     
     //int id = dest->getID();
     

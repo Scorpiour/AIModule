@@ -78,8 +78,12 @@ float Robot::getSY()const{
 	return this->sy * 10;
 }
 
-float Robot::getRadius()const{
-	return this->radius;
+float Robot::getInnerRadius()const{
+	return this->innerRadius;
+}
+
+float Robot::getOuterRadius()const{
+    return this->outerRadius;
 }
 
 void Robot::setScale(glm::vec3 _scale){
@@ -94,7 +98,8 @@ void Robot::setScale(glm::vec3 _scale){
 	this->width = scalez;
 	this->length = scalex;
 
-	this->radius = max(this->width/2,this->length/2);
+	this->innerRadius = max(this->width/2,this->length/2);
+    this->outerRadius = 0.5 * sqrt(this->width * this->width + this->length * this->length);
 }
 
 void Robot::resetTouchCount(){
@@ -245,11 +250,11 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	float ix = this->getX();
 	float iy = this->getY();
-	float ir = this->getRadius();
+	float ir = this->getInnerRadius();
 	
 	float tx = dest->getX();
 	float ty = dest->getY();
-	float tr = dest->getRadius();
+	float tr = dest->getOuterRadius();
 
 	RigidTypeID id = dest->getID();
 	
@@ -359,7 +364,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 			{
 				float ix = this->getX();
 				float iy = this->getY();
-				float ir = this->getRadius();
+				float ir = this->getOuterRadius();
 				float tx = this->pTargetPoint->getX();
 				float ty = this->pTargetPoint->getY();
 
@@ -862,7 +867,7 @@ float Robot::calculateDistance(const Point2F& point,float rad){
 	}
 	float ix = this->getX();
 	float iy = this->getY();
-	float ir = this->getRadius();
+	float ir = this->getInnerRadius();
 	
 	float tx = point.x;
 	float ty = point.y;

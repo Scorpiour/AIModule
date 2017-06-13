@@ -147,7 +147,7 @@ void TrailPoints::draw(double dt){
 				glUniform1f(program->getLoc("divideInnerLevel"),1.0);
 				glUniformMatrix4fv(modelMatrixLoc,1,GL_FALSE,modelMatrix);
 				glUniform3fv(translateLoc,1,glm::value_ptr(position));
-				glUniform1f(starRadiusLoc,this->radius);
+				glUniform1f(starRadiusLoc,this->innerRadius);
 				glUniform3fv(starColorLoc,1,glm::value_ptr(colourValue));
 				glUniform3fv(starIntensityLoc,1,glm::value_ptr(colourIntensity));
 				glUniform1f(highlightLoc,additionIntensity);

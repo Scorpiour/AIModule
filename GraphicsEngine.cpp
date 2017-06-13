@@ -751,7 +751,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -779,7 +779,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -808,7 +808,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = 110;
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -836,7 +836,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = -110;
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -864,7 +864,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = 110;
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -892,7 +892,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = -110;
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -922,7 +922,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -950,7 +950,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -978,7 +978,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = 125;
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -1008,7 +1008,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -1036,7 +1036,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float iy = pWall->getY();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -1064,7 +1064,7 @@ bool GraphicsEngine::prepareSprites(void){
 		float ty = dest->getY();
 		float tx = dest->getX();
 		float ix = -125;
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -1094,7 +1094,7 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		float ty = dest->getY();
 		float tx = dest->getX();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -1126,7 +1126,7 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		float ty = dest->getY();
 		float tx = dest->getX();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -1158,7 +1158,7 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		float ty = dest->getY();
 		float tx = dest->getX();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;
@@ -1190,7 +1190,7 @@ bool GraphicsEngine::prepareSprites(void){
 		}
 		float ty = dest->getY();
 		float tx = dest->getX();
-		float r = dest->getRadius();
+		float r = dest->getOuterRadius();
 
 		result.x = 0.f;
 		result.y = 0.f;

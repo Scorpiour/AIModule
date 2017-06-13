@@ -51,8 +51,10 @@ public:
 	virtual void setSY(float)=0;
 	virtual float getSX()const=0;
 	virtual float getSY()const=0;
-	virtual float getRadius()const=0;
-
+	//virtual float getRadius()const=0;
+    virtual float getOuterRadius()const = 0;
+    virtual float getInnerRadius()const = 0;
+    
 	virtual void move(double)=0;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) = 0;
 	virtual bool calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)=0;
@@ -111,9 +113,9 @@ public:
 	virtual void setSY(float) override;
 	virtual float getSX()const override;
 	virtual float getSY()const override;
-	virtual float getRadius()const override;
-
-	virtual void move(double) override;
+    virtual float getOuterRadius()const override;
+    virtual float getInnerRadius()const override;
+    virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual bool calculateVirtualForce(RigidBody* dest,Point2F& result,double dt) override;
 	virtual float calculateDistance(const Point2F& point, float rad) override;

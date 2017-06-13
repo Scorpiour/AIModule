@@ -79,7 +79,7 @@ void Ball::draw(double dt){
 	glUniform1f(program->getLoc("divideInnerLevel"),3.0);
 	glUniformMatrix4fv(modelMatrixLoc,1,GL_FALSE,modelMatrix);
 	glUniform3fv(translateLoc,1,glm::value_ptr(position));
-	glUniform1f(starRadiusLoc,this->radius);
+	glUniform1f(starRadiusLoc,this->innerRadius);
 	glUniform3fv(starColorLoc,1,glm::value_ptr(colourValue));
 	glUniform3fv(starIntensityLoc,1,glm::value_ptr(colourIntensity));
 	glUniform1f(highlightLoc,additionIntensity);
@@ -115,8 +115,12 @@ float Ball::getSY()const{
 	return this->sy * 10;
 }
 
-float Ball::getRadius()const{
-	return this->radius * 10;
+float Ball::getOuterRadius()const{
+	return this->outerRadius * 10;
+}
+
+float Ball::getInnerRadius()const{
+    return this->innerRadius * 10;
 }
 
 void Ball::setFriction(float f){
@@ -130,7 +134,7 @@ Point2F Ball::getKickingPos(float gap){
 	
 	float ix = this->getX();
 	float iy = this->getY();
-	float ir = this->getRadius();
+	float ir = this->getInnerRadius();
 
 	Point2F bpos;
 	bpos.x = ix;
@@ -280,7 +284,7 @@ bool Ball::checkLOS(const Point2F& p1, const Point2F& p2){
 
 	float x = this->getX();
 	float y = this->getY();
-	float r = this->getRadius();
+	float r = this->getInnerRadius();
 
 	float margin = 3.5;
 
@@ -310,11 +314,11 @@ bool Ball::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	float dstx = dest->getX();
 	float dsty = dest->getY();
-	float dstr = dest->getRadius();
+	float dstr = dest->getOuterRadius();
 
 	float srcx = this->getX();
 	float srcy = this->getY();
-	float srcr = this->getRadius();
+	float srcr = this->getOuterRadius();
 	
 	data.dataList[0] = dstx;
 	data.dataList[1] = dsty;
@@ -343,7 +347,7 @@ float Ball::calculateDistance(const Point2F& point, float rad){
 	if(this->activeDistance){
 		float ix = this->getX();
 		float iy = this->getY();
-		float ir = this->getRadius();
+		float ir = this->getOuterRadius();
 
 		float tx = point.x;
 		float ty = point.y;

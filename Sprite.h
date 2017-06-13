@@ -27,7 +27,8 @@ protected:
 	GLfloat modelMatrix[16];
 	GLfloat rotateMatrix[16];
 	GLfloat scaleMatrix[16];
-	double radius;
+	double innerRadius;
+    double outerRadius;
 	bool isVisible;
 	bool isEnable;
 protected:
@@ -190,7 +191,8 @@ public:
 	virtual void setSY(float) override;
 	virtual float getSX()const override;
 	virtual float getSY()const override;
-	virtual float getRadius()const override;
+    virtual float getOuterRadius()const override;
+    virtual float getInnerRadius()const override;
 
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;
@@ -230,7 +232,8 @@ public:
 	virtual void setSY(float) override;
 	virtual float getSX()const override;
 	virtual float getSY()const override;
-	virtual float getRadius()const override;
+    virtual float getOuterRadius()const override;
+    virtual float getInnerRadius()const override;
 	virtual void setFriction(float);
 
 	virtual void move(double) override;
@@ -310,7 +313,8 @@ public:
 	virtual void setSY(float) override;
 	virtual float getSX()const override;
 	virtual float getSY()const override;
-	virtual float getRadius()const override;
+    virtual float getOuterRadius()const override;
+    virtual float getInnerRadius()const override;
 
 	virtual void move(double) override;
 	virtual bool calculateForce(RigidBody* dest,Point2F& result,double dt) override;

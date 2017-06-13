@@ -27,8 +27,11 @@ float VirtualAttractivePoint::getSX()const {
 float VirtualAttractivePoint::getSY()const { 
 	return 0.f;
 }
-float VirtualAttractivePoint::getRadius()const {
+float VirtualAttractivePoint::getOuterRadius()const {
 	return 0.f;
+}
+float VirtualAttractivePoint::getInnerRadius()const{
+    return 0.f;
 }
 
 void VirtualAttractivePoint::move(double dt) {

@@ -65,8 +65,12 @@ float Wall::getSY()const{
 	return 0.f;
 }
 
-float Wall::getRadius()const{
+float Wall::getOuterRadius()const{
 	return 0.f;
+}
+
+float Wall::getInnerRadius()const{
+    return 0.f;
 }
 
 void Wall::move(double){
@@ -159,7 +163,7 @@ bool Wall::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 			distance = abs(a*tx + b*ty + c)*denom;
 		}
 		
-		if(distance > margin + dest->getRadius()){
+		if(distance > margin + dest->getOuterRadius()){
 			result.x = 0;
 			result.y = 0;
 			return false;

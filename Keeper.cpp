@@ -102,11 +102,11 @@ bool Keeper::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 	float ix = this->getX();
 	float iy = this->getY();
-	float ir = this->getRadius();
+	float ir = this->getInnerRadius();
 	
 	float tx = dest->getX();
 	float ty = dest->getY();
-	float tr = dest->getRadius();
+	float tr = dest->getOuterRadius();
 
 	RigidTypeID id = dest->getID();
 	
@@ -473,7 +473,7 @@ float Keeper::calculateDistance(RigidBody* dest){
     Point2F pt;
     pt.x = dest->getX();
     pt.y = dest->getY();
-    float rad = dest->getRadius();
+    float rad = dest->getOuterRadius();
     
     return Robot::calculateDistance(pt,rad);
 }
