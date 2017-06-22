@@ -119,6 +119,7 @@ public:
     void update(double dt) override;
     void draw(double dt) override;
     
+	void addPointFront(const Point2F& pt);
     void addPoint(const Point2F& pt);
 	void removeFrontPoint();
 	void removeBackPoint();

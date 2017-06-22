@@ -3,7 +3,7 @@
 using namespace std;
 
 Robot::Robot():Sprite(),RigidBody(){
-	mass = 10.f;
+	mass = 25.f;
     this->pts = nullptr;
 	this->path = nullptr;
 	this->pTargetPoint = nullptr;
@@ -690,6 +690,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 
 											Point2F tarp;
+											/*
 											pt.x = tarp.x = data.dataList[0];
 											pt.y = tarp.y = data.dataList[1];
 
@@ -711,7 +712,18 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 												}	
 											}
 
-											this->pTargetPoint->setPosition(tarp);			
+											this->pTargetPoint->setPosition(tarp);
+											*/
+											for(int i = data.dataSize / 2 - 2; i >= 0;i--){
+												pt.x = data.dataList[i*2];
+												pt.y = data.dataList[i*2+1];
+
+												pt.x *= 0.1f;
+												pt.y *= 0.1f;
+
+												this->path->addPointFront(pt);
+
+											}
 										}
 										this->resetPath = false;
 										cout<<"Replan done! time - "<<clock()-rt<<endl;
@@ -722,7 +734,11 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 
 
 								}
-							
+								
+								Point2F apfForce;
+								RigidController::getInstance().calculateVirtualForce(this,apfForce,dt);
+								this->virtualForce += apfForce;
+
 							}break;
 
 						case 2:

@@ -18,6 +18,12 @@ TrailPoints::~TrailPoints(){
     
 }
 
+void TrailPoints::addPointFront(const Point2F& pt){
+	if(this->points.size() <= maxCount){
+		this->points.push_front(pt);
+	}
+}
+
 void TrailPoints::addPoint(const Point2F& pt){
     this->points.push_back(pt);
     if(this->points.size() > maxCount){

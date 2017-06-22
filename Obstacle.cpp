@@ -118,7 +118,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 
 	float ix = this->getX();
 	float iy = this->getY();
-	float ir = this->getInnerRadius();
+	float ir = this->getOuterRadius();
 	
 	float tx = dest->getX();
 	float ty = dest->getY();
@@ -136,7 +136,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 
 	float distance = sqrt(dy*dy + dx*dx);
 	
-	if(distance > this->getOuterRadius() + tr){
+	if(distance > ir + tr){
 		result.x = 0;
 		result.y = 0;
 		return true;
@@ -217,7 +217,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
 
 	distance = abs(distance);
 
-	if(distance > r + tr + 20){
+	if(distance > r + tr + 20){  //radius of 20
 		result.x = 0;
 		result.y = 0;
 		return false;
@@ -228,7 +228,7 @@ bool Obstacle::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt)
         distance -= (r+tr);
     }
     //float value = 100.f/(distance);
-	float value = 500.f/(1+exp(distance-50));//1000.f/distance;
+	float value = 200.f/(1+exp(distance-20));//1000.f/distance;
     //float value = 50-distance;
 	float arc = GlobalVariables::Atan2(forceDirection.y, forceDirection.x);
 

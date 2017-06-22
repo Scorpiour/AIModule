@@ -271,7 +271,7 @@ bool Ball::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 
 	float distance = sqrt(dx*dx + dy*dy);
 
-	float value = distance;
+	float value = distance * 0.668;//distance;
 
 	result.x = value * cos(arc);
 	result.y = value * sin(arc);

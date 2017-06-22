@@ -118,6 +118,18 @@ typedef struct Point2F{
 		return true;
 	}*/
 
+	const Point2F& operator += (const Point2F& pt){
+		x += pt.x;
+		y += pt.y;
+		return *this;
+	}
+	const Point2F& operator -= (const Point2F& pt){
+		x -= pt.x;
+		y -= pt.y;
+
+		return *this;
+	}
+
 	operator bool()const{
 		if(fabs(x) < 1E-7 && fabs(y) < 1E-7){
 			return false;

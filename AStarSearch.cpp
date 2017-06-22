@@ -283,19 +283,35 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 				ptr = ptr->next;
 				size++;
 			}
-			cout<<"\t- Path length :\t"<<size<<endl;
+			
 			pInternalData->idxSize = size;
 			pInternalData->dataSize = size*2;
 			pInternalData->dataList = new double[size*2];
 
 			ptr = result;
-
+			double pl = 0.f;
 			for(size_t i=0;i<size;i++){
 				pInternalData->dataList[i*2] = ptr->position.x;
 				pInternalData->dataList[i*2+1] = ptr->position.y;
 				ptr = ptr->next;
 			}
             
+			for(size_t i=1;i<size;i++){
+				size_t k = i-1;
+				double x1 = pInternalData->dataList[k*2];
+				double y1 = pInternalData->dataList[i*2];
+				double x2 = pInternalData->dataList[k*2+1];
+				double y2 = pInternalData->dataList[i*2+1];
+
+				double dx = x1-x2;
+				double dy = y1-y2;
+				double r = sqrt(dx*dx+dy*dy);
+				pl += r;
+
+			}
+
+			cout<<"\t- Path length :\t"<<pl<<endl;
+
             //validate result and find where the issue it might be
             
             ptr = result;
