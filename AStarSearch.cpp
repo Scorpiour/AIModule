@@ -214,12 +214,13 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
                     if(magFlag){
                         float nextMag = magnitudeFunc(nextPosition);
                         float difMag = nextMag - curMag;
-                        
+                        nextG += difMag;
+						/*
 						if(difMag <= 0){
 							nextG += difMag;
 						}else{
 							nextG = sqrt(nextG*nextG + difMag*difMag);
-						}
+						}*/
 						//nextG = sqrt(nextG*nextG + difMag*difMag);
                         /*
 						difMag = abs(difMag);

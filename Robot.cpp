@@ -3,7 +3,7 @@
 using namespace std;
 
 Robot::Robot():Sprite(),RigidBody(){
-	mass = 25.f;
+	mass = 50.f;
     this->pts = nullptr;
 	this->path = nullptr;
 	this->pTargetPoint = nullptr;
@@ -143,16 +143,19 @@ void Robot::move(double dt){
 	float ay = (virtualForce.y + collisionForce.y )/ mass;
     */
 	float ax,ay;
-    ax = (collisionForce.x + virtualForce.x )/mass;
-    ay = (collisionForce.y + virtualForce.y )/mass;
-    /*
+
+
+	
+	//ax = (collisionForce.x + virtualForce.x )/mass;
+    //ay = (collisionForce.y + virtualForce.y )/mass;
+    
     if(collisionForce){
 		ax = collisionForce.x / mass;
 		ay = collisionForce.y / mass;
 	}else{
 		ax = virtualForce.x / mass;
 		ay = virtualForce.y / mass;
-	}*/
+	}
 
     //ax = (collisionForce.x + virtualForce.x) / mass;
     //ay = (collisionForce.y + virtualForce.y) / mass;
