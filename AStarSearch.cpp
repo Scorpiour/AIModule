@@ -310,13 +310,14 @@ GlobalFlag AIAStarSearch::processAIData(double dt){
 			for(size_t i=1;i<size;i++){
 				size_t k = i-1;
 				double x1 = pInternalData->dataList[k*2];
-				double y1 = pInternalData->dataList[i*2];
-				double x2 = pInternalData->dataList[k*2+1];
+				double y1 = pInternalData->dataList[k*2+1];
+				double x2 = pInternalData->dataList[i*2];
 				double y2 = pInternalData->dataList[i*2+1];
 
 				double dx = x1-x2;
 				double dy = y1-y2;
 				double r = sqrt(dx*dx+dy*dy);
+                //cout<<r<<endl;
 				pl += r;
 
 			}

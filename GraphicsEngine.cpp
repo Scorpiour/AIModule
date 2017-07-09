@@ -1243,9 +1243,9 @@ bool GraphicsEngine::prepareSprites(void){
 
 	//Obstacles;
 
-	//10 Regular Obstacles
+	//Regular Obstacles
     string name = "RegObs";
-	Model* m = new Model(name);
+	Model* m = new Model(name,Point2F(-90,70),Point2F(90,-70));
 	this->modelList.insert(make_pair(name,m));
 
 	srand(time(NULL));
