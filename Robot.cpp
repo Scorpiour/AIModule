@@ -211,9 +211,11 @@ void Robot::move(double dt){
 		
 	}
 
+    float dx = (osx + 0.5*(sx - osx)*dt);
+    float dy = (osy + 0.5*(sy - osy)*dt);
 
-    float dx = osx*dt + 0.5*dt*ax;//0.5*(osx+sx)*dt;// + 0.5*dt*ax;
-    float dy = osy*dt + 0.5*dt*ay;//0.5*(osy+sy)*dt;// + 0.5*dt*ay;
+    //float dx = osx*dt + 0.5*dt*ax;//0.5*(osx+sx)*dt;// + 0.5*dt*ax;
+    //float dy = osy*dt + 0.5*dt*ay;//0.5*(osy+sy)*dt;// + 0.5*dt*ay;
 
 
 	this->position.x += dx;
@@ -437,9 +439,9 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 				//dy -= kdy;
 				//kickingpos = true;
 			
-				this->prevStatus = this->currentStatus;
+				//this->prevStatus = this->currentStatus;
 				//resetPath = false;
-
+            this->prevStatus = this->currentStatus;
 				//if(prevStatus != currentStatus){
 					this->resetPath = true;
 					this->setMovable(true);
@@ -500,7 +502,7 @@ bool Robot::calculateForce(RigidBody* dest,Point2F& result,double dt){
 				
 			
 			//}else{
-			//	kickingpos = false;
+				//kickingpos = false;
 			//}
 
 			float distance = sqrt(dx*dx + dy*dy);

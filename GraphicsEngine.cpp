@@ -1250,7 +1250,7 @@ bool GraphicsEngine::prepareSprites(void){
 
 	srand(time(NULL));
 
-	for(int i=0;i<50;i++){
+	for(int i=0;i<10;i++){
 
 		float x = rand()%21;
 		x += -10;
@@ -1269,7 +1269,7 @@ bool GraphicsEngine::prepareSprites(void){
 		pObs->setPosition(glm::vec3(x,-0.15,y));
 		pObs->setScale(glm::vec3(0.7,0.7,0.7));
 		pObs->setAngle(glm::vec3(0,2*M_PI/p,0));
-		pObs->setMovable(false);
+		pObs->setMovable(true);
 		m->addSprite(pObs);
 	}
 

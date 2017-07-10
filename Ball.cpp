@@ -258,9 +258,9 @@ void Ball::move(double dt){
 
 bool Ball::calculateVirtualForce(RigidBody* dest, Point2F& result,double dt){
 
-	result.x = 0;
-	result.y = 0;
-	return true;
+	//result.x = 0;
+	//result.y = 0;
+	//return true;
 
 	float tx = dest->getX();
 	float ty = dest->getY();
